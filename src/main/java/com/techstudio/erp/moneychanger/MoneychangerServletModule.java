@@ -27,14 +27,14 @@ public class MoneychangerServletModule extends ServletModule {
   @Override
   public void configureServlets() {
 
-    // AppStats filter and servlet
-    bind(AppstatsFilter.class).in(Singleton.class);
-    bind(AppstatsServlet.class).in(Singleton.class);
-
-    Map<String, String> appstatsFilterParams = new HashMap<String, String>();
-    appstatsFilterParams.put("logMessage", "Appstats available: /appstats/details?time={ID}");
-    filter("/*").through(AppstatsFilter.class, appstatsFilterParams);
-    serve("/appstats/*").with(AppstatsServlet.class);
+//    // AppStats filter and servlet
+//    bind(AppstatsFilter.class).in(Singleton.class);
+//    bind(AppstatsServlet.class).in(Singleton.class);
+//
+//    Map<String, String> appstatsFilterParams = new HashMap<String, String>();
+//    appstatsFilterParams.put("logMessage", "Appstats available: /appstats/details?time={ID}");
+//    filter("/*").through(AppstatsFilter.class, appstatsFilterParams);
+//    serve("/appstats/*").with(AppstatsServlet.class);
 
     // RequestFactory servlet
     bind(RequestFactoryServlet.class).to(MoneychangerRequestFactoryServlet.class).in(Singleton.class);
