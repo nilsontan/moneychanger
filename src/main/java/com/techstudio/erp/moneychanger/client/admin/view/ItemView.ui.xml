@@ -1,0 +1,23 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+
+  <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+
+  <g:FlowPanel>
+    <g:Label text="Item List" addStyleNames="{res.admin.pageTitle}" />
+    <g:Label text="Create or Update items quickly" addStyleNames="{res.admin.pageDescription}" />
+    <g:HorizontalPanel spacing="10">
+      <g:FlowPanel>
+        <c:CellTable ui:field="itemTable" />
+        <c:SimplePager ui:field="itemPager" location="CENTER" />
+      </g:FlowPanel>
+      <g:FlowPanel>
+        <g:Label text="Enter Item Name" addStyleNames="{res.admin.formParam}" />
+        <g:TextBox ui:field="itemName" />
+      </g:FlowPanel>
+    </g:HorizontalPanel>
+  </g:FlowPanel>
+
+</ui:UiBinder>

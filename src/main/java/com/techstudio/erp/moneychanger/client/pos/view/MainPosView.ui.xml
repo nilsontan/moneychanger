@@ -1,0 +1,94 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+  <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+
+  <g:DockLayoutPanel unit="PX">
+    <g:north size="40">
+      <g:FlowPanel addStyleNames="{res.pos.northBar}">
+        <g:HTMLPanel>
+          <g:DecoratorPanel ui:field="loadingMessage" addStyleNames="{res.pos.centered}">
+            <g:FlowPanel>
+              <g:Label text="Loading..." addStyleNames="{res.pos.formTitle}" />
+            </g:FlowPanel>
+          </g:DecoratorPanel>
+        </g:HTMLPanel>
+        <g:HorizontalPanel spacing="5">
+          <g:Image resource="{res.logoPos}" />
+          <g:HTMLPanel>
+            <div style="height:5px" />
+            <g:Label text="Moneychanger" addStyleNames="{res.pos.formTitle}" />
+          </g:HTMLPanel>
+        </g:HorizontalPanel>
+      </g:FlowPanel>
+    </g:north>
+    <g:center>
+      <g:LayoutPanel ui:field="mainContentContainer" />
+    </g:center>
+    <g:east size="396">
+      <g:FlowPanel addStyleNames="{res.pos.eastBar}">
+        <g:HorizontalPanel>
+          <g:Grid>
+            <g:row>
+              <g:customCell>
+                <g:PushButton text="7" addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+              <g:customCell>
+                <g:PushButton text="8" addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+              <g:customCell>
+                <g:PushButton text="9" addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+            </g:row>
+            <g:row>
+              <g:customCell>
+                <g:PushButton text="4" addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+              <g:customCell>
+                <g:PushButton text="5" addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+              <g:customCell>
+                <g:PushButton text="6" addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+            </g:row>
+            <g:row>
+              <g:customCell>
+                <g:PushButton text="1" addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+              <g:customCell>
+                <g:PushButton text="2" addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+              <g:customCell>
+                <g:PushButton text="3" addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+            </g:row>
+            <g:row>
+              <g:customCell>
+                <g:PushButton text="0" addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+              <g:customCell>
+                <g:PushButton text="00" addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+              <g:customCell>
+                <g:PushButton text="." addStyleNames="{res.pos.numPad}" />
+              </g:customCell>
+            </g:row>
+          </g:Grid>
+          <g:Grid>
+            <g:row>
+              <g:customCell>
+                <g:PushButton text="B" addStyleNames="{res.pos.numPadV}" />
+              </g:customCell>
+            </g:row>
+            <g:row>
+              <g:customCell>
+                <g:PushButton text="^" addStyleNames="{res.pos.numPadV}" />
+              </g:customCell>
+            </g:row>
+          </g:Grid>
+        </g:HorizontalPanel>
+      </g:FlowPanel>
+    </g:east>
+  </g:DockLayoutPanel>
+</ui:UiBinder>

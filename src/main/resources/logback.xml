@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+  <!-- catalina.out  -->
+  <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- param name="Target" value="System.out" /> -->
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+    </layout>
+  </appender>
+
+  <!-- main logging with debug, for developers -->
+  <!--<appender name="dev-log" class="org.apache.log4j.DailyRollingFileAppender">-->
+  <!--<param name="File" value="${log.dir}/moneychanger.log" />-->
+  <!--<param name="Append" value="true" />-->
+  <!--<param name="DatePattern" value="yyyy-MM-dd" />-->
+  <!--<layout class="org.apache.log4j.PatternLayout">-->
+  <!--<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p %20.20c - %m%n" />-->
+  <!--</layout>-->
+  <!--</appender>-->
+
+  <!-- by default, log everything to the console with a level of WARN or higher -->
+  <root value="debug">
+    <appender-ref ref="stdout" />
+    <!--<appender-ref ref="dev-log" />-->
+  </root>
+
+</configuration>

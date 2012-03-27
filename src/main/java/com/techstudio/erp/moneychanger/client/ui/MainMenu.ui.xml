@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+  <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+  <ui:with type="com.techstudio.erp.moneychanger.client.NameTokens" field="nameTokens" />
+
+  <g:HTMLPanel>
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getPosPage}">
+      POS
+    </g:InlineHyperlink>
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getItemPage}">
+      Item
+    </g:InlineHyperlink>
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getCategoryPage}">
+      Category
+    </g:InlineHyperlink>
+  </g:HTMLPanel>
+</ui:UiBinder> 

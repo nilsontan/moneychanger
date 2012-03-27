@@ -1,0 +1,76 @@
+.centered {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  width: 350px;
+
+  font: bold 16pt blue;
+}
+
+.mainTitle {
+  color: #7B8FAE;
+  font-size: 20pt;
+  font-weight: bold;
+  text-shadow: #DDD 3px 3px 1px;
+  margin: 0;
+  padding: 0 0 0 4px;
+}
+
+.mainSubtitle {
+  color: #888;
+  font-size: 16pt;
+  margin: 0;
+  padding: 0 0 0 6px;
+}
+
+.northBar {
+  padding: 0 10px;
+  border-bottom: 1px solid #C3C3C3;
+}
+
+.north2Bar {
+  background-color: #D7DDE8;
+  border-bottom: 1px solid #C3C3C3;
+  padding: 0 10px;
+}
+
+.menuTitle, a.menuTitle {
+  margin-right: 20px;
+  color: #888;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 20pt;
+  vertical-align: middle;
+}
+
+.menuTitle:hover {
+  color: #4B4A4A;
+  text-decoration: underline;
+}
+
+  /* Form styling */
+.pageTitle {
+  color: #4B4A4A;
+  font-size: 17pt;
+  font-weight: bold;
+  margin: 10px 10px 0;
+}
+
+.pageDescription {
+  color: #4B4A4A;
+  padding: 10px 0;
+  border-bottom: 1px solid #6F7277;
+  margin: 0 10px 12px 10px;
+}
+
+.formTitle {
+  color: #4B4A4A;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: #DDF 1px 1px 0;
+}
+
+.formParam {
+  font-weight: bold;
+}
