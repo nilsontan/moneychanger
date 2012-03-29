@@ -14,9 +14,15 @@ import com.gwtplatform.mvp.client.UiHandlers;
  */
 public interface CurrencyUiHandlers extends UiHandlers {
   void setCurrencyCode(String code);
+
   void setCurrencyName(String name);
 
+  void setCurrencySign(String sign);
+
+  void setCurrencyRate(String rate);
+
   void createCurrency();
+
   void updateCurrency();
 
   void repopulateData();

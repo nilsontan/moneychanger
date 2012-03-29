@@ -57,7 +57,7 @@ public class MoneychangerModule extends AbstractPresenterModule {
     bind(Resources.class).in(Singleton.class);
 
     // Constants
-    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.ITEM_PAGE);
+    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.CURRENCY_PAGE);
 
     // Presenters
     bindPresenter(MainPagePresenter.class, MainPagePresenter.MyView.class,

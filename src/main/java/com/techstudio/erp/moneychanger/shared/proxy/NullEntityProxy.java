@@ -30,6 +30,23 @@ public class NullEntityProxy {
   }
 
   public static class NullCurrencyProxy
-    extends AbstractNullEntityProxy implements CurrencyProxy {
+      extends AbstractNullEntityProxy implements CurrencyProxy {
+    @Override
+    public String getSign() {
+      return "";
+    }
+
+    @Override
+    public void setSign(String sign) {
+    }
+
+    @Override
+    public String getRate() {
+      return "";
+    }
+
+    @Override
+    public void setRate(String rate) {
+    }
   }
 }

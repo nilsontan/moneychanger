@@ -56,6 +56,10 @@ public class CurrencyPresenter
     void setCurrencyCode(String code);
 
     void setCurrencyName(String name);
+
+    void setCurrencySign(String sign);
+
+    void setCurrencyRate(String rate);
   }
 
   private final Provider<CurrencyRequest> currencyRequestProvider;
@@ -64,6 +68,8 @@ public class CurrencyPresenter
   private Long id;
   private String code;
   private String name;
+  private String sign;
+  private String rate;
 
   @Inject
   public CurrencyPresenter(final EventBus eventBus,
@@ -97,6 +103,8 @@ public class CurrencyPresenter
               currencyDataProvider.setCurrency(response);
               code = response.getCode();
               name = response.getName();
+              sign = response.getSign();
+              rate = response.getRate();
               updateView();
             }
           });
@@ -112,6 +120,18 @@ public class CurrencyPresenter
   @Override
   public void setCurrencyName(String name) {
     this.name = name.trim();
+    updateView();
+  }
+
+  @Override
+  public void setCurrencySign(String sign) {
+    this.sign = sign.trim();
+    updateView();
+  }
+
+  @Override
+  public void setCurrencyRate(String rate) {
+    this.rate = rate.trim();
     updateView();
   }
 
@@ -179,6 +199,8 @@ public class CurrencyPresenter
   private void fillData(CurrencyProxy proxy) {
     proxy.setCode(code);
     proxy.setName(name);
+    proxy.setSign(sign);
+    proxy.setRate(rate);
   }
 
   @Override
@@ -194,6 +216,8 @@ public class CurrencyPresenter
   private void updateView() {
     getView().setCurrencyCode(code);
     getView().setCurrencyName(name);
+    getView().setCurrencySign(sign);
+    getView().setCurrencyRate(rate);
     boolean isFilled = formIsValidated();
     getView().enableCreateButton(isFilled);
     getView().enableUpdateButton(isFilled);
@@ -201,6 +225,8 @@ public class CurrencyPresenter
 
   private boolean formIsValidated() {
     return !Strings.isNullOrEmpty(code)
-        && !Strings.isNullOrEmpty(name);
+        && !Strings.isNullOrEmpty(name)
+        && !Strings.isNullOrEmpty(sign)
+        && !Strings.isNullOrEmpty(rate);
   }
 }

@@ -7,8 +7,6 @@
 
 package com.techstudio.erp.moneychanger.client.admin.view;
 
-import com.google.common.base.Strings;
-import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -28,8 +26,6 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.admin.presenter.CurrencyPresenter;
 import com.techstudio.erp.moneychanger.client.ui.CurrencyLinkCell;
 import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
-
-import java.util.Date;
 
 /**
  * @author Nilson
@@ -51,6 +47,12 @@ public class CurrencyView
 
   @UiField
   TextBox currencyName;
+
+  @UiField
+  TextBox currencySign;
+
+  @UiField
+  TextBox currencyRate;
 
   @UiField
   Button currencyUpdate;
@@ -88,6 +90,16 @@ public class CurrencyView
     getUiHandlers().setCurrencyName(event.getValue());
   }
 
+  @UiHandler("currencySign")
+  void onCurrencySignChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setCurrencySign(event.getValue());
+  }
+
+  @UiHandler("currencyRate")
+  void onCurrencyRateChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setCurrencyRate(event.getValue());
+  }
+
   @UiHandler("currencyCreate")
   void onCreateCurrency(ClickEvent event) {
     getUiHandlers().createCurrency();
@@ -110,7 +122,7 @@ public class CurrencyView
 
   @Override
   public void enableCreateButton(boolean enabled) {
-      currencyCreate.setEnabled(enabled);
+    currencyCreate.setEnabled(enabled);
   }
 
   @Override
@@ -126,6 +138,16 @@ public class CurrencyView
   @Override
   public void setCurrencyName(String name) {
     currencyName.setValue(name);
+  }
+
+  @Override
+  public void setCurrencySign(String sign) {
+    currencySign.setValue(sign);
+  }
+
+  @Override
+  public void setCurrencyRate(String rate) {
+    currencyRate.setValue(rate);
   }
 
   private void setupCurrencyTable() {
@@ -145,6 +167,22 @@ public class CurrencyView
     };
     currencyTable.addColumn(currencyNameColumn, "Name");
 
+    Column<CurrencyProxy, String> currencySignColumn = new Column<CurrencyProxy, String>(new EditTextCell()) {
+      @Override
+      public String getValue(CurrencyProxy currencyProxy) {
+        return currencyProxy.getSign();
+      }
+    };
+    currencyTable.addColumn(currencySignColumn, "Sign");
+
+    Column<CurrencyProxy, String> currencyRateColumn = new Column<CurrencyProxy, String>(new EditTextCell()) {
+      @Override
+      public String getValue(CurrencyProxy currencyProxy) {
+        return currencyProxy.getRate().toString();
+      }
+    };
+    currencyTable.addColumn(currencyRateColumn, "Rate");
+
     Column<CurrencyProxy, Long> linkColumn = new Column<CurrencyProxy, Long>(new CurrencyLinkCell()) {
       @Override
       public Long getValue(CurrencyProxy currencyProxy) {
@@ -152,6 +190,7 @@ public class CurrencyView
       }
     };
     currencyTable.addColumn(linkColumn, "View");
+
     currencyTable.setPageSize(10);
 
     currencyPager.setDisplay(currencyTable);
