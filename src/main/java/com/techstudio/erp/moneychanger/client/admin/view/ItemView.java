@@ -9,6 +9,7 @@ package com.techstudio.erp.moneychanger.client.admin.view;
 
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.EditTextCell;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -16,13 +17,18 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-import com.techstudio.erp.moneychanger.client.admin.presenter.ItemPresenter.MyView;
+import com.techstudio.erp.moneychanger.client.admin.presenter.ItemPresenter;
+import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
 import com.techstudio.erp.moneychanger.client.ui.ItemLinkCell;
+import com.techstudio.erp.moneychanger.client.ui.SelectOneListBox;
+import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 
 import java.util.Date;
@@ -32,7 +38,7 @@ import java.util.Date;
  */
 public class ItemView
     extends ViewWithUiHandlers<ItemUiHandlers>
-    implements MyView {
+    implements ItemPresenter.MyView {
 
   public interface Binder extends UiBinder<Widget, ItemView> {
   }
@@ -40,7 +46,44 @@ public class ItemView
   private final Widget widget;
 
   @UiField
+  TextBox itemCode;
+
+  @UiField
   TextBox itemName;
+
+  @UiField(provided = true)
+  SelectOneListBox<CategoryProxy> itemCategoryList
+      = new SelectOneListBox<CategoryProxy>(new SelectOneListBox.OptionFormatter<CategoryProxy>() {
+    @Override
+    public String getLabel(CategoryProxy option) {
+      return option.getName();
+    }
+
+    @Override
+    public String getValue(CategoryProxy option) {
+      return option.getId().toString();
+    }
+  });
+
+  @UiField(provided = true)
+  SelectOneListBox<CurrencyProxy> itemCurrencyList
+      = new SelectOneListBox<CurrencyProxy>(new SelectOneListBox.OptionFormatter<CurrencyProxy>() {
+    @Override
+    public String getLabel(CurrencyProxy option) {
+      return option.getName();
+    }
+
+    @Override
+    public String getValue(CurrencyProxy option) {
+      return option.getId().toString();
+    }
+  });
+
+  @UiField
+  Button itemUpdate;
+
+  @UiField
+  Button itemCreate;
 
   @UiField
   CellTable<ItemProxy> itemTable = new CellTable<ItemProxy>();
@@ -59,23 +102,80 @@ public class ItemView
     return widget;
   }
 
+  @UiHandler("itemCode")
+  public void onItemCodeChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setItemCode(event.getValue());
+  }
+
   @UiHandler("itemName")
-  void onItemNameChange(ValueChangeEvent<String> event) {
-    String name = event.getValue();
-    if (name == null || name.isEmpty()) {
-      return;
-    }
-    getUiHandlers().updateItemName(event.getValue());
+  public void onItemNameChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setItemName(event.getValue());
+  }
+
+  @UiHandler("itemCategoryList")
+  public void onItemCategoryChange(ValueChangeEvent<CategoryProxy> event) {
+    getUiHandlers().setItemCategory(itemCategoryList.getSelectedValue());
+  }
+
+  @UiHandler("itemCurrencyList")
+  public void onItemCurrencyChange(ValueChangeEvent<CurrencyProxy> event) {
+    getUiHandlers().setItemCurrency(itemCurrencyList.getSelectedValue());
+  }
+
+  @UiHandler("itemCreate")
+  public void onCreateCurrency(ClickEvent event) {
+    getUiHandlers().createItem();
+  }
+
+  @UiHandler("itemUpdate")
+  public void onUpdateCurrency(ClickEvent event) {
+    getUiHandlers().updateItem();
   }
 
   @Override
-  public HasData<ItemProxy> getTable() {
+  public HasData<ItemProxy> getItemTable() {
     return itemTable;
   }
 
   @Override
-  public void showItemName(String name) {
+  public HasSelectedValue<CategoryProxy> getCategoryList() {
+    return itemCategoryList;
+  }
+
+  @Override
+  public HasSelectedValue<CurrencyProxy> getCurrencyList() {
+    return itemCurrencyList;
+  }
+
+  @Override
+  public void enableCreateButton(boolean isValid) {
+    itemCreate.setEnabled(isValid);
+  }
+
+  @Override
+  public void enableUpdateButton(boolean isValid) {
+    itemUpdate.setEnabled(isValid);
+  }
+
+  @Override
+  public void setItemCode(String code) {
+    itemCode.setValue(code);
+  }
+
+  @Override
+  public void setItemName(String name) {
     itemName.setValue(name);
+  }
+
+  @Override
+  public void setItemCategory(CategoryProxy categoryProxy) {
+    itemCategoryList.setSelectedValue(categoryProxy);
+  }
+
+  //TODO:Nilson problem with ListBox unselecting itself
+  @Override
+  public void setItemCurrency(CurrencyProxy currencyProxy) {
+    itemCurrencyList.setSelectedValue(currencyProxy);
   }
 
   private void setupItemTable() {
@@ -95,6 +195,14 @@ public class ItemView
     };
     itemTable.addColumn(itemCategoryColumn, "Category");
 
+    Column<ItemProxy, String> itemCurrencyColumn = new Column<ItemProxy, String>(new EditTextCell()) {
+      @Override
+      public String getValue(ItemProxy itemProxy) {
+        return itemProxy.getCurrency().getName();
+      }
+    };
+    itemTable.addColumn(itemCurrencyColumn, "Currency");
+
     Column<ItemProxy, Date> dateColumn = new Column<ItemProxy, Date>(new DateCell()) {
       @Override
       public Date getValue(ItemProxy itemProxy) {
@@ -110,6 +218,8 @@ public class ItemView
       }
     };
     itemTable.addColumn(linkColumn);
+
+    itemTable.setPageSize(10);
 
     itemPager.setDisplay(itemTable);
   }

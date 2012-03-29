@@ -45,7 +45,7 @@ public class Category extends MyDatastoreObject {
   public boolean equals(final Object obj) {
     if (obj instanceof Category) {
       final Category other = (Category) obj;
-      return Objects.equal(getName(), other.getName())
+      return Objects.equal(getCode(), other.getCode())
           && Objects.equal(parent, other.parent);
     } else {
       return false;

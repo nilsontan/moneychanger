@@ -1,5 +1,6 @@
 package com.techstudio.erp.moneychanger.server.domain;
 
+import com.google.common.base.Objects;
 import com.googlecode.objectify.annotation.Unindexed;
 
 import java.math.BigDecimal;
@@ -8,6 +9,8 @@ import java.math.BigDecimal;
  * @author Nilson
  */
 public class Currency extends MyDatastoreObject {
+
+  public static final Currency EMPTY = new Currency();
 
   @Unindexed
   private String sign = "$";
@@ -33,9 +36,14 @@ public class Currency extends MyDatastoreObject {
     this.rate = new BigDecimal(rate).setScale(4).toString();
   }
 
-//  @Override
-//  public void setName(String name) {
-//    super.setName(name.trim().toUpperCase());
-//  }
+  @Override
+  public boolean equals(final Object obj) {
+    if (obj instanceof Currency) {
+      final Currency other = (Currency) obj;
+      return Objects.equal(getCode(), other.getCode());
+    } else {
+      return false;
+    }
+  }
 
 }

@@ -7,6 +7,8 @@
 
 package com.techstudio.erp.moneychanger.client.admin.presenter;
 
+import com.google.common.base.Strings;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -23,9 +25,10 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.CategoryUiHandlers;
 import com.techstudio.erp.moneychanger.client.ui.CategoryDataProvider;
-import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
+
+import java.util.List;
 
 /**
  * @author Nilson
@@ -43,23 +46,25 @@ public class CategoryPresenter
   }
 
   public interface MyView extends View, HasUiHandlers<CategoryUiHandlers> {
-    HasSelectedValue<CategoryProxy> getList();
+//    HasSelectedValue<CategoryProxy> getList();
 
     HasData<CategoryProxy> getTable();
 
-    void setCategoryName(String name);
+    void enableCreateButton(boolean isValid);
 
-//    void setParentCategoryIndex(int index);
-//
-//    void setParentCategoryList(List<String> names);
+    void enableUpdateButton(boolean isValid);
+
+    void setCategoryCode(String code);
+
+    void setCategoryName(String name);
   }
 
   private final Provider<CategoryRequest> categoryRequestProvider;
   private final CategoryDataProvider categoryDataProvider;
 
   private Long id;
-  private CategoryProxy categoryProxy;
-//  private List<CategoryProxy> parentCategoryList;
+  private String code;
+  private String name;
 
   @Inject
   public CategoryPresenter(final EventBus eventBus,
@@ -71,7 +76,6 @@ public class CategoryPresenter
     getView().setUiHandlers(this);
     this.categoryRequestProvider = categoryRequestProvider;
     this.categoryDataProvider = categoryDataProvider;
-    this.categoryDataProvider.addDataListDisplay(getView().getList());
     this.categoryDataProvider.addDataDisplay(getView().getTable());
   }
 
@@ -84,72 +88,90 @@ public class CategoryPresenter
   protected void onReset() {
     super.onReset();
 
-    categoryProxy = null;
-    categoryDataProvider.setCategory(categoryProxy);
-    if (id != null) {
-      categoryRequestProvider.get().fetch(id).with(CategoryProxy.PARENT)
+    if (id == null) {
+      code = "";
+      name = "";
+      categoryDataProvider.removeCategory();
+      updateView();
+    } else {
+      categoryRequestProvider.get().fetch(id)
           .fire(new Receiver<CategoryProxy>() {
             @Override
             public void onSuccess(CategoryProxy response) {
-              categoryProxy = response;
-              categoryDataProvider.setCategory(categoryProxy);
-              getView().setCategoryName(response.getName());
-
-//              parentCategoryList.remove(response);
-//              CategoryProxy parentCategory = response.getParent();
-//              int indexOfParent = 0;
-//              if (parentCategory != null) {
-//                indexOfParent = parentCategoryList.indexOf(parentCategory);
-//              }
-//          getView().setParentCategoryIndex(indexOfParent);
+              categoryDataProvider.setCategory(response);
+              code = response.getCode();
+              name = response.getName();
+              updateView();
             }
           });
     }
-    //TODO:Nilson delete this line if not needed
-//    RangeChangeEvent.fire(getView().getTable(), getView().getTable().getVisibleRange());
+  }
+
+  @Override
+  public void setCategoryCode(String code) {
+    this.code = code.trim().toUpperCase();
+    updateView();
   }
 
   @Override
   public void setCategoryName(String name) {
-    if (name == null) {
-      return;
-    }
-    if (categoryProxy == null || !name.equals(categoryProxy.getName())) {
-      CategoryRequest categoryRequest = categoryRequestProvider.get();
-      categoryProxy = getEditableCategoryProxy(categoryRequest);
-      categoryProxy.setName(name);
-      categoryRequest.save(categoryProxy).with(CategoryProxy.PARENT).fire(new Receiver<CategoryProxy>() {
-        @Override
-        public void onSuccess(CategoryProxy response) {
-          categoryProxy = response;
-          categoryDataProvider.updateAllData();
-        }
-      });
-    }
+    this.name = name.trim();
+    updateView();
   }
 
   @Override
-  public void setParentCategoryIndex(int index) {
-//    CategoryProxy parentCategoryProxy = parentCategoryList.get(index);
-//    if (categoryProxy == null || !parentCategoryProxy.equals(categoryProxy.getParent())) {
-//      CategoryRequest categoryRequest = categoryRequestProvider.get();
-//      categoryProxy = getEditableCategoryProxy(categoryRequest);
-//      categoryProxy.setParent(parentCategoryProxy);
-//      categoryRequest.save(categoryProxy).with(CategoryProxy.PARENT).fire(new Receiver<CategoryProxy>() {
-//        @Override
-//        public void onSuccess(CategoryProxy response) {
-//          categoryProxy = response;
-//          categoryDataProvider.updateTableData();
-//        }
-//      });
-//    }
+  public void createCategory() {
+    if (!isFormValid()) {
+      return;
+    }
+    categoryRequestProvider.get().fetchByProperty("code", code)
+        .fire(new Receiver<List<CategoryProxy>>() {
+          @Override
+          public void onSuccess(List<CategoryProxy> response) {
+            if (response.isEmpty()) {
+              CategoryRequest request = categoryRequestProvider.get();
+              CategoryProxy proxy = request.create(CategoryProxy.class);
+              fillData(proxy);
+              request.save(proxy).fire(new Receiver<CategoryProxy>() {
+                @Override
+                public void onSuccess(CategoryProxy response) {
+                  categoryDataProvider.updateAllData();
+                  updateView();
+                }
+              });
+            } else {
+              Window.alert("A category with that code already exist!");
+            }
+          }
+        });
   }
 
-  private CategoryProxy getEditableCategoryProxy(CategoryRequest categoryRequest) {
-    if (categoryProxy == null) {
-      categoryProxy = categoryRequest.create(CategoryProxy.class);
+  @Override
+  public void updateCategory() {
+    if (!isFormValid()) {
+      return;
     }
-    return categoryRequest.edit(categoryProxy);
+    categoryRequestProvider.get().fetchByProperty("code", code)
+        .fire(new Receiver<List<CategoryProxy>>() {
+          @Override
+          public void onSuccess(List<CategoryProxy> response) {
+            if (response.isEmpty()) {
+              Window.alert("A category with that code does not exist!");
+            } else {
+              CategoryRequest request = categoryRequestProvider.get();
+              CategoryProxy proxy = response.get(0);
+              proxy = request.edit(proxy);
+              fillData(proxy);
+              request.save(proxy).fire(new Receiver<CategoryProxy>() {
+                @Override
+                public void onSuccess(CategoryProxy response) {
+                  categoryDataProvider.updateAllData();
+                  updateView();
+                }
+              });
+            }
+          }
+        });
   }
 
   @Override
@@ -160,5 +182,23 @@ public class CategoryPresenter
     } catch (NumberFormatException e) {
       id = null;
     }
+  }
+
+  private void fillData(CategoryProxy proxy) {
+    proxy.setCode(code);
+    proxy.setName(name);
+  }
+
+  private void updateView() {
+    getView().setCategoryCode(code);
+    getView().setCategoryName(name);
+    boolean isValid = isFormValid();
+    getView().enableCreateButton(isValid);
+    getView().enableUpdateButton(isValid);
+  }
+
+  private boolean isFormValid() {
+    return !Strings.isNullOrEmpty(code)
+        && !Strings.isNullOrEmpty(name);
   }
 }

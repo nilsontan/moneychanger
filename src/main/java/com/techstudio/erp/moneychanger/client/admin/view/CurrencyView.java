@@ -189,7 +189,7 @@ public class CurrencyView
         return currencyProxy.getId();
       }
     };
-    currencyTable.addColumn(linkColumn, "View");
+    currencyTable.addColumn(linkColumn);
 
     currencyTable.setPageSize(10);
 

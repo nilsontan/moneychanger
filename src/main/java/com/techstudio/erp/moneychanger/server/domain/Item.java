@@ -11,6 +11,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.techstudio.erp.moneychanger.server.service.CategoryDao;
+import com.techstudio.erp.moneychanger.server.service.CurrencyDao;
 
 /**
  * A 'product' or item
@@ -22,7 +23,10 @@ public class Item extends MyDatastoreObject {
 
   private Key<Category> category;
 
-  public Item() { }
+  private Key<Currency> currency;
+
+  public Item() {
+  }
 
   public Category getCategory() {
     if (category == null) {
@@ -40,6 +44,24 @@ public class Item extends MyDatastoreObject {
       return;
     }
     this.category = new CategoryDao().key(category);
+  }
+
+  public Currency getCurrency() {
+    if (currency == null) {
+      return Currency.EMPTY;
+    }
+    try {
+      return new CurrencyDao().get(currency);
+    } catch (EntityNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public void setCurrency(Currency currency) {
+    if (currency.equals(Currency.EMPTY)) {
+      return;
+    }
+    this.currency = new CurrencyDao().key(currency);
   }
 
 }

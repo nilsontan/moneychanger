@@ -7,7 +7,6 @@
 
 package com.techstudio.erp.moneychanger.client.ui;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -23,6 +22,8 @@ import java.util.List;
  */
 public class CurrencyDataProvider extends MultiDataProvider<CurrencyProxy> {
 
+  private static CurrencyProxy DEFAULT_CURRENCY;
+
   private final Provider<CurrencyRequest> currencyRequestProvider;
 
   private CurrencyProxy currencyProxy;
@@ -30,6 +31,7 @@ public class CurrencyDataProvider extends MultiDataProvider<CurrencyProxy> {
   @Inject
   public CurrencyDataProvider(Provider<CurrencyRequest> currencyRequestProvider) {
     this.currencyRequestProvider = currencyRequestProvider;
+    findDefault();
   }
 
   public void updateAllData() {
@@ -39,12 +41,12 @@ public class CurrencyDataProvider extends MultiDataProvider<CurrencyProxy> {
           public void onSuccess(List<CurrencyProxy> currencyProxies) {
             updateRowCount(currencyProxies.size(), true);
             updateRowData(0, currencyProxies);
-            ImmutableList<CurrencyProxy> list
-                = new ImmutableList.Builder<CurrencyProxy>()
-                .add(NullEntityProxy.CURRENCY)
-                .addAll(currencyProxies)
-                .build();
-            updateList(list);
+//            ImmutableList<CurrencyProxy> list
+//                = new ImmutableList.Builder<CurrencyProxy>()
+//                .add(NullEntityProxy.CURRENCY)
+//                .addAll(currencyProxies)
+//                .build();
+            updateList(currencyProxies);
           }
         });
   }
@@ -64,14 +66,12 @@ public class CurrencyDataProvider extends MultiDataProvider<CurrencyProxy> {
     currencyRequestProvider.get().fetchAll()
         .fire(new Receiver<List<CurrencyProxy>>() {
           @Override
-          public void onSuccess(List<CurrencyProxy> currencyProxies) {
-            currencyProxies.remove(currencyProxy);
-            ImmutableList<CurrencyProxy> list
-                = new ImmutableList.Builder<CurrencyProxy>()
-                .add(NullEntityProxy.CURRENCY)
-                .addAll(currencyProxies)
-                .build();
-            updateList(list);
+          public void onSuccess(List<CurrencyProxy> responses) {
+//            ImmutableList<CurrencyProxy> list
+//                = new ImmutableList.Builder<CurrencyProxy>()
+//                .addAll(currencyProxies)
+//                .build();
+            updateList(responses);
           }
         });
   }
@@ -93,5 +93,33 @@ public class CurrencyDataProvider extends MultiDataProvider<CurrencyProxy> {
 
   public void removeCurrency() {
     this.currencyProxy = NullEntityProxy.CURRENCY;
+  }
+
+  public CurrencyProxy getDefaultCurrency() {
+    if (DEFAULT_CURRENCY == null) {
+      findDefault();
+    }
+    return DEFAULT_CURRENCY;
+  }
+
+  private void findDefault() {
+    currencyRequestProvider.get().fetchAll()
+        .fire(new Receiver<List<CurrencyProxy>>() {
+          @Override
+          public void onSuccess(List<CurrencyProxy> responses) {
+            if (responses.isEmpty()) {
+            } else {
+              for (CurrencyProxy proxy : responses) {
+                if (proxy.getCode().equals("SGD")) {
+                  DEFAULT_CURRENCY = proxy;
+                  break;
+                }
+              }
+              if (DEFAULT_CURRENCY == null) {
+                DEFAULT_CURRENCY = responses.get(0);
+              }
+            }
+          }
+        });
   }
 }

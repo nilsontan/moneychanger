@@ -13,7 +13,11 @@ import com.gwtplatform.mvp.client.UiHandlers;
  * @author Nilson
  */
 public interface CategoryUiHandlers extends UiHandlers {
+  void setCategoryCode(String code);
+
   void setCategoryName(String name);
 
-  void setParentCategoryIndex(int name);
+  void createCategory();
+
+  void updateCategory();
 }

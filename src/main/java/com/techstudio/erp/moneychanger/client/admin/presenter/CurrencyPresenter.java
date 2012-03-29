@@ -49,9 +49,9 @@ public class CurrencyPresenter
   public interface MyView extends View, HasUiHandlers<CurrencyUiHandlers> {
     HasData<CurrencyProxy> getTable();
 
-    void enableCreateButton(boolean isFilled);
+    void enableCreateButton(boolean isValid);
 
-    void enableUpdateButton(boolean isFilled);
+    void enableUpdateButton(boolean isValid);
 
     void setCurrencyCode(String code);
 
@@ -137,7 +137,7 @@ public class CurrencyPresenter
 
   @Override
   public void createCurrency() {
-    if (!formIsValidated()) {
+    if (!isFormValid()) {
       return;
     }
     currencyRequestProvider.get().fetchByProperty("code", code)
@@ -164,7 +164,7 @@ public class CurrencyPresenter
 
   @Override
   public void updateCurrency() {
-    if (!formIsValidated()) {
+    if (!isFormValid()) {
       return;
     }
     currencyRequestProvider.get().fetchByProperty("code", code)
@@ -196,13 +196,6 @@ public class CurrencyPresenter
     testData.repopulateCurrencies(currencyRequestProvider, currencyDataProvider);
   }
 
-  private void fillData(CurrencyProxy proxy) {
-    proxy.setCode(code);
-    proxy.setName(name);
-    proxy.setSign(sign);
-    proxy.setRate(rate);
-  }
-
   @Override
   public void prepareFromRequest(PlaceRequest placeRequest) {
     String idString = placeRequest.getParameter("id", "");
@@ -213,17 +206,24 @@ public class CurrencyPresenter
     }
   }
 
+  private void fillData(CurrencyProxy proxy) {
+    proxy.setCode(code);
+    proxy.setName(name);
+    proxy.setSign(sign);
+    proxy.setRate(rate);
+  }
+
   private void updateView() {
     getView().setCurrencyCode(code);
     getView().setCurrencyName(name);
     getView().setCurrencySign(sign);
     getView().setCurrencyRate(rate);
-    boolean isFilled = formIsValidated();
-    getView().enableCreateButton(isFilled);
-    getView().enableUpdateButton(isFilled);
+    boolean isValid = isFormValid();
+    getView().enableCreateButton(isValid);
+    getView().enableUpdateButton(isValid);
   }
 
-  private boolean formIsValidated() {
+  private boolean isFormValid() {
     return !Strings.isNullOrEmpty(code)
         && !Strings.isNullOrEmpty(name)
         && !Strings.isNullOrEmpty(sign)

@@ -27,6 +27,10 @@ public interface CategoryRequest extends RequestContext {
 
   Request<CategoryProxy> fetch(Long id);
 
+  Request<Void> purge(CategoryProxy currencyProxy);
+
+  Request<List<CategoryProxy>> fetchByProperty(String prop, String value);
+
   Request<List<CategoryProxy>> fetchRange(Integer start, Integer length);
 
   Request<Integer> getCount();

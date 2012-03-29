@@ -21,7 +21,7 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
-import com.techstudio.erp.moneychanger.client.admin.view.CategoryUiHandlers;
+import com.techstudio.erp.moneychanger.client.pos.view.PosUiHandlers;
 import com.techstudio.erp.moneychanger.client.ui.CategoryDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
@@ -31,7 +31,7 @@ import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
  */
 public class PosPresenter
     extends Presenter<PosPresenter.MyView, PosPresenter.MyProxy>
-    implements CategoryUiHandlers {
+    implements PosUiHandlers {
 
   /**
    * {@link com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter}'s proxy.
@@ -41,7 +41,7 @@ public class PosPresenter
   public interface MyProxy extends ProxyPlace<PosPresenter> {
   }
 
-  public interface MyView extends View, HasUiHandlers<CategoryUiHandlers> {
+  public interface MyView extends View, HasUiHandlers<PosUiHandlers> {
     HasData<CategoryProxy> getTable();
 
     void setCategoryName(String name);
@@ -98,7 +98,7 @@ public class PosPresenter
           });
     }
     //TODO:Nilson delete this line if not needed
-//    RangeChangeEvent.fire(getView().getTable(), getView().getTable().getVisibleRange());
+//    RangeChangeEvent.fire(getView().getItemTable(), getView().getItemTable().getVisibleRange());
   }
 
   @Override

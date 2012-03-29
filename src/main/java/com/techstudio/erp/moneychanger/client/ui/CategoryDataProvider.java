@@ -23,6 +23,8 @@ import java.util.List;
  */
 public class CategoryDataProvider extends MultiDataProvider<CategoryProxy> {
 
+  private static CategoryProxy DEFAULT_CATEGORY;
+
   private final Provider<CategoryRequest> categoryRequestProvider;
 
   private CategoryProxy categoryProxy;
@@ -30,6 +32,7 @@ public class CategoryDataProvider extends MultiDataProvider<CategoryProxy> {
   @Inject
   public CategoryDataProvider(Provider<CategoryRequest> categoryRequestProvider) {
     this.categoryRequestProvider = categoryRequestProvider;
+    findDefault();
   }
 
   public void updateAllData() {
@@ -64,14 +67,8 @@ public class CategoryDataProvider extends MultiDataProvider<CategoryProxy> {
     categoryRequestProvider.get().fetchAll().with(CategoryProxy.PARENT)
         .fire(new Receiver<List<CategoryProxy>>() {
           @Override
-          public void onSuccess(List<CategoryProxy> categoryProxies) {
-            categoryProxies.remove(categoryProxy);
-            ImmutableList<CategoryProxy> list
-                = new ImmutableList.Builder<CategoryProxy>()
-                .add(NullEntityProxy.CATEGORY)
-                .addAll(categoryProxies)
-                .build();
-            updateList(list);
+          public void onSuccess(List<CategoryProxy> responses) {
+            updateList(responses);
           }
         });
   }
@@ -93,5 +90,25 @@ public class CategoryDataProvider extends MultiDataProvider<CategoryProxy> {
 
   public void removeCategory() {
     this.categoryProxy = null;
+  }
+
+  public CategoryProxy getDefaultCategory() {
+    if (DEFAULT_CATEGORY == null) {
+      findDefault();
+    }
+    return DEFAULT_CATEGORY;
+  }
+
+  private void findDefault() {
+    categoryRequestProvider.get().fetchAll()
+        .fire(new Receiver<List<CategoryProxy>>() {
+          @Override
+          public void onSuccess(List<CategoryProxy> responses) {
+            if (responses.isEmpty()) {
+            } else {
+              DEFAULT_CATEGORY = responses.get(0);
+            }
+          }
+        });
   }
 }

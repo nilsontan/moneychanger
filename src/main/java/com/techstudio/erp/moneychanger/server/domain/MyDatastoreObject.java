@@ -12,14 +12,14 @@ import java.util.Date;
 /**
  * Datastore Object with some common parameters
  * <ol>
- *   <li>Code</li>
- *   <li>Name</li>
- *   <li>Date Created</li>
+ * <li>Code</li>
+ * <li>Name</li>
+ * <li>Date Created</li>
  * </ol>
  *
  * @author Nilson
  */
-public abstract class MyDatastoreObject extends DatastoreObject {
+public class MyDatastoreObject extends DatastoreObject {
   private String code = "";
   private String name = "";
   private final Date creationDate = new Date();

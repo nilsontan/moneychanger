@@ -37,8 +37,8 @@ public class CategoryInfoForm extends Composite {
   }
 
 //  @Override
-//  public void showItemName(String name) {
-//    categoryName.showItemName(name);
+//  public void setItemName(String name) {
+//    categoryName.setItemName(name);
 //  }
 //
 //  @Override

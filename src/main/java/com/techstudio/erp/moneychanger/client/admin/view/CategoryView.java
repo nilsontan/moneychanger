@@ -7,8 +7,8 @@
 
 package com.techstudio.erp.moneychanger.client.admin.view;
 
-import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.EditTextCell;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -16,6 +16,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -24,11 +25,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.admin.presenter.CategoryPresenter;
 import com.techstudio.erp.moneychanger.client.ui.CategoryLinkCell;
-import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
-import com.techstudio.erp.moneychanger.client.ui.SelectOneListBox;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
-
-import java.util.Date;
 
 /**
  * @author Nilson
@@ -46,21 +43,16 @@ public class CategoryView
   Grid catGrid;
 
   @UiField
+  TextBox categoryCode;
+
+  @UiField
   TextBox categoryName;
 
-  @UiField(provided = true)
-  SelectOneListBox<CategoryProxy> categoryParentList
-      = new SelectOneListBox<CategoryProxy>(new SelectOneListBox.OptionFormatter<CategoryProxy>() {
-    @Override
-    public String getLabel(CategoryProxy option) {
-      return option.getName();
-    }
+  @UiField
+  Button categoryCreate;
 
-    @Override
-    public String getValue(CategoryProxy option) {
-      return option.getId().toString();
-    }
-  });
+  @UiField
+  Button categoryUpdate;
 
   @UiField
   CellTable<CategoryProxy> categoryTable = new CellTable<CategoryProxy>();
@@ -79,19 +71,24 @@ public class CategoryView
     return widget;
   }
 
+  @UiHandler("categoryCode")
+  public void onCategoryCodeChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setCategoryCode(event.getValue());
+  }
+
   @UiHandler("categoryName")
-  void onCategoryNameChange(ValueChangeEvent<String> event) {
+  public void onCategoryNameChange(ValueChangeEvent<String> event) {
     getUiHandlers().setCategoryName(event.getValue());
   }
 
-//  @UiHandler("categoryParent")
-//  void onCategoryParentChange(ChangeEvent event) {
-//    getUiHandlers().setParentCategoryIndex(categoryParent.getSelectedIndex());
-//  }
+  @UiHandler("categoryCreate")
+  public void onCreateCurrency(ClickEvent event) {
+    getUiHandlers().createCategory();
+  }
 
-  @Override
-  public HasSelectedValue<CategoryProxy> getList() {
-    return categoryParentList;
+  @UiHandler("categoryUpdate")
+  public void onUpdateCurrency(ClickEvent event) {
+    getUiHandlers().updateCategory();
   }
 
   @Override
@@ -100,24 +97,34 @@ public class CategoryView
   }
 
   @Override
+  public void enableCreateButton(boolean isValid) {
+    categoryCreate.setEnabled(isValid);
+  }
+
+  @Override
+  public void enableUpdateButton(boolean isValid) {
+    categoryUpdate.setEnabled(isValid);
+  }
+
+  @Override
+  public void setCategoryCode(String code) {
+    categoryCode.setValue(code);
+  }
+
+  @Override
   public void setCategoryName(String name) {
     categoryName.setValue(name);
   }
 
-//  @Override
-//  public void setParentCategoryIndex(int index) {
-//    categoryParent.setSelectedIndex(index);
-//  }
-//
-//  @Override
-//  public void setParentCategoryList(List<String> names) {
-//    categoryParent.clear();
-//    for (String name : names) {
-//      categoryParent.addItem(name);
-//    }
-//  }
-
   private void setupCategoryTable() {
+    Column<CategoryProxy, String> categoryCodeColumn = new Column<CategoryProxy, String>(new EditTextCell()) {
+      @Override
+      public String getValue(CategoryProxy categoryProxy) {
+        return categoryProxy.getCode();
+      }
+    };
+    categoryTable.addColumn(categoryCodeColumn, "Code");
+
     Column<CategoryProxy, String> categoryNameColumn = new Column<CategoryProxy, String>(new EditTextCell()) {
       @Override
       public String getValue(CategoryProxy categoryProxy) {
@@ -125,22 +132,6 @@ public class CategoryView
       }
     };
     categoryTable.addColumn(categoryNameColumn, "Name");
-
-    Column<CategoryProxy, String> categoryParentNameColumn = new Column<CategoryProxy, String>(new EditTextCell()) {
-      @Override
-      public String getValue(CategoryProxy categoryProxy) {
-        return categoryProxy.getParent().getName();
-      }
-    };
-    categoryTable.addColumn(categoryParentNameColumn, "Parent");
-
-    Column<CategoryProxy, Date> dateColumn = new Column<CategoryProxy, Date>(new DateCell()) {
-      @Override
-      public Date getValue(CategoryProxy categoryProxy) {
-        return categoryProxy.getCreationDate();
-      }
-    };
-    categoryTable.addColumn(dateColumn, "Created on");
 
     Column<CategoryProxy, Long> linkColumn = new Column<CategoryProxy, Long>(new CategoryLinkCell()) {
       @Override

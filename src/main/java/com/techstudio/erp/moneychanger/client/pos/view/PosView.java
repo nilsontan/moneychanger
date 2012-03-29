@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-import com.techstudio.erp.moneychanger.client.admin.view.CategoryUiHandlers;
 import com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter.MyView;
 import com.techstudio.erp.moneychanger.client.ui.CategoryLinkCell;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
@@ -33,7 +32,7 @@ import java.util.Date;
  * @author Nilson
  */
 public class PosView
-    extends ViewWithUiHandlers<CategoryUiHandlers>
+    extends ViewWithUiHandlers<PosUiHandlers>
     implements MyView {
 
   public interface Binder extends UiBinder<Widget, PosView> {

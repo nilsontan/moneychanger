@@ -16,6 +16,7 @@ public class NullEntityProxy {
 
   public static final NullCategoryProxy CATEGORY = new NullCategoryProxy();
   public static final NullCurrencyProxy CURRENCY = new NullCurrencyProxy();
+  public static final NullItemProxy ITEM = new NullItemProxy();
 
   public static class NullCategoryProxy
       extends AbstractNullEntityProxy implements CategoryProxy {
@@ -47,6 +48,28 @@ public class NullEntityProxy {
 
     @Override
     public void setRate(String rate) {
+    }
+  }
+
+  public static class NullItemProxy
+      extends AbstractNullEntityProxy implements ItemProxy {
+
+    @Override
+    public CategoryProxy getCategory() {
+      return null;
+    }
+
+    @Override
+    public void setCategory(CategoryProxy categoryProxy) {
+    }
+
+    @Override
+    public CurrencyProxy getCurrency() {
+      return null;
+    }
+
+    @Override
+    public void setCurrency(CurrencyProxy currencyProxy) {
     }
   }
 }

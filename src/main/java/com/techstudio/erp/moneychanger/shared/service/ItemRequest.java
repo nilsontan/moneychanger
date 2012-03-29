@@ -27,6 +27,8 @@ public interface ItemRequest extends RequestContext {
 
   Request<ItemProxy> fetch(Long id);
 
+  Request<Void> purge(ItemProxy currencyProxy);
+
   Request<List<ItemProxy>> fetchByProperty(String prop, String value);
 
   Request<List<ItemProxy>> fetchRange(Integer start, Integer length);
