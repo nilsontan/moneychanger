@@ -22,21 +22,27 @@ package com.techstudio.erp.moneychanger.client;
  * @author Nilson
  */
 public class NameTokens {
-  public static final String CATEGORY_PAGE = "!CATEGORY_PAGE";
+  public static final String POS_PAGE = "!POS_PAGE";
 
   public static final String ITEM_PAGE = "!ITEM_PAGE";
 
-  public static final String POS_PAGE = "!POS_PAGE";
+  public static final String CATEGORY_PAGE = "!CATEGORY_PAGE";
 
-  public static String getCategoryPage() {
-    return CATEGORY_PAGE;
+  public static final String CURRENCY_PAGE = "!CURRENCY_PAGE";
+
+  public static String getPosPage() {
+    return POS_PAGE;
   }
 
   public static String getItemPage() {
     return ITEM_PAGE;
   }
 
-  public static String getPosPage() {
-    return POS_PAGE;
+  public static String getCategoryPage() {
+    return CATEGORY_PAGE;
+  }
+
+  public static String getCurrencyPage() {
+    return CURRENCY_PAGE;
   }
 }

@@ -1,0 +1,50 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:c="urn:import:com.google.gwt.user.cellview.client"
+    >
+
+  <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+
+  <g:FlowPanel>
+    <g:Label text="Currency List" addStyleNames="{res.admin.pageTitle}" />
+    <g:Label text="Create or Update currencies quickly" addStyleNames="{res.admin.pageDescription}" />
+    <g:HorizontalPanel spacing="10">
+      <g:FlowPanel>
+        <c:CellTable ui:field="currencyTable" />
+        <c:SimplePager ui:field="currencyPager" location="CENTER" />
+      </g:FlowPanel>
+      <g:VerticalPanel>
+        <g:DecoratorPanel>
+          <g:FlowPanel>
+            <g:Label text="Currency Info" addStyleNames="{res.admin.formTitle}" />
+            <g:Grid ui:field="catGrid">
+              <g:row>
+                <g:customCell>
+                  <g:Label text="Code" addStyleNames="{res.admin.formParam}" />
+                </g:customCell>
+                <g:customCell>
+                  <g:TextBox ui:field="currencyCode" />
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <g:Label text="Name" addStyleNames="{res.admin.formParam}" />
+                </g:customCell>
+                <g:customCell>
+                  <g:TextBox ui:field="currencyName" />
+                </g:customCell>
+              </g:row>
+            </g:Grid>
+            <g:HorizontalPanel spacing="2">
+              <g:Button ui:field="currencyUpdate" text="Update Currency" />
+              <g:Button ui:field="currencyCreate" text="Create Currency" />
+            </g:HorizontalPanel>
+          </g:FlowPanel>
+        </g:DecoratorPanel>
+        <g:Button ui:field="currencyData" text="Reset Currencies" />
+      </g:VerticalPanel>
+    </g:HorizontalPanel>
+  </g:FlowPanel>
+
+</ui:UiBinder>

@@ -10,6 +10,7 @@ package com.techstudio.erp.moneychanger.client.resources;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.TextResource;
 
 /**
  * @author Nilson
@@ -28,6 +29,9 @@ public interface Resources extends ClientBundle {
 
   @Source("logo_pos.png")
   ImageResource logoPos();
+
+  @Source("currency.txt")
+  TextResource currencyText();
 
   public interface StyleAdmin extends CssResource {
     String centered();

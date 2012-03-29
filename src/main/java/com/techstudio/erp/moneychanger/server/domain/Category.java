@@ -14,7 +14,7 @@ import com.googlecode.objectify.annotation.Entity;
 import com.techstudio.erp.moneychanger.server.service.CategoryDao;
 
 @Entity
-public class Category extends DatedDatastoreObject {
+public class Category extends MyDatastoreObject {
 
   public static final Category EMPTY = new Category();
 

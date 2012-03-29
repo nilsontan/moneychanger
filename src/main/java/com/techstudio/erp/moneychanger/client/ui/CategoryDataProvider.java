@@ -33,7 +33,7 @@ public class CategoryDataProvider extends MultiDataProvider<CategoryProxy> {
   }
 
   public void updateAllData() {
-    categoryRequestProvider.get().listAll().with(CategoryProxy.PARENT)
+    categoryRequestProvider.get().fetchAll().with(CategoryProxy.PARENT)
         .fire(new Receiver<List<CategoryProxy>>() {
           @Override
           public void onSuccess(List<CategoryProxy> categoryProxies) {
@@ -50,7 +50,7 @@ public class CategoryDataProvider extends MultiDataProvider<CategoryProxy> {
   }
 
   public void updateTableData() {
-    categoryRequestProvider.get().listAll().with(CategoryProxy.PARENT)
+    categoryRequestProvider.get().fetchAll().with(CategoryProxy.PARENT)
         .fire(new Receiver<List<CategoryProxy>>() {
           @Override
           public void onSuccess(List<CategoryProxy> categoryProxies) {
@@ -61,7 +61,7 @@ public class CategoryDataProvider extends MultiDataProvider<CategoryProxy> {
   }
 
   public void updateListData() {
-    categoryRequestProvider.get().listAll().with(CategoryProxy.PARENT)
+    categoryRequestProvider.get().fetchAll().with(CategoryProxy.PARENT)
         .fire(new Receiver<List<CategoryProxy>>() {
           @Override
           public void onSuccess(List<CategoryProxy> categoryProxies) {

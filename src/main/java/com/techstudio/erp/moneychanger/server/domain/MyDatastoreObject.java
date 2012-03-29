@@ -11,12 +11,26 @@ import java.util.Date;
 
 /**
  * Datastore Object with some common parameters
+ * <ol>
+ *   <li>Code</li>
+ *   <li>Name</li>
+ *   <li>Date Created</li>
+ * </ol>
  *
  * @author Nilson
  */
-public abstract class DatedDatastoreObject extends DatastoreObject {
-  private String name = "-";
+public abstract class MyDatastoreObject extends DatastoreObject {
+  private String code = "";
+  private String name = "";
   private final Date creationDate = new Date();
+
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code.trim().toUpperCase();
+  }
 
   public String getName() {
     return name;

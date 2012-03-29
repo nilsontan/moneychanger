@@ -7,6 +7,7 @@
 
 package com.techstudio.erp.moneychanger.client.admin.presenter;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.inject.Inject;
@@ -26,6 +27,8 @@ import com.techstudio.erp.moneychanger.client.admin.view.ItemUiHandlers;
 import com.techstudio.erp.moneychanger.client.ui.ItemDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.service.ItemRequest;
+
+import java.util.List;
 
 /**
  * @author Nilson
@@ -87,18 +90,25 @@ public class ItemPresenter
   }
 
   @Override
-  public void updateItemName(String name) {
-    if (name == null) {
-      return;
-    }
+  public void updateItemName(final String name) {
     if (itemProxy == null || !name.equals(itemProxy.getName())) {
-      ItemRequest itemRequest = itemRequestProvider.get();
-      itemProxy = getEditableItemProxy(itemRequest);
-      itemProxy.setName(name);
-      itemRequest.save(itemProxy).with("category").fire(new Receiver<ItemProxy>() {
+
+      itemRequestProvider.get().fetchByProperty("name", name).fire(new Receiver<List<ItemProxy>>() {
         @Override
-        public void onSuccess(ItemProxy response) {
-          itemDataProvider.updateData();
+        public void onSuccess(List<ItemProxy> response) {
+          if (response.isEmpty()) {
+            ItemRequest itemRequest = itemRequestProvider.get();
+            itemProxy = getEditableItemProxy(itemRequest);
+            itemProxy.setName(name);
+            itemRequest.save(itemProxy).with("category").fire(new Receiver<ItemProxy>() {
+              @Override
+              public void onSuccess(ItemProxy response) {
+                itemDataProvider.updateData();
+              }
+            });
+          } else {
+            Window.alert("An item with that name already exist!");
+          }
         }
       });
     }
@@ -109,19 +119,19 @@ public class ItemPresenter
 //      return;
 //    }
 //    if (categoryProxy == null || !name.equals(categoryProxy.getName())) {
-//      CategoryRequest categoryService = categoryServiceProvider.get();
-//      categoryProxy = getEditableCategoryProxy(categoryService);
+//      CategoryRequest categoryRequest = categoryServiceProvider.get();
+//      categoryProxy = getEditableCategoryProxy(categoryRequest);
 //      categoryProxy.showItemName(name);
-//      categoryService.save(categoryProxy).to(new Receiver<Void>() {
+//      categoryRequest.save(categoryProxy).to(new Receiver<Void>() {
 //        @Override
 //        public void onSuccess(Void aVoid) {
 //          categoryDataProvider.updateTableData();
 ////          getView().setItemCatName(name);
 ////          getView().updateCatTable(categoryProxy);
-//          ItemRequest itemService = itemRequestProvider.get();
-//          itemProxy = getEditableItemProxy(itemService);
+//          ItemRequest itemRequest = itemRequestProvider.get();
+//          itemProxy = getEditableItemProxy(itemRequest);
 //          itemProxy.setCategory(categoryProxy);
-//          itemService.save(itemProxy).with("category").to(new Receiver<Void>() {
+//          itemRequest.save(itemProxy).with("category").to(new Receiver<Void>() {
 //            @Override
 //            public void onSuccess(Void aVoid) {
 //              itemDataProvider.updateTableData();

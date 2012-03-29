@@ -8,32 +8,36 @@
 package com.techstudio.erp.moneychanger.server.service;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.techstudio.erp.moneychanger.server.domain.Item;
+import com.techstudio.erp.moneychanger.server.domain.Currency;
 
 import java.util.List;
 
 /**
  * @author Nilson
  */
-public class ItemDao extends ObjectifyDao<Item> {
-  public List<Item> fetchAll() {
+public class CurrencyDao extends ObjectifyDao<Currency> {
+  public List<Currency> fetchAll() {
     return listAll();
   }
 
-  public Item save(Item item) {
-    put(item);
-    return item;
+  public Currency save(Currency currency) {
+    put(currency);
+    return currency;
   }
 
-  public Item fetch(Long id) throws EntityNotFoundException {
+  public Currency fetch(Long id) throws EntityNotFoundException {
     return get(id);
   }
 
-  public List<Item> fetchByProperty(String prop, String value) {
+  public void purge(Currency currency) {
+    delete(currency);
+  }
+
+  public List<Currency> fetchByProperty(String prop, String value) {
     return listByProperty(prop, value);
   }
 
-  public List<Item> fetchRange(Integer start, Integer length) {
+  public List<Currency> fetchRange(Integer start, Integer length) {
     return listAll(start, length);
   }
 

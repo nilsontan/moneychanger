@@ -17,7 +17,7 @@ import java.util.List;
  * @author Nilson
  */
 public class CategoryDao extends ObjectifyDao<Category> {
-  public List<Category> listAllCategories() {
+  public List<Category> fetchAll() {
     return listAll();
   }
 

@@ -15,5 +15,8 @@
     <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getCategoryPage}">
       Category
     </g:InlineHyperlink>
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getCurrencyPage}">
+      Currency
+    </g:InlineHyperlink>
   </g:HTMLPanel>
 </ui:UiBinder> 

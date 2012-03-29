@@ -61,6 +61,10 @@ public class ItemView
 
   @UiHandler("itemName")
   void onItemNameChange(ValueChangeEvent<String> event) {
+    String name = event.getValue();
+    if (name == null || name.isEmpty()) {
+      return;
+    }
     getUiHandlers().updateItemName(event.getValue());
   }
 

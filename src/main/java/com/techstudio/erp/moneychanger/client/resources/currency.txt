@@ -1,0 +1,24 @@
+AUD,Australian Dollar
+GBP,British Pound
+CAD,Canadian Dollar
+DKK,Danish Krone
+EUR,Euro
+HKD,Hong Kong Dollar
+INR,Indian Rupee
+IDR,Indonesian Rupiah
+JPY,Japanese Yen
+KRW,Korean Won
+MYR,Malaysian Ringgit
+NOK,Norwegian Krone
+NZD,New Zealand Dollar
+PHP,Philippine Peso
+SAR,Saudi Riyal
+SGD,Singapore Dollar
+ZAR,South African Rand
+SEK,Swedish Krona
+CHF,Swiss Franc
+TWD,Taiwan Dollar
+THB,Thai Baht
+AED,UAE Dirham
+USD,United States Dollar
+VND,Vietnam Dong

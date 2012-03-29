@@ -14,6 +14,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.client.gin.DispatchAsyncModule;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.techstudio.erp.moneychanger.client.admin.presenter.CategoryPresenter;
+import com.techstudio.erp.moneychanger.client.admin.presenter.CurrencyPresenter;
 import com.techstudio.erp.moneychanger.client.admin.presenter.ItemPresenter;
 import com.techstudio.erp.moneychanger.client.admin.presenter.MainPagePresenter;
 import com.techstudio.erp.moneychanger.client.pos.presenter.MainPosPresenter;
@@ -36,13 +37,11 @@ public interface MoneychangerGinjector extends Ginjector {
   MoneychangerRequestFactory getRequestFactory();
 
   AsyncProvider<MainPagePresenter> getMainPagePresenter();
-
-  AsyncProvider<CategoryPresenter> getAboutUsPresenter();
-
-  AsyncProvider<ItemPresenter> getContactPresenter();
+  AsyncProvider<ItemPresenter> getItemPresenter();
+  AsyncProvider<CategoryPresenter> getCategoryPresenter();
+  AsyncProvider<CurrencyPresenter> getCurrencyPresenter();
 
   AsyncProvider<MainPosPresenter> getMainPosPresenter();
-
   AsyncProvider<PosPresenter> getPosPresenter();
 
 }

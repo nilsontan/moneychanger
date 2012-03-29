@@ -22,9 +22,11 @@ import com.gwtplatform.mvp.client.proxy.TokenFormatter;
 import com.techstudio.erp.moneychanger.client.MoneychangerPlaceManager;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.presenter.CategoryPresenter;
+import com.techstudio.erp.moneychanger.client.admin.presenter.CurrencyPresenter;
 import com.techstudio.erp.moneychanger.client.admin.presenter.ItemPresenter;
 import com.techstudio.erp.moneychanger.client.admin.presenter.MainPagePresenter;
 import com.techstudio.erp.moneychanger.client.admin.view.CategoryView;
+import com.techstudio.erp.moneychanger.client.admin.view.CurrencyView;
 import com.techstudio.erp.moneychanger.client.admin.view.ItemView;
 import com.techstudio.erp.moneychanger.client.admin.view.MainPageView;
 import com.techstudio.erp.moneychanger.client.pos.presenter.MainPosPresenter;
@@ -33,6 +35,7 @@ import com.techstudio.erp.moneychanger.client.pos.view.MainPosView;
 import com.techstudio.erp.moneychanger.client.pos.view.PosView;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
+import com.techstudio.erp.moneychanger.shared.service.CurrencyRequest;
 import com.techstudio.erp.moneychanger.shared.service.ItemRequest;
 import com.techstudio.erp.moneychanger.shared.service.MoneychangerRequestFactory;
 
@@ -59,10 +62,12 @@ public class MoneychangerModule extends AbstractPresenterModule {
     // Presenters
     bindPresenter(MainPagePresenter.class, MainPagePresenter.MyView.class,
         MainPageView.class, MainPagePresenter.MyProxy.class);
-    bindPresenter(CategoryPresenter.class, CategoryPresenter.MyView.class,
-        CategoryView.class, CategoryPresenter.MyProxy.class);
     bindPresenter(ItemPresenter.class, ItemPresenter.MyView.class,
         ItemView.class, ItemPresenter.MyProxy.class);
+    bindPresenter(CategoryPresenter.class, CategoryPresenter.MyView.class,
+        CategoryView.class, CategoryPresenter.MyProxy.class);
+    bindPresenter(CurrencyPresenter.class, CurrencyPresenter.MyView.class,
+        CurrencyView.class, CurrencyPresenter.MyProxy.class);
 
     bindPresenter(MainPosPresenter.class, MainPosPresenter.MyView.class,
         MainPosView.class, MainPosPresenter.MyProxy.class);
@@ -79,12 +84,17 @@ public class MoneychangerModule extends AbstractPresenterModule {
   }
 
   @Provides
-  CategoryRequest provideCategoryService(MoneychangerRequestFactory requestFactory) {
-    return requestFactory.categoryService();
+  ItemRequest provideItemService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.itemRequest();
   }
 
   @Provides
-  ItemRequest provideItemService(MoneychangerRequestFactory requestFactory) {
-    return requestFactory.itemService();
+  CategoryRequest provideCategoryService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.categoryRequest();
+  }
+
+  @Provides
+  CurrencyRequest provideCurrencyService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.currencyRequest();
   }
 }

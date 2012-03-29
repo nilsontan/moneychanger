@@ -13,6 +13,7 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 import com.googlecode.objectify.util.DAOBase;
 import com.techstudio.erp.moneychanger.server.domain.Category;
+import com.techstudio.erp.moneychanger.server.domain.Currency;
 import com.techstudio.erp.moneychanger.server.domain.Item;
 
 import javax.persistence.Embedded;
@@ -36,8 +37,9 @@ public class ObjectifyDao<T> extends DAOBase {
       | Modifier.TRANSIENT;
 
   static {
-    ObjectifyService.register(Category.class);
     ObjectifyService.register(Item.class);
+    ObjectifyService.register(Category.class);
+    ObjectifyService.register(Currency.class);
   }
 
   protected Class<T> clazz;

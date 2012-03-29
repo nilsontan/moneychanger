@@ -16,14 +16,14 @@ import java.util.Date;
  */
 public interface BaseEntityProxy extends EntityProxy {
   Long getId();
-
   Integer getVersion();
 
-  String getName();
+  String getCode();
+  void setCode(String code);
 
+  String getName();
   void setName(String name);
 
   Date getCreationDate();
-
   void setCreationDate(Date date);
 }

@@ -11,25 +11,27 @@ import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.Service;
 import com.techstudio.erp.moneychanger.server.locator.DaoServiceLocator;
-import com.techstudio.erp.moneychanger.server.service.ItemDao;
-import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
+import com.techstudio.erp.moneychanger.server.service.CurrencyDao;
+import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 
 import java.util.List;
 
 /**
  * @author Nilson
  */
-@Service(value = ItemDao.class, locator = DaoServiceLocator.class)
-public interface ItemRequest extends RequestContext {
-  Request<List<ItemProxy>> fetchAll();
+@Service(value = CurrencyDao.class, locator = DaoServiceLocator.class)
+public interface CurrencyRequest extends RequestContext {
+  Request<List<CurrencyProxy>> fetchAll();
 
-  Request<ItemProxy> save(ItemProxy editable);
+  Request<CurrencyProxy> save(CurrencyProxy editable);
 
-  Request<ItemProxy> fetch(Long id);
+  Request<CurrencyProxy> fetch(Long id);
 
-  Request<List<ItemProxy>> fetchByProperty(String prop, String value);
+  Request<Void> purge(CurrencyProxy currencyProxy);
 
-  Request<List<ItemProxy>> fetchRange(Integer start, Integer length);
+  Request<List<CurrencyProxy>> fetchByProperty(String prop, String value);
+
+  Request<List<CurrencyProxy>> fetchRange(Integer start, Integer length);
 
   Request<Integer> getCount();
 }

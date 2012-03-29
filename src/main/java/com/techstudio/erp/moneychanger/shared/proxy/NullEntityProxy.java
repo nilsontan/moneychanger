@@ -15,8 +15,10 @@ package com.techstudio.erp.moneychanger.shared.proxy;
 public class NullEntityProxy {
 
   public static final NullCategoryProxy CATEGORY = new NullCategoryProxy();
+  public static final NullCurrencyProxy CURRENCY = new NullCurrencyProxy();
 
-  public static class NullCategoryProxy extends AbstractNullEntityProxy implements CategoryProxy {
+  public static class NullCategoryProxy
+      extends AbstractNullEntityProxy implements CategoryProxy {
     @Override
     public CategoryProxy getParent() {
       return null;
@@ -25,5 +27,9 @@ public class NullEntityProxy {
     @Override
     public void setParent(CategoryProxy categoryProxy) {
     }
+  }
+
+  public static class NullCurrencyProxy
+    extends AbstractNullEntityProxy implements CurrencyProxy {
   }
 }

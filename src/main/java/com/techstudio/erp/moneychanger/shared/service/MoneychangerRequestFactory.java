@@ -15,7 +15,9 @@ import com.google.web.bindery.requestfactory.shared.RequestFactory;
  * @author Nilson
  */
 public interface MoneychangerRequestFactory extends RequestFactory {
-  ItemRequest itemService();
+  ItemRequest itemRequest();
 
-  CategoryRequest categoryService();
+  CategoryRequest categoryRequest();
+
+  CurrencyRequest currencyRequest();
 }

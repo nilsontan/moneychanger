@@ -16,12 +16,13 @@ import com.techstudio.erp.moneychanger.server.service.CategoryDao;
  * A 'product' or item
  */
 @Entity
-public class Item extends DatedDatastoreObject {
+public class Item extends MyDatastoreObject {
+
+  public static final Item EMPTY = new Item();
 
   private Key<Category> category;
 
-  public Item() {
-  }
+  public Item() { }
 
   public Category getCategory() {
     if (category == null) {

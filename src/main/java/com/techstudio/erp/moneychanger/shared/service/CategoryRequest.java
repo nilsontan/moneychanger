@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Service(value = CategoryDao.class, locator = DaoServiceLocator.class)
 public interface CategoryRequest extends RequestContext {
-  Request<List<CategoryProxy>> listAll();
+  Request<List<CategoryProxy>> fetchAll();
 
   Request<CategoryProxy> save(CategoryProxy editable);
 

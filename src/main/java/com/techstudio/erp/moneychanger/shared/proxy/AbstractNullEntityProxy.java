@@ -26,8 +26,17 @@ public abstract class AbstractNullEntityProxy implements BaseEntityProxy {
   }
 
   @Override
+  public String getCode() {
+    return "";
+  }
+
+  @Override
+  public void setCode(String code) {
+  }
+
+  @Override
   public String getName() {
-    return "-";
+    return "";
   }
 
   @Override
