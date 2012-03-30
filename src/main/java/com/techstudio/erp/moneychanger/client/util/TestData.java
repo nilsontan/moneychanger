@@ -26,17 +26,17 @@ public final class TestData {
 
     currencies = Lists.newArrayList();
     TextResource textResource = resources.currencyText();
-    Iterable<String> split = Splitter.on("\r\n").split(textResource.getText());
+    Iterable<String> split = Splitter.on("\n").split(textResource.getText());
     for (String line : split) {
       ArrayList<String> currency = Lists.newArrayList(Splitter.on(",").split(line));
       if (currency.size() != 3) continue;
       MyCurrency myCurrency = new MyCurrency();
       myCurrency.code = currency.get(0);
       myCurrency.name = currency.get(1);
-      myCurrency.sign = currency.get(2);
+      myCurrency.sign = currency.get(2).trim();
       currencies.add(myCurrency);
     }
-  }
+   }
 
   public void repopulateCurrencies(final Provider<CurrencyRequest> currencyRequestProvider,
                                    final CurrencyDataProvider currencyDataProvider) {
