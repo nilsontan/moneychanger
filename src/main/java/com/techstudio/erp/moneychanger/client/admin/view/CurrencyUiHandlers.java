@@ -19,8 +19,6 @@ public interface CurrencyUiHandlers extends UiHandlers {
 
   void setCurrencySign(String sign);
 
-  void setCurrencyRate(String rate);
-
   void createCurrency();
 
   void updateCurrency();

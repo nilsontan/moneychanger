@@ -19,23 +19,21 @@ import java.util.List;
  */
 public final class TestData {
 
-  private final Resources resources;
   private List<MyCurrency> currencies;
 
   public TestData() {
-    resources = GWT.create(Resources.class);
+    Resources resources = GWT.create(Resources.class);
 
     currencies = Lists.newArrayList();
     TextResource textResource = resources.currencyText();
     Iterable<String> split = Splitter.on("\r\n").split(textResource.getText());
     for (String line : split) {
       ArrayList<String> currency = Lists.newArrayList(Splitter.on(",").split(line));
-      if (currency.size() != 4) continue;
+      if (currency.size() != 3) continue;
       MyCurrency myCurrency = new MyCurrency();
       myCurrency.code = currency.get(0);
       myCurrency.name = currency.get(1);
       myCurrency.sign = currency.get(2);
-      myCurrency.rate = currency.get(3);
       currencies.add(myCurrency);
     }
   }
@@ -59,7 +57,6 @@ public final class TestData {
               proxy1.setCode(myCurrency.code);
               proxy1.setName(myCurrency.name);
               proxy1.setSign(myCurrency.sign);
-              proxy1.setRate(myCurrency.rate);
               request2.save(proxy1);
             }
             request2.fire(new Receiver<Void>() {
@@ -80,12 +77,5 @@ public final class TestData {
     String name;
     String sign;
     String rate;
-
-//    MyCurrency(String code, String name, String sign, BigDecimal rate) {
-//      this.code = code;
-//      this.name = name;
-//      this.sign = sign;
-//      this.rate = rate;
-//    }
   }
 }

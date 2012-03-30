@@ -43,14 +43,6 @@
                   <g:TextBox ui:field="currencySign" />
                 </g:customCell>
               </g:row>
-              <g:row>
-                <g:customCell>
-                  <g:Label text="Rate" addStyleNames="{res.admin.formParam}" />
-                </g:customCell>
-                <g:customCell>
-                  <g:TextBox ui:field="currencyRate" />
-                </g:customCell>
-              </g:row>
             </g:Grid>
             <g:HorizontalPanel spacing="2">
               <g:Button ui:field="currencyUpdate" text="Update Currency" />

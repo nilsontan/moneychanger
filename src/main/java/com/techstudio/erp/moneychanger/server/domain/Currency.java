@@ -14,8 +14,6 @@ public class Currency extends MyDatastoreObject {
 
   @Unindexed
   private String sign = "$";
-  @Unindexed
-  private String rate = "1";
 
   public Currency() {
   }
@@ -26,14 +24,6 @@ public class Currency extends MyDatastoreObject {
 
   public void setSign(String sign) {
     this.sign = sign;
-  }
-
-  public String getRate() {
-    return rate.toString();
-  }
-
-  public void setRate(String rate) {
-    this.rate = new BigDecimal(rate).setScale(4).toString();
   }
 
   @Override

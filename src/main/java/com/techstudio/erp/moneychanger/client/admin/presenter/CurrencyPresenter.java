@@ -58,8 +58,6 @@ public class CurrencyPresenter
     void setCurrencyName(String name);
 
     void setCurrencySign(String sign);
-
-    void setCurrencyRate(String rate);
   }
 
   private final Provider<CurrencyRequest> currencyRequestProvider;
@@ -69,7 +67,6 @@ public class CurrencyPresenter
   private String code;
   private String name;
   private String sign;
-  private String rate;
 
   @Inject
   public CurrencyPresenter(final EventBus eventBus,
@@ -104,7 +101,6 @@ public class CurrencyPresenter
               code = response.getCode();
               name = response.getName();
               sign = response.getSign();
-              rate = response.getRate();
               updateView();
             }
           });
@@ -126,12 +122,6 @@ public class CurrencyPresenter
   @Override
   public void setCurrencySign(String sign) {
     this.sign = sign.trim();
-    updateView();
-  }
-
-  @Override
-  public void setCurrencyRate(String rate) {
-    this.rate = rate.trim();
     updateView();
   }
 
@@ -210,14 +200,12 @@ public class CurrencyPresenter
     proxy.setCode(code);
     proxy.setName(name);
     proxy.setSign(sign);
-    proxy.setRate(rate);
   }
 
   private void updateView() {
     getView().setCurrencyCode(code);
     getView().setCurrencyName(name);
     getView().setCurrencySign(sign);
-    getView().setCurrencyRate(rate);
     boolean isValid = isFormValid();
     getView().enableCreateButton(isValid);
     getView().enableUpdateButton(isValid);
@@ -226,7 +214,6 @@ public class CurrencyPresenter
   private boolean isFormValid() {
     return !Strings.isNullOrEmpty(code)
         && !Strings.isNullOrEmpty(name)
-        && !Strings.isNullOrEmpty(sign)
-        && !Strings.isNullOrEmpty(rate);
+        && !Strings.isNullOrEmpty(sign);
   }
 }

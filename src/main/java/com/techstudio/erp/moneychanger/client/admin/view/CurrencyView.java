@@ -52,9 +52,6 @@ public class CurrencyView
   TextBox currencySign;
 
   @UiField
-  TextBox currencyRate;
-
-  @UiField
   Button currencyUpdate;
 
   @UiField
@@ -93,11 +90,6 @@ public class CurrencyView
   @UiHandler("currencySign")
   void onCurrencySignChange(ValueChangeEvent<String> event) {
     getUiHandlers().setCurrencySign(event.getValue());
-  }
-
-  @UiHandler("currencyRate")
-  void onCurrencyRateChange(ValueChangeEvent<String> event) {
-    getUiHandlers().setCurrencyRate(event.getValue());
   }
 
   @UiHandler("currencyCreate")
@@ -145,11 +137,6 @@ public class CurrencyView
     currencySign.setValue(sign);
   }
 
-  @Override
-  public void setCurrencyRate(String rate) {
-    currencyRate.setValue(rate);
-  }
-
   private void setupCurrencyTable() {
     Column<CurrencyProxy, String> currencyCodeColumn = new Column<CurrencyProxy, String>(new EditTextCell()) {
       @Override
@@ -174,14 +161,6 @@ public class CurrencyView
       }
     };
     currencyTable.addColumn(currencySignColumn, "Sign");
-
-    Column<CurrencyProxy, String> currencyRateColumn = new Column<CurrencyProxy, String>(new EditTextCell()) {
-      @Override
-      public String getValue(CurrencyProxy currencyProxy) {
-        return currencyProxy.getRate().toString();
-      }
-    };
-    currencyTable.addColumn(currencyRateColumn, "Rate");
 
     Column<CurrencyProxy, Long> linkColumn = new Column<CurrencyProxy, Long>(new CurrencyLinkCell()) {
       @Override

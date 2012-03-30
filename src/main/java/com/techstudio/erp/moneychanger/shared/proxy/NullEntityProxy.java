@@ -40,15 +40,6 @@ public class NullEntityProxy {
     @Override
     public void setSign(String sign) {
     }
-
-    @Override
-    public String getRate() {
-      return "";
-    }
-
-    @Override
-    public void setRate(String rate) {
-    }
   }
 
   public static class NullItemProxy

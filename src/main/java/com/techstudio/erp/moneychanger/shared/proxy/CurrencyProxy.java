@@ -19,8 +19,4 @@ public interface CurrencyProxy extends BaseEntityProxy {
   String getSign();
 
   void setSign(String sign);
-
-  String getRate();
-
-  void setRate(String rate);
 }

@@ -1,24 +1,24 @@
-AUD,Australian Dollar,$,0.7668
-GBP,British Pound,£,0.4998
-CAD,Canadian Dollar,C$,0.7938
-DKK,Danish Krone,kr,4.4369
-EUR,Euro,€,0.5967
-HKD,Hong Kong Dollar,HK$,6.1741
-INR,Indian Rupee,Rs.,40.6496
-IDR,Indonesian Rupiah,Rp,7311.7596
-JPY,Japanese Yen,¥,65.718
-KRW,Korean Won,₩,904.1743
-MYR,Malaysian Ringgit,RM,2.4437
-NOK,Norwegian Krone,kr,4.5603
-NZD,New Zealand Dollar,$0.9737
-PHP,Philippine Peso,₱,34.1973
-SAR,Saudi Riyal,ر.س,2.9821
-SGD,Singapore Dollar,S$,1.0000
-ZAR,South African Rand,R,6.1053
-SEK,Swedish Krona,kr,5.2896
-CHF,Swiss Franc,CHF,0.7192
-TWD,Taiwan Dollar,NT$,23.5032
-THB,Thai Baht,R,24.4891
-AED,UAE Dirham,د.إ,2.9206
-USD,United States Dollar,$,0.7951
-VND,Vietnam Dong,₫,16462.5904
+AUD,Australian Dollar,$
+GBP,British Pound,£
+CAD,Canadian Dollar,C$
+DKK,Danish Krone,kr
+EUR,Euro,€
+HKD,Hong Kong Dollar,HK$
+INR,Indian Rupee,Rs.
+IDR,Indonesian Rupiah,Rp
+JPY,Japanese Yen,¥
+KRW,Korean Won,₩
+MYR,Malaysian Ringgit,RM
+NOK,Norwegian Krone,kr
+NZD,New Zealand Dollar,$
+PHP,Philippine Peso,₱
+SAR,Saudi Riyal,ر.س
+SGD,Singapore Dollar,S$
+ZAR,South African Rand,R
+SEK,Swedish Krona,kr
+CHF,Swiss Franc,CHF
+TWD,Taiwan Dollar,NT$
+THB,Thai Baht,R
+AED,UAE Dirham,د.إ
+USD,United States Dollar,$
+VND,Vietnam Dong,₫
