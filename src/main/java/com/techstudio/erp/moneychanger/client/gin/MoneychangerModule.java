@@ -21,23 +21,16 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
 import com.techstudio.erp.moneychanger.client.MoneychangerPlaceManager;
 import com.techstudio.erp.moneychanger.client.NameTokens;
-import com.techstudio.erp.moneychanger.client.admin.presenter.CategoryPresenter;
-import com.techstudio.erp.moneychanger.client.admin.presenter.CurrencyPresenter;
-import com.techstudio.erp.moneychanger.client.admin.presenter.ItemPresenter;
-import com.techstudio.erp.moneychanger.client.admin.presenter.MainPagePresenter;
-import com.techstudio.erp.moneychanger.client.admin.view.CategoryView;
-import com.techstudio.erp.moneychanger.client.admin.view.CurrencyView;
-import com.techstudio.erp.moneychanger.client.admin.view.ItemView;
-import com.techstudio.erp.moneychanger.client.admin.view.MainPageView;
+import com.techstudio.erp.moneychanger.client.admin.presenter.*;
+import com.techstudio.erp.moneychanger.client.admin.view.*;
 import com.techstudio.erp.moneychanger.client.pos.presenter.MainPosPresenter;
 import com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter;
 import com.techstudio.erp.moneychanger.client.pos.view.MainPosView;
 import com.techstudio.erp.moneychanger.client.pos.view.PosView;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
-import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
-import com.techstudio.erp.moneychanger.shared.service.CurrencyRequest;
-import com.techstudio.erp.moneychanger.shared.service.ItemRequest;
-import com.techstudio.erp.moneychanger.shared.service.MoneychangerRequestFactory;
+import com.techstudio.erp.moneychanger.client.util.MoneychangerTestData;
+import com.techstudio.erp.moneychanger.client.util.TestData;
+import com.techstudio.erp.moneychanger.shared.service.*;
 
 /**
  * @author Nilson
@@ -45,9 +38,6 @@ import com.techstudio.erp.moneychanger.shared.service.MoneychangerRequestFactory
 public class MoneychangerModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
-    // Default implementation of standard resources
-//    install(new DefaultModule(MoneychangerPlaceManager.class));
-
     bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
     bind(PlaceManager.class).to(MoneychangerPlaceManager.class).in(Singleton.class);
     bind(MoneychangerPlaceManager.class).in(Singleton.class);
@@ -55,9 +45,11 @@ public class MoneychangerModule extends AbstractPresenterModule {
     bind(RootPresenter.class).asEagerSingleton();
     bind(Scheduler.class).to(SchedulerImpl.class).in(Singleton.class);
     bind(Resources.class).in(Singleton.class);
+    bind(TestData.class).to(MoneychangerTestData.class).in(Singleton.class);
 
     // Constants
-    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.CURRENCY_PAGE);
+    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.TEST_PAGE);
+    bindConstant().annotatedWith(DefaultScale.class).to(4);
 
     // Presenters
     bindPresenter(MainPagePresenter.class, MainPagePresenter.MyView.class,
@@ -68,6 +60,12 @@ public class MoneychangerModule extends AbstractPresenterModule {
         CategoryView.class, CategoryPresenter.MyProxy.class);
     bindPresenter(CurrencyPresenter.class, CurrencyPresenter.MyView.class,
         CurrencyView.class, CurrencyPresenter.MyProxy.class);
+    bindPresenter(ExchangeRatePresenter.class, ExchangeRatePresenter.MyView.class,
+        ExchangeRateView.class, ExchangeRatePresenter.MyProxy.class);
+    bindPresenter(UomPresenter.class, UomPresenter.MyView.class,
+        UomView.class, UomPresenter.MyProxy.class);
+    bindPresenter(TestPresenter.class, TestPresenter.MyView.class,
+        TestView.class, TestPresenter.MyProxy.class);
 
     bindPresenter(MainPosPresenter.class, MainPosPresenter.MyView.class,
         MainPosView.class, MainPosPresenter.MyProxy.class);
@@ -96,5 +94,15 @@ public class MoneychangerModule extends AbstractPresenterModule {
   @Provides
   CurrencyRequest provideCurrencyService(MoneychangerRequestFactory requestFactory) {
     return requestFactory.currencyRequest();
+  }
+
+  @Provides
+  ExchangeRateRequest provideExchangeRateService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.exchangeRateRequest();
+  }
+
+  @Provides
+  UomRequest provideUomService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.uomRequest();
   }
 }

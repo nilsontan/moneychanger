@@ -9,6 +9,7 @@ package com.techstudio.erp.moneychanger.client.admin.view;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -30,15 +31,13 @@ public class MainPageView extends ViewImpl implements MyView {
   public interface Binder extends UiBinder<DockLayoutPanel, MainPageView> {
   }
 
-//  private static Binder uiBinder = GWT.create(Binder.class);
-
   private final DockLayoutPanel widget;
 
   @UiField
   LayoutPanel mainContentContainer;
 
-//  @UiField
-//  Element loadingMessage;
+  @UiField
+  DecoratorPanel loadingMessage;
 
   @UiField(provided = true)
   MainMenu mainMenuTop;
@@ -87,7 +86,6 @@ public class MainPageView extends ViewImpl implements MyView {
 
   @Override
   public void showLoading(boolean visible) {
-//    loadingMessage.getStyle().setVisibility(
-//        visible ? Visibility.VISIBLE : Visibility.HIDDEN);
+    loadingMessage.setVisible(visible);
   }
 }

@@ -54,6 +54,24 @@
                 </g:FlowPanel>
               </g:customCell>
             </g:row>
+            <g:row>
+              <g:customCell>
+                <g:Label text="Uom" addStyleNames="{res.admin.formParam}" />
+              </g:customCell>
+              <g:customCell>
+                <g:FlowPanel>
+                  <m:SelectOneListBox ui:field="itemUomList" />
+                </g:FlowPanel>
+              </g:customCell>
+            </g:row>
+            <g:row>
+              <g:customCell>
+                <g:Label text="Uom Rate" addStyleNames="{res.admin.formParam}" />
+              </g:customCell>
+              <g:customCell>
+                <g:TextBox ui:field="itemUomRate" />
+              </g:customCell>
+            </g:row>
           </g:Grid>
           <g:HorizontalPanel spacing="2">
             <g:Button ui:field="itemUpdate" text="Update Item" />

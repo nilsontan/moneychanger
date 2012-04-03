@@ -18,6 +18,7 @@ import com.techstudio.erp.moneychanger.server.locator.ObjectifyLocator;
 public interface ItemProxy extends BaseEntityProxy {
   public static final String CATEGORY = "category";
   public static final String CURRENCY = "currency";
+  public static final String UOM = "uom";
 
   CategoryProxy getCategory();
 
@@ -26,4 +27,12 @@ public interface ItemProxy extends BaseEntityProxy {
   CurrencyProxy getCurrency();
 
   void setCurrency(CurrencyProxy currencyProxy);
+
+  UomProxy getUom();
+
+  void setUom(UomProxy uomProxy);
+
+  Integer getUomRate();
+
+  void setUomRate(Integer uomRate);
 }

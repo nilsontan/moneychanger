@@ -7,11 +7,11 @@
 
 package com.techstudio.erp.moneychanger.client;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.gwtplatform.mvp.client.DelayedBindRegistry;
 import com.techstudio.erp.moneychanger.client.gin.MoneychangerGinjector;
-import com.techstudio.erp.moneychanger.shared.CustomUncaughtExceptionHandler;
 
 /**
  * @author Nilson
@@ -24,7 +24,8 @@ public class Moneychanger implements EntryPoint {
     // Wire the request factory nd the event bus
 //    ginjector.getRequestFactory().initialize(ginjector.getEventBus());
 
-    GWT.setUncaughtExceptionHandler(new CustomUncaughtExceptionHandler());
+//    GWT.setUncaughtExceptionHandler(new CustomUncaughtExceptionHandler());
+    Log.setUncaughtExceptionHandler();
 
     // This is required for Gwt-Platform proxy's generator.
     DelayedBindRegistry.bind(ginjector);

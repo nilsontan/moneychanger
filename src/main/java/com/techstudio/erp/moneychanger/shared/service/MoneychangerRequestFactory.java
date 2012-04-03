@@ -20,4 +20,8 @@ public interface MoneychangerRequestFactory extends RequestFactory {
   CategoryRequest categoryRequest();
 
   CurrencyRequest currencyRequest();
+
+  ExchangeRateRequest exchangeRateRequest();
+
+  UomRequest uomRequest();
 }

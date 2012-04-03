@@ -8,8 +8,8 @@
 package com.techstudio.erp.moneychanger.server.locator;
 
 import com.google.web.bindery.requestfactory.shared.Locator;
-import com.googlecode.objectify.util.DAOBase;
 import com.techstudio.erp.moneychanger.server.domain.DatastoreObject;
+import com.techstudio.erp.moneychanger.server.service.MyDAOBase;
 
 /**
  * Generic @Locator for objects that extend DatastoreObject
@@ -28,7 +28,7 @@ public class ObjectifyLocator extends Locator<DatastoreObject, Long> {
 
   @Override
   public DatastoreObject find(Class<? extends DatastoreObject> clazz, Long id) {
-    DAOBase daoBase = new DAOBase();
+    MyDAOBase daoBase = new MyDAOBase();
     return daoBase.ofy().find(clazz, id);
   }
 

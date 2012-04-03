@@ -7,6 +7,7 @@
 
 package com.techstudio.erp.moneychanger.client.admin.presenter;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.view.client.HasData;
@@ -24,13 +25,11 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.ItemUiHandlers;
-import com.techstudio.erp.moneychanger.client.ui.CategoryDataProvider;
-import com.techstudio.erp.moneychanger.client.ui.CurrencyDataProvider;
-import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
-import com.techstudio.erp.moneychanger.client.ui.ItemDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.*;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
 import com.techstudio.erp.moneychanger.shared.service.ItemRequest;
 
 import java.util.List;
@@ -54,6 +53,8 @@ public class ItemPresenter
 
     HasSelectedValue<CurrencyProxy> getCurrencyList();
 
+    HasSelectedValue<UomProxy> getUomList();
+
     void enableCreateButton(boolean isValid);
 
     void enableUpdateButton(boolean isValid);
@@ -65,18 +66,25 @@ public class ItemPresenter
     void setItemCategory(CategoryProxy categoryProxy);
 
     void setItemCurrency(CurrencyProxy currencyProxy);
+
+    void setItemUom(UomProxy uomProxy);
+
+    void setItemUomRate(String uomRate);
   }
 
   private final Provider<ItemRequest> itemRequestProvider;
   private final ItemDataProvider itemDataProvider;
   private final CategoryDataProvider categoryDataProvider;
   private final CurrencyDataProvider currencyDataProvider;
+  private final UomDataProvider uomDataProvider;
 
   private Long id;
   private String code;
   private String name;
   private CategoryProxy category;
   private CurrencyProxy currency;
+  private UomProxy uom;
+  private Integer uomRate;
 
   @Inject
   public ItemPresenter(final EventBus eventBus,
@@ -85,7 +93,8 @@ public class ItemPresenter
                        final Provider<ItemRequest> itemRequestProvider,
                        final ItemDataProvider itemDataProvider,
                        final CategoryDataProvider categoryDataProvider,
-                       final CurrencyDataProvider currencyDataProvider) {
+                       final CurrencyDataProvider currencyDataProvider,
+                       final UomDataProvider uomDataProvider) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
     this.itemRequestProvider = itemRequestProvider;
@@ -95,6 +104,8 @@ public class ItemPresenter
     this.categoryDataProvider.addDataListDisplay(getView().getCategoryList());
     this.currencyDataProvider = currencyDataProvider;
     this.currencyDataProvider.addDataListDisplay(getView().getCurrencyList());
+    this.uomDataProvider = uomDataProvider;
+    this.uomDataProvider.addDataListDisplay(getView().getUomList());
   }
 
   @Override
@@ -111,23 +122,41 @@ public class ItemPresenter
       name = "";
       category = categoryDataProvider.getDefaultCategory();
       currency = currencyDataProvider.getDefaultCurrency();
-      itemDataProvider.removeItem();
+      uom = uomDataProvider.getDefaultUom();
+      uomRate = 1;
       updateView();
     } else {
       itemRequestProvider.get().fetch(id)
           .with(ItemProxy.CATEGORY)
           .with(ItemProxy.CURRENCY)
+          .with(ItemProxy.UOM)
           .fire(new Receiver<ItemProxy>() {
             @Override
             public void onSuccess(ItemProxy response) {
-              itemDataProvider.setItem(response);
               code = response.getCode();
               name = response.getName();
               category = response.getCategory();
               currency = response.getCurrency();
+              uom = response.getUom();
+              uomRate = response.getUomRate();
               updateView();
             }
           });
+    }
+  }
+
+  @Override
+  protected void onReveal() {
+    super.onReveal();
+    categoryDataProvider.updateListData();
+    currencyDataProvider.updateListData();
+    uomDataProvider.updateListData();
+    if (categoryDataProvider.getDefaultCategory() == null) {
+      Window.alert("There are no available Categories. Please create a Category first");
+    } else if (currencyDataProvider.getDefaultCurrency() == null) {
+      Window.alert("There are no available Currencies. Please create a Currency first");
+    } else if (uomDataProvider.getDefaultUom() == null) {
+      Window.alert("There are no available Uoms. Please create a Uom first");
     }
   }
 
@@ -156,6 +185,18 @@ public class ItemPresenter
   }
 
   @Override
+  public void setItemUom(UomProxy uomProxy) {
+    this.uom = uomProxy;
+    updateView();
+  }
+
+  @Override
+  public void setItemUomRate(String uomRate) {
+    this.uomRate = returnUomRate(uomRate);
+    updateView();
+  }
+
+  @Override
   public void createItem() {
     if (!isFormValid()) {
       return;
@@ -171,6 +212,7 @@ public class ItemPresenter
               request.save(proxy)
                   .with(ItemProxy.CATEGORY)
                   .with(ItemProxy.CURRENCY)
+                  .with(ItemProxy.UOM)
                   .fire(new Receiver<ItemProxy>() {
                     @Override
                     public void onSuccess(ItemProxy response) {
@@ -204,6 +246,7 @@ public class ItemPresenter
               request.save(proxy)
                   .with(ItemProxy.CATEGORY)
                   .with(ItemProxy.CURRENCY)
+                  .with(ItemProxy.UOM)
                   .fire(new Receiver<ItemProxy>() {
                     @Override
                     public void onSuccess(ItemProxy response) {
@@ -231,6 +274,8 @@ public class ItemPresenter
     proxy.setName(name);
     proxy.setCategory(category);
     proxy.setCurrency(currency);
+    proxy.setUom(uom);
+    proxy.setUomRate(uomRate);
   }
 
   private void updateView() {
@@ -238,6 +283,8 @@ public class ItemPresenter
     getView().setItemName(name);
     getView().setItemCategory(category);
     getView().setItemCurrency(currency);
+    getView().setItemUom(uom);
+    getView().setItemUomRate(uomRate.toString());
     boolean isValid = isFormValid();
     getView().enableCreateButton(isValid);
     getView().enableUpdateButton(isValid);
@@ -247,6 +294,13 @@ public class ItemPresenter
     return !Strings.isNullOrEmpty(code)
         && !Strings.isNullOrEmpty(name)
         && category != null
-        && currency != null;
+        && currency != null
+        && uom != null
+        && uomRate > 0;
+  }
+
+  private Integer returnUomRate(String uomRate) {
+    String filterOutNonDigits = CharMatcher.DIGIT.retainFrom(uomRate).trim();
+    return Integer.valueOf(filterOutNonDigits);
   }
 }

@@ -12,7 +12,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
-import com.techstudio.erp.moneychanger.shared.proxy.NullEntityProxy;
 import com.techstudio.erp.moneychanger.shared.service.CurrencyRequest;
 
 import java.util.List;
@@ -25,8 +24,6 @@ public class CurrencyDataProvider extends MultiDataProvider<CurrencyProxy> {
   private static CurrencyProxy DEFAULT_CURRENCY;
 
   private final Provider<CurrencyRequest> currencyRequestProvider;
-
-  private CurrencyProxy currencyProxy;
 
   @Inject
   public CurrencyDataProvider(Provider<CurrencyRequest> currencyRequestProvider) {
@@ -41,11 +38,6 @@ public class CurrencyDataProvider extends MultiDataProvider<CurrencyProxy> {
           public void onSuccess(List<CurrencyProxy> currencyProxies) {
             updateRowCount(currencyProxies.size(), true);
             updateRowData(0, currencyProxies);
-//            ImmutableList<CurrencyProxy> list
-//                = new ImmutableList.Builder<CurrencyProxy>()
-//                .add(NullEntityProxy.CURRENCY)
-//                .addAll(currencyProxies)
-//                .build();
             updateList(currencyProxies);
           }
         });
@@ -67,10 +59,6 @@ public class CurrencyDataProvider extends MultiDataProvider<CurrencyProxy> {
         .fire(new Receiver<List<CurrencyProxy>>() {
           @Override
           public void onSuccess(List<CurrencyProxy> responses) {
-//            ImmutableList<CurrencyProxy> list
-//                = new ImmutableList.Builder<CurrencyProxy>()
-//                .addAll(currencyProxies)
-//                .build();
             updateList(responses);
           }
         });
@@ -84,15 +72,6 @@ public class CurrencyDataProvider extends MultiDataProvider<CurrencyProxy> {
   @Override
   protected void onValueChanged(HasSelectedValue<CurrencyProxy> display) {
     updateListData();
-  }
-
-  public void setCurrency(CurrencyProxy currencyProxy) {
-    this.currencyProxy = currencyProxy;
-    updateListData();
-  }
-
-  public void removeCurrency() {
-    this.currencyProxy = NullEntityProxy.CURRENCY;
   }
 
   public CurrencyProxy getDefaultCurrency() {

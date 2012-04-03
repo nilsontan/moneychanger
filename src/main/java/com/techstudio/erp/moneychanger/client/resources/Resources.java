@@ -30,8 +30,20 @@ public interface Resources extends ClientBundle {
   @Source("logo_pos.png")
   ImageResource logoPos();
 
+  @Source("category.txt")
+  TextResource categoryText();
+
   @Source("currency.txt")
   TextResource currencyText();
+
+  @Source("uom.txt")
+  TextResource uomText();
+
+  @Source("item.txt")
+  TextResource itemText();
+
+  @Source("exchange_rates.txt")
+  TextResource xrRatesText();
 
   public interface StyleAdmin extends CssResource {
     String centered();

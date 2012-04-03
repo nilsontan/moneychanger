@@ -17,6 +17,7 @@ public class NullEntityProxy {
   public static final NullCategoryProxy CATEGORY = new NullCategoryProxy();
   public static final NullCurrencyProxy CURRENCY = new NullCurrencyProxy();
   public static final NullItemProxy ITEM = new NullItemProxy();
+  public static final NullExchangeRateProxy EXCHANGE_RATE_PROXY = new NullExchangeRateProxy();
 
   public static class NullCategoryProxy
       extends AbstractNullEntityProxy implements CategoryProxy {
@@ -61,6 +62,64 @@ public class NullEntityProxy {
 
     @Override
     public void setCurrency(CurrencyProxy currencyProxy) {
+    }
+
+    @Override
+    public UomProxy getUom() {
+      return null;
+    }
+
+    @Override
+    public void setUom(UomProxy uomProxy) {
+    }
+
+    @Override
+    public Integer getUomRate() {
+      return 1;
+    }
+
+    @Override
+    public void setUomRate(Integer uomRate) {
+    }
+  }
+
+  public static class NullExchangeRateProxy
+      extends AbstractNullEntityProxy implements ExchangeRateProxy {
+
+    @Override
+    public CurrencyProxy getCurrency() {
+      return null;
+    }
+
+    @Override
+    public void setCurrency(CurrencyProxy currencyProxy) {
+    }
+
+    @Override
+    public Integer getUnit() {
+      return 1;
+    }
+
+    @Override
+    public void setUnit(Integer unit) {
+    }
+
+    @Override
+    public String getAskRate() {
+      return "1";
+    }
+
+    @Override
+    public void setAskRate(String askRate) {
+    }
+
+    @Override
+    public String getBidRate() {
+      return "1";
+    }
+
+    @Override
+    public void setBidRate(String bidRate) {
     }
   }
 }

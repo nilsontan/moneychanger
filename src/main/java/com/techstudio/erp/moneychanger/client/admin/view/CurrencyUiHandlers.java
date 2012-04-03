@@ -22,6 +22,4 @@ public interface CurrencyUiHandlers extends UiHandlers {
   void createCurrency();
 
   void updateCurrency();
-
-  void repopulateData();
 }

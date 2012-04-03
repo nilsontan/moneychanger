@@ -18,5 +18,14 @@
     <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getCurrencyPage}">
       Currency
     </g:InlineHyperlink>
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getExchangeRatePage}">
+      Exchange Rate
+    </g:InlineHyperlink>
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getUomPage}">
+      Uom
+    </g:InlineHyperlink>
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getTestPage}">
+      Settings
+    </g:InlineHyperlink>
   </g:HTMLPanel>
 </ui:UiBinder> 

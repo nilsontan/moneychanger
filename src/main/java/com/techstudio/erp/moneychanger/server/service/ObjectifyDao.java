@@ -9,12 +9,8 @@ package com.techstudio.erp.moneychanger.server.service;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
-import com.googlecode.objectify.util.DAOBase;
-import com.techstudio.erp.moneychanger.server.domain.Category;
-import com.techstudio.erp.moneychanger.server.domain.Currency;
-import com.techstudio.erp.moneychanger.server.domain.Item;
+import com.techstudio.erp.moneychanger.server.domain.*;
 
 import javax.persistence.Embedded;
 import javax.persistence.Transient;
@@ -31,15 +27,17 @@ import java.util.Map;
  * @param <T>
  * @author Nilson
  */
-public class ObjectifyDao<T> extends DAOBase {
+public class ObjectifyDao<T> extends MyDAOBase {
 
   static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC
       | Modifier.TRANSIENT;
 
   static {
-    ObjectifyService.register(Item.class);
-    ObjectifyService.register(Category.class);
-    ObjectifyService.register(Currency.class);
+    MyObjectifyService.register(Item.class);
+    MyObjectifyService.register(Category.class);
+    MyObjectifyService.register(Currency.class);
+    MyObjectifyService.register(Uom.class);
+    MyObjectifyService.register(ExchangeRate.class);
   }
 
   protected Class<T> clazz;
@@ -123,7 +121,7 @@ public class ObjectifyDao<T> extends DAOBase {
   }
 
   public Key<T> key(T obj) {
-    return ObjectifyService.factory().getKey(obj);
+    return MyObjectifyService.factory().getKey(obj);
   }
 
   public List<T> listChildren(Object parent) {

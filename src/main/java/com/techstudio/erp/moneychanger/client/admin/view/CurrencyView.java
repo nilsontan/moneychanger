@@ -17,7 +17,6 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
@@ -40,9 +39,6 @@ public class CurrencyView
   private final Widget widget;
 
   @UiField
-  Grid catGrid;
-
-  @UiField
   TextBox currencyCode;
 
   @UiField
@@ -56,9 +52,6 @@ public class CurrencyView
 
   @UiField
   Button currencyCreate;
-
-  @UiField
-  Button currencyData;
 
   @UiField
   CellTable<CurrencyProxy> currencyTable = new CellTable<CurrencyProxy>();
@@ -92,19 +85,16 @@ public class CurrencyView
     getUiHandlers().setCurrencySign(event.getValue());
   }
 
+  @SuppressWarnings("unused")
   @UiHandler("currencyCreate")
   void onCreateCurrency(ClickEvent event) {
     getUiHandlers().createCurrency();
   }
 
+  @SuppressWarnings("unused")
   @UiHandler("currencyUpdate")
   void onUpdateCurrency(ClickEvent event) {
     getUiHandlers().updateCurrency();
-  }
-
-  @UiHandler("currencyData")
-  void onRepopulateData(ClickEvent event) {
-    getUiHandlers().repopulateData();
   }
 
   @Override

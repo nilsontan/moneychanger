@@ -1,0 +1,2 @@
+CUR,Currency
+PHO,Phone Card

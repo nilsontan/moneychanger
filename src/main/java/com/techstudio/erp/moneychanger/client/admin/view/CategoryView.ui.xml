@@ -17,7 +17,7 @@
       <g:DecoratorPanel>
         <g:FlowPanel>
           <g:Label text="Category Info" addStyleNames="{res.admin.formTitle}" />
-          <g:Grid ui:field="catGrid">
+          <g:Grid>
             <g:row>
               <g:customCell>
                 <g:Label text="Code" addStyleNames="{res.admin.formParam}" />

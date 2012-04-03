@@ -25,7 +25,6 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.CurrencyUiHandlers;
 import com.techstudio.erp.moneychanger.client.ui.CurrencyDataProvider;
-import com.techstudio.erp.moneychanger.client.util.TestData;
 import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 import com.techstudio.erp.moneychanger.shared.service.CurrencyRequest;
 
@@ -97,7 +96,6 @@ public class CurrencyPresenter
           .fire(new Receiver<CurrencyProxy>() {
             @Override
             public void onSuccess(CurrencyProxy response) {
-              currencyDataProvider.setCurrency(response);
               code = response.getCode();
               name = response.getName();
               sign = response.getSign();
@@ -178,12 +176,6 @@ public class CurrencyPresenter
             }
           }
         });
-  }
-
-  @Override
-  public void repopulateData() {
-    TestData testData = new TestData();
-    testData.repopulateCurrencies(currencyRequestProvider, currencyDataProvider);
   }
 
   @Override

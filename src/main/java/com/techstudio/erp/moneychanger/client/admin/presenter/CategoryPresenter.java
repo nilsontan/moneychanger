@@ -91,14 +91,12 @@ public class CategoryPresenter
     if (id == null) {
       code = "";
       name = "";
-      categoryDataProvider.removeCategory();
       updateView();
     } else {
       categoryRequestProvider.get().fetch(id)
           .fire(new Receiver<CategoryProxy>() {
             @Override
             public void onSuccess(CategoryProxy response) {
-              categoryDataProvider.setCategory(response);
               code = response.getCode();
               name = response.getName();
               updateView();

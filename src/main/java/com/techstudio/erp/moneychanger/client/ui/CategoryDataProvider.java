@@ -7,13 +7,11 @@
 
 package com.techstudio.erp.moneychanger.client.ui;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
-import com.techstudio.erp.moneychanger.shared.proxy.NullEntityProxy;
 import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
 
 import java.util.List;
@@ -27,8 +25,6 @@ public class CategoryDataProvider extends MultiDataProvider<CategoryProxy> {
 
   private final Provider<CategoryRequest> categoryRequestProvider;
 
-  private CategoryProxy categoryProxy;
-
   @Inject
   public CategoryDataProvider(Provider<CategoryRequest> categoryRequestProvider) {
     this.categoryRequestProvider = categoryRequestProvider;
@@ -39,15 +35,10 @@ public class CategoryDataProvider extends MultiDataProvider<CategoryProxy> {
     categoryRequestProvider.get().fetchAll().with(CategoryProxy.PARENT)
         .fire(new Receiver<List<CategoryProxy>>() {
           @Override
-          public void onSuccess(List<CategoryProxy> categoryProxies) {
-            updateRowCount(categoryProxies.size(), true);
-            updateRowData(0, categoryProxies);
-            ImmutableList<CategoryProxy> list
-                = new ImmutableList.Builder<CategoryProxy>()
-                .add(NullEntityProxy.CATEGORY)
-                .addAll(categoryProxies)
-                .build();
-            updateList(list);
+          public void onSuccess(List<CategoryProxy> responses) {
+            updateRowCount(responses.size(), true);
+            updateRowData(0, responses);
+            updateList(responses);
           }
         });
   }
@@ -56,9 +47,9 @@ public class CategoryDataProvider extends MultiDataProvider<CategoryProxy> {
     categoryRequestProvider.get().fetchAll().with(CategoryProxy.PARENT)
         .fire(new Receiver<List<CategoryProxy>>() {
           @Override
-          public void onSuccess(List<CategoryProxy> categoryProxies) {
-            updateRowCount(categoryProxies.size(), true);
-            updateRowData(0, categoryProxies);
+          public void onSuccess(List<CategoryProxy> responses) {
+            updateRowCount(responses.size(), true);
+            updateRowData(0, responses);
           }
         });
   }
@@ -81,15 +72,6 @@ public class CategoryDataProvider extends MultiDataProvider<CategoryProxy> {
   @Override
   protected void onValueChanged(HasSelectedValue<CategoryProxy> display) {
     updateListData();
-  }
-
-  public void setCategory(CategoryProxy categoryProxy) {
-    this.categoryProxy = categoryProxy;
-    updateListData();
-  }
-
-  public void removeCategory() {
-    this.categoryProxy = null;
   }
 
   public CategoryProxy getDefaultCategory() {

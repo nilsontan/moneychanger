@@ -12,7 +12,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
-import com.techstudio.erp.moneychanger.shared.proxy.NullEntityProxy;
 import com.techstudio.erp.moneychanger.shared.service.ItemRequest;
 
 import java.util.List;
@@ -23,8 +22,6 @@ import java.util.List;
 public class ItemDataProvider extends MultiDataProvider<ItemProxy> {
 
   private final Provider<ItemRequest> itemRequestProvider;
-
-  private ItemProxy itemProxy;
 
   @Inject
   public ItemDataProvider(Provider<ItemRequest> itemRequestProvider) {
@@ -38,11 +35,6 @@ public class ItemDataProvider extends MultiDataProvider<ItemProxy> {
           public void onSuccess(List<ItemProxy> responses) {
             updateRowCount(responses.size(), true);
             updateRowData(0, responses);
-//            ImmutableList<ItemProxy> list
-//                = new ImmutableList.Builder<ItemProxy>()
-//                .add(NullEntityProxy.ITEM)
-//                .addAll(itemProxies)
-//                .build();
             updateList(responses);
           }
         });
@@ -53,6 +45,7 @@ public class ItemDataProvider extends MultiDataProvider<ItemProxy> {
         .fetchAll()
         .with(ItemProxy.CATEGORY)
         .with(ItemProxy.CURRENCY)
+        .with(ItemProxy.UOM)
         .fire(new Receiver<List<ItemProxy>>() {
           @Override
           public void onSuccess(List<ItemProxy> responses) {
@@ -67,15 +60,10 @@ public class ItemDataProvider extends MultiDataProvider<ItemProxy> {
         .fetchAll()
         .with(ItemProxy.CATEGORY)
         .with(ItemProxy.CURRENCY)
+        .with(ItemProxy.UOM)
         .fire(new Receiver<List<ItemProxy>>() {
           @Override
           public void onSuccess(List<ItemProxy> responses) {
-//            itemProxies.remove(itemProxy);
-//            ImmutableList<ItemProxy> list
-//                = new ImmutableList.Builder<ItemProxy>()
-//                .add(NullEntityProxy.ITEM)
-//                .addAll(itemProxies)
-//                .build();
             updateList(responses);
           }
         });
@@ -89,14 +77,5 @@ public class ItemDataProvider extends MultiDataProvider<ItemProxy> {
   @Override
   protected void onValueChanged(HasSelectedValue<ItemProxy> display) {
     updateListData();
-  }
-
-  public void setItem(ItemProxy itemProxy) {
-    this.itemProxy = itemProxy;
-    updateListData();
-  }
-
-  public void removeItem() {
-    this.itemProxy = NullEntityProxy.ITEM;
   }
 }

@@ -18,6 +18,9 @@
 
   <inherits name="com.google.common.collect.Collect" />
 
+  <!-- logging -->
+  <inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
+
   <!-- Inherit the default GWT admin sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->
   <!-- any one of the following lines.                            -->

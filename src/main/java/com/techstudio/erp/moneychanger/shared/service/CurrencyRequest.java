@@ -23,11 +23,11 @@ import java.util.List;
 public interface CurrencyRequest extends RequestContext {
   Request<List<CurrencyProxy>> fetchAll();
 
-  Request<CurrencyProxy> save(CurrencyProxy editable);
+  Request<CurrencyProxy> save(CurrencyProxy proxy);
 
   Request<CurrencyProxy> fetch(Long id);
 
-  Request<Void> purge(CurrencyProxy currencyProxy);
+  Request<Void> purge(CurrencyProxy proxy);
 
   Request<List<CurrencyProxy>> fetchByProperty(String prop, String value);
 

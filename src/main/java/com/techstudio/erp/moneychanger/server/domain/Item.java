@@ -9,13 +9,16 @@ package com.techstudio.erp.moneychanger.server.domain;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
 import com.techstudio.erp.moneychanger.server.service.CategoryDao;
 import com.techstudio.erp.moneychanger.server.service.CurrencyDao;
+import com.techstudio.erp.moneychanger.server.service.UomDao;
 
 /**
  * A 'product' or item
  */
+@Cached
 @Entity
 public class Item extends MyDatastoreObject {
 
@@ -24,6 +27,10 @@ public class Item extends MyDatastoreObject {
   private Key<Category> category;
 
   private Key<Currency> currency;
+
+  private Key<Uom> uom;
+
+  private Integer uomRate;
 
   public Item() {
   }
@@ -62,6 +69,32 @@ public class Item extends MyDatastoreObject {
       return;
     }
     this.currency = new CurrencyDao().key(currency);
+  }
+
+  public Uom getUom() {
+    if (uom == null) {
+      return Uom.EMPTY;
+    }
+    try {
+      return new UomDao().get(uom);
+    } catch (EntityNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public void setUom(Uom uom) {
+    if (uom.equals(Uom.EMPTY)) {
+      return;
+    }
+    this.uom = new UomDao().key(uom);
+  }
+
+  public Integer getUomRate() {
+    return uomRate;
+  }
+
+  public void setUomRate(Integer uomRate) {
+    this.uomRate = uomRate;
   }
 
 }

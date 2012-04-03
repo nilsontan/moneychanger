@@ -30,6 +30,7 @@ import com.techstudio.erp.moneychanger.client.ui.SelectOneListBox;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
 
 import java.util.Date;
 
@@ -79,6 +80,23 @@ public class ItemView
     }
   });
 
+  @UiField(provided = true)
+  SelectOneListBox<UomProxy> itemUomList
+      = new SelectOneListBox<UomProxy>(new SelectOneListBox.OptionFormatter<UomProxy>() {
+    @Override
+    public String getLabel(UomProxy option) {
+      return option.getName();
+    }
+
+    @Override
+    public String getValue(UomProxy option) {
+      return option.getId().toString();
+    }
+  });
+
+  @UiField
+  TextBox itemUomRate;
+
   @UiField
   Button itemUpdate;
 
@@ -112,21 +130,36 @@ public class ItemView
     getUiHandlers().setItemName(event.getValue());
   }
 
+  @SuppressWarnings("unused")
   @UiHandler("itemCategoryList")
   public void onItemCategoryChange(ValueChangeEvent<CategoryProxy> event) {
     getUiHandlers().setItemCategory(itemCategoryList.getSelectedValue());
   }
 
+  @SuppressWarnings("unused")
   @UiHandler("itemCurrencyList")
   public void onItemCurrencyChange(ValueChangeEvent<CurrencyProxy> event) {
     getUiHandlers().setItemCurrency(itemCurrencyList.getSelectedValue());
   }
 
+  @SuppressWarnings("unused")
+  @UiHandler("itemUomList")
+  public void onItemUomChange(ValueChangeEvent<UomProxy> event) {
+    getUiHandlers().setItemUom(itemUomList.getSelectedValue());
+  }
+
+  @UiHandler("itemUomRate")
+  public void onItemUomRateChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setItemUomRate(event.getValue());
+  }
+
+  @SuppressWarnings("unused")
   @UiHandler("itemCreate")
   public void onCreateCurrency(ClickEvent event) {
     getUiHandlers().createItem();
   }
 
+  @SuppressWarnings("unused")
   @UiHandler("itemUpdate")
   public void onUpdateCurrency(ClickEvent event) {
     getUiHandlers().updateItem();
@@ -145,6 +178,11 @@ public class ItemView
   @Override
   public HasSelectedValue<CurrencyProxy> getCurrencyList() {
     return itemCurrencyList;
+  }
+
+  @Override
+  public HasSelectedValue<UomProxy> getUomList() {
+    return itemUomList;
   }
 
   @Override
@@ -178,6 +216,16 @@ public class ItemView
     itemCurrencyList.setSelectedValue(currencyProxy);
   }
 
+  @Override
+  public void setItemUom(UomProxy uomProxy) {
+    itemUomList.setSelectedValue(uomProxy);
+  }
+
+  @Override
+  public void setItemUomRate(String uomRate) {
+    itemUomRate.setValue(uomRate);
+  }
+
   private void setupItemTable() {
     Column<ItemProxy, String> itemNameColumn = new Column<ItemProxy, String>(new EditTextCell()) {
       @Override
@@ -202,6 +250,22 @@ public class ItemView
       }
     };
     itemTable.addColumn(itemCurrencyColumn, "Currency");
+
+    Column<ItemProxy, String> itemUomColumn = new Column<ItemProxy, String>(new EditTextCell()) {
+      @Override
+      public String getValue(ItemProxy itemProxy) {
+        return itemProxy.getUom().getName();
+      }
+    };
+    itemTable.addColumn(itemUomColumn, "Uom");
+
+    Column<ItemProxy, String> itemUomRateColumn = new Column<ItemProxy, String>(new EditTextCell()) {
+      @Override
+      public String getValue(ItemProxy itemProxy) {
+        return itemProxy.getUomRate().toString();
+      }
+    };
+    itemTable.addColumn(itemUomRateColumn, "Uom Rate");
 
     Column<ItemProxy, Date> dateColumn = new Column<ItemProxy, Date>(new DateCell()) {
       @Override

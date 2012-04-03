@@ -18,7 +18,7 @@
         <g:DecoratorPanel>
           <g:FlowPanel>
             <g:Label text="Currency Info" addStyleNames="{res.admin.formTitle}" />
-            <g:Grid ui:field="catGrid">
+            <g:Grid>
               <g:row>
                 <g:customCell>
                   <g:Label text="Code" addStyleNames="{res.admin.formParam}" />
@@ -50,7 +50,6 @@
             </g:HorizontalPanel>
           </g:FlowPanel>
         </g:DecoratorPanel>
-        <g:Button ui:field="currencyData" text="Reset Currencies" />
       </g:VerticalPanel>
     </g:HorizontalPanel>
   </g:FlowPanel>

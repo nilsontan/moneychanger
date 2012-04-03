@@ -10,6 +10,11 @@
       <g:FlowPanel addStyleNames="{res.admin.northBar}">
         <g:HTMLPanel>
           <div style="height:10px" />
+          <g:DecoratorPanel ui:field="loadingMessage" addStyleNames="{res.pos.centered}">
+            <g:FlowPanel>
+              <g:Label text="Loading..." addStyleNames="{res.pos.formTitle}" />
+            </g:FlowPanel>
+          </g:DecoratorPanel>
         </g:HTMLPanel>
         <g:HorizontalPanel spacing="5">
           <g:Image resource="{res.logo}" />

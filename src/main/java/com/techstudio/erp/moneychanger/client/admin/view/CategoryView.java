@@ -17,7 +17,6 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
@@ -38,9 +37,6 @@ public class CategoryView
   }
 
   private final Widget widget;
-
-  @UiField
-  Grid catGrid;
 
   @UiField
   TextBox categoryCode;
@@ -81,11 +77,13 @@ public class CategoryView
     getUiHandlers().setCategoryName(event.getValue());
   }
 
+  @SuppressWarnings("unused")
   @UiHandler("categoryCreate")
   public void onCreateCurrency(ClickEvent event) {
     getUiHandlers().createCategory();
   }
 
+  @SuppressWarnings("unused")
   @UiHandler("categoryUpdate")
   public void onUpdateCurrency(ClickEvent event) {
     getUiHandlers().updateCategory();

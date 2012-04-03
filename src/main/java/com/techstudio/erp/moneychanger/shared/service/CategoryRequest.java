@@ -23,11 +23,11 @@ import java.util.List;
 public interface CategoryRequest extends RequestContext {
   Request<List<CategoryProxy>> fetchAll();
 
-  Request<CategoryProxy> save(CategoryProxy editable);
+  Request<CategoryProxy> save(CategoryProxy proxy);
 
   Request<CategoryProxy> fetch(Long id);
 
-  Request<Void> purge(CategoryProxy currencyProxy);
+  Request<Void> purge(CategoryProxy proxy);
 
   Request<List<CategoryProxy>> fetchByProperty(String prop, String value);
 

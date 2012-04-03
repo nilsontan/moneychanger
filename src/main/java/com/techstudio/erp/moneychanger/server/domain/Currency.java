@@ -1,13 +1,15 @@
 package com.techstudio.erp.moneychanger.server.domain;
 
 import com.google.common.base.Objects;
+import com.googlecode.objectify.annotation.Cached;
+import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Unindexed;
-
-import java.math.BigDecimal;
 
 /**
  * @author Nilson
  */
+@Cached
+@Entity
 public class Currency extends MyDatastoreObject {
 
   public static final Currency EMPTY = new Currency();

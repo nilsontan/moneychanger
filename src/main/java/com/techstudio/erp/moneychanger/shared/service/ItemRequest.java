@@ -23,11 +23,11 @@ import java.util.List;
 public interface ItemRequest extends RequestContext {
   Request<List<ItemProxy>> fetchAll();
 
-  Request<ItemProxy> save(ItemProxy editable);
+  Request<ItemProxy> save(ItemProxy proxy);
 
   Request<ItemProxy> fetch(Long id);
 
-  Request<Void> purge(ItemProxy currencyProxy);
+  Request<Void> purge(ItemProxy proxy);
 
   Request<List<ItemProxy>> fetchByProperty(String prop, String value);
 

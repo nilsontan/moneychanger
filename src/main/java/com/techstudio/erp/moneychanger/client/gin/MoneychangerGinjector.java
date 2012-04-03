@@ -13,13 +13,11 @@ import com.google.gwt.inject.client.Ginjector;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.client.gin.DispatchAsyncModule;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import com.techstudio.erp.moneychanger.client.admin.presenter.CategoryPresenter;
-import com.techstudio.erp.moneychanger.client.admin.presenter.CurrencyPresenter;
-import com.techstudio.erp.moneychanger.client.admin.presenter.ItemPresenter;
-import com.techstudio.erp.moneychanger.client.admin.presenter.MainPagePresenter;
+import com.techstudio.erp.moneychanger.client.admin.presenter.*;
 import com.techstudio.erp.moneychanger.client.pos.presenter.MainPosPresenter;
 import com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
+import com.techstudio.erp.moneychanger.client.util.TestData;
 import com.techstudio.erp.moneychanger.shared.service.MoneychangerRequestFactory;
 
 /**
@@ -34,14 +32,26 @@ public interface MoneychangerGinjector extends Ginjector {
 
   Resources getResources();
 
+  TestData getDataReset();
+
   MoneychangerRequestFactory getRequestFactory();
 
   AsyncProvider<MainPagePresenter> getMainPagePresenter();
+
   AsyncProvider<ItemPresenter> getItemPresenter();
+
   AsyncProvider<CategoryPresenter> getCategoryPresenter();
+
   AsyncProvider<CurrencyPresenter> getCurrencyPresenter();
 
+  AsyncProvider<ExchangeRatePresenter> getExchangeRatePresenter();
+
+  AsyncProvider<UomPresenter> getUomPresenter();
+
+  AsyncProvider<TestPresenter> getTestPresenter();
+
   AsyncProvider<MainPosPresenter> getMainPosPresenter();
+
   AsyncProvider<PosPresenter> getPosPresenter();
 
 }

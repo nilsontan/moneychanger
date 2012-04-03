@@ -10,9 +10,11 @@ package com.techstudio.erp.moneychanger.server.domain;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.common.base.Objects;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
 import com.techstudio.erp.moneychanger.server.service.CategoryDao;
 
+@Cached
 @Entity
 public class Category extends MyDatastoreObject {
 

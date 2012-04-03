@@ -77,28 +77,16 @@ public class PosPresenter
     super.onReset();
 
     categoryProxy = null;
-    categoryDataProvider.setCategory(categoryProxy);
     if (id != null) {
       categoryRequestProvider.get().fetch(id).with(CategoryProxy.PARENT)
           .fire(new Receiver<CategoryProxy>() {
             @Override
             public void onSuccess(CategoryProxy response) {
               categoryProxy = response;
-              categoryDataProvider.setCategory(categoryProxy);
               getView().setCategoryName(response.getName());
-
-//              parentCategoryList.remove(response);
-//              CategoryProxy parentCategory = response.getParent();
-//              int indexOfParent = 0;
-//              if (parentCategory != null) {
-//                indexOfParent = parentCategoryList.indexOf(parentCategory);
-//              }
-//          getView().setParentCategoryIndex(indexOfParent);
             }
           });
     }
-    //TODO:Nilson delete this line if not needed
-//    RangeChangeEvent.fire(getView().getItemTable(), getView().getItemTable().getVisibleRange());
   }
 
   @Override
@@ -122,19 +110,6 @@ public class PosPresenter
 
   @Override
   public void setParentCategoryIndex(int index) {
-//    CategoryProxy parentCategoryProxy = parentCategoryList.get(index);
-//    if (categoryProxy == null || !parentCategoryProxy.equals(categoryProxy.getParent())) {
-//      CategoryRequest categoryRequest = categoryRequestProvider.get();
-//      categoryProxy = getEditableCategoryProxy(categoryRequest);
-//      categoryProxy.setParent(parentCategoryProxy);
-//      categoryRequest.save(categoryProxy).with(CategoryProxy.PARENT).fire(new Receiver<CategoryProxy>() {
-//        @Override
-//        public void onSuccess(CategoryProxy response) {
-//          categoryProxy = response;
-//          categoryDataProvider.updateTableData();
-//        }
-//      });
-//    }
   }
 
   private CategoryProxy getEditableCategoryProxy(CategoryRequest categoryRequest) {

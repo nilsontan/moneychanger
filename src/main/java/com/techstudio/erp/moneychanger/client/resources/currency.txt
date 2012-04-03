@@ -1,24 +1,24 @@
-AUD,Australian Dollar,$
-GBP,British Pound,£
-CAD,Canadian Dollar,C$
-DKK,Danish Krone,kr
-EUR,Euro,€
-HKD,Hong Kong Dollar,HK$
-INR,Indian Rupee,Rs.
-IDR,Indonesian Rupiah,Rp
-JPY,Japanese Yen,¥
-KRW,Korean Won,₩
-MYR,Malaysian Ringgit,RM
-NOK,Norwegian Krone,kr
-NZD,New Zealand Dollar,$
-PHP,Philippine Peso,₱
-SAR,Saudi Riyal,ر.س
-SGD,Singapore Dollar,S$
-ZAR,South African Rand,R
-SEK,Swedish Krona,kr
-CHF,Swiss Franc,CHF
-TWD,Taiwan Dollar,NT$
-THB,Thai Baht,R
-AED,UAE Dirham,د.إ
-USD,United States Dollar,$
-VND,Vietnam Dong,₫
+AUD,Australian Dollar,$,1
+GBP,British Pound,£,1
+CAD,Canadian Dollar,C$,1
+DKK,Danish Krone,kr,1
+EUR,Euro,€,1
+HKD,Hong Kong Dollar,HK$,1
+INR,Indian Rupee,Rs.,1
+IDR,Indonesian Rupiah,Rp.,1
+JPY,Japanese Yen,¥,1
+KRW,Korean Won,₩,1
+MYR,Malaysian Ringgit,RM,1
+NOK,Norwegian Krone,kr,1
+NZD,New Zealand Dollar,$,1
+PHP,Philippine Peso,₱,1
+SAR,Saudi Riyal,ر.س,1
+SGD,Singapore Dollar,S$,1
+ZAR,South African Rand,R,1
+SEK,Swedish Krona,kr,1
+CHF,Swiss Franc,CHF,1
+TWD,Taiwan Dollar,NT$,1
+THB,Thai Baht,R,1
+AED,UAE Dirham,د.إ,1
+USD,United States Dollar,$,1
+VND,Vietnam Dong,₫,1
