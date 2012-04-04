@@ -6,32 +6,60 @@
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
 
   <g:FlowPanel>
-    <g:Label text="Category List" addStyleNames="{res.pos.pageTitle}" />
-    <g:Label text="Create or Update categories quickly" addStyleNames="{res.pos.pageDescription}" />
-    <g:HorizontalPanel spacing="10">
-      <g:FlowPanel>
-        <c:CellTable ui:field="categoryTable" />
-        <c:SimplePager ui:field="categoryPager" location="CENTER" />
-      </g:FlowPanel>
-      <g:DecoratorPanel>
-        <g:FlowPanel>
-          <g:Label text="Category Info" addStyleNames="{res.pos.formTitle}" />
-          <g:Grid ui:field="catGrid">
-            <g:row>
-              <g:customCell>
-                <g:Label text="Name" addStyleNames="{res.pos.formParam}" />
-              </g:customCell>
-              <g:customCell>
-                <g:TextBox ui:field="categoryName" />
-              </g:customCell>
-            </g:row>
-          </g:Grid>
-          <g:HorizontalPanel spacing="2">
-            <g:Button text="Update Category" />
-            <g:Button text="Create Category" />
-          </g:HorizontalPanel>
+    <g:HorizontalPanel>
+      <g:VerticalPanel spacing="10">
+        <g:Image ui:field="txNew" resource="{res.iTxNew}" />
+        <g:Image ui:field="txAdd" resource="{res.iTxAdd}" />
+        <g:Image ui:field="txDel" resource="{res.iTxDel}" />
+        <g:Image ui:field="txSav" resource="{res.iTxSav}" />
+      </g:VerticalPanel>
+      <g:VerticalPanel spacing="10">
+        <g:FlowPanel ui:field="xrDisplay">
+          <c:CellTable ui:field="xrTable" />
+          <c:SimplePager ui:field="xrPager" location="CENTER" />
         </g:FlowPanel>
-      </g:DecoratorPanel>
+        <g:FlowPanel ui:field="txPanel">
+          <g:Label ui:field="currentStep" addStyleNames="{res.admin.formTitle}" />
+          <g:DecoratorPanel>
+            <g:FlowPanel>
+              <g:Grid ui:field="curGrid">
+                <g:row>
+                  <g:customCell>
+                    <g:HTMLPanel>
+                      <g:Button ui:field="btnAud" addStyleNames="{res.cur.aud}" />
+                      <g:Label text="AUD" addStyleNames="{res.pos.curBtn}" />
+                    </g:HTMLPanel>
+                  </g:customCell>
+                  <g:customCell>
+                    <g:HTMLPanel>
+                      <g:Button ui:field="btnGbp" addStyleNames="{res.cur.gbp}" />
+                      <g:Label text="GBP" addStyleNames="{res.pos.curBtn}" />
+                    </g:HTMLPanel>
+                  </g:customCell>
+                  <g:customCell>
+                    <g:HTMLPanel>
+                      <g:Button ui:field="btnMyr" addStyleNames="{res.cur.myr}" />
+                      <g:Label text="MYR" addStyleNames="{res.pos.curBtn}" />
+                    </g:HTMLPanel>
+                  </g:customCell>
+                  <g:customCell>
+                    <g:HTMLPanel>
+                      <g:Button ui:field="btnSgd" addStyleNames="{res.cur.sgd}" />
+                      <g:Label text="SGD" addStyleNames="{res.pos.curBtn}" />
+                    </g:HTMLPanel>
+                  </g:customCell>
+                  <g:customCell>
+                    <g:HTMLPanel>
+                      <g:Button ui:field="btnUsd" addStyleNames="{res.cur.usd}" />
+                      <g:Label text="USD" addStyleNames="{res.pos.curBtn}" />
+                    </g:HTMLPanel>
+                  </g:customCell>
+                </g:row>
+              </g:Grid>
+            </g:FlowPanel>
+          </g:DecoratorPanel>
+        </g:FlowPanel>
+      </g:VerticalPanel>
     </g:HorizontalPanel>
   </g:FlowPanel>
 </ui:UiBinder> 

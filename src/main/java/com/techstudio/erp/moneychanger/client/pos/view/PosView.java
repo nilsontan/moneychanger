@@ -7,26 +7,20 @@
 
 package com.techstudio.erp.moneychanger.client.pos.view;
 
-import com.google.gwt.cell.client.DateCell;
-import com.google.gwt.cell.client.EditTextCell;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter.MyView;
-import com.techstudio.erp.moneychanger.client.ui.CategoryLinkCell;
-import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
-
-import java.util.Date;
+import com.techstudio.erp.moneychanger.shared.proxy.ExchangeRateProxy;
 
 /**
  * @author Nilson
@@ -41,21 +35,54 @@ public class PosView
   private final Widget widget;
 
   @UiField
-  Grid catGrid;
+  FlowPanel xrDisplay;
 
   @UiField
-  TextBox categoryName;
+  FlowPanel txPanel;
 
   @UiField
-  CellTable<CategoryProxy> categoryTable = new CellTable<CategoryProxy>();
+  Label currentStep;
 
   @UiField
-  SimplePager categoryPager = new SimplePager();
+  Image txNew;
+
+  @UiField
+  Image txAdd;
+
+  @UiField
+  Image txDel;
+
+  @UiField
+  Image txSav;
+
+  @UiField
+  Grid curGrid;
+
+  @UiField
+  Button btnAud;
+
+  @UiField
+  Button btnGbp;
+
+  @UiField
+  Button btnMyr;
+
+  @UiField
+  Button btnSgd;
+
+  @UiField
+  Button btnUsd;
+
+  @UiField
+  CellTable<ExchangeRateProxy> xrTable = new CellTable<ExchangeRateProxy>();
+
+  @UiField
+  SimplePager xrPager = new SimplePager();
 
   @Inject
   public PosView(final Binder binder) {
     widget = binder.createAndBindUi(this);
-    setupCategoryTable();
+    setupXrTable();
   }
 
   @Override
@@ -63,72 +90,139 @@ public class PosView
     return widget;
   }
 
-  @UiHandler("categoryName")
-  void onCategoryNameChange(ValueChangeEvent<String> event) {
-    getUiHandlers().setCategoryName(event.getValue());
+  @SuppressWarnings("unused")
+  @UiHandler("txNew")
+  public void onTxNew(ClickEvent event) {
+    getUiHandlers().createNewTransaction();
   }
 
-//  @UiHandler("categoryParent")
-//  void onCategoryParentChange(ChangeEvent event) {
-//    getUiHandlers().setParentCategoryIndex(categoryParent.getSelectedIndex());
-//  }
+  @SuppressWarnings("unused")
+  @UiHandler("txAdd")
+  public void onTxAdd(ClickEvent event) {
+    getUiHandlers().addToTransaction();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("txDel")
+  public void onTxDel(ClickEvent event) {
+    getUiHandlers().deleteTransaction();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("txSav")
+  public void onTxSav(ClickEvent event) {
+    getUiHandlers().saveTransaction();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("btnAud")
+  public void onAud(ClickEvent event) {
+    getUiHandlers().itemSelected("AUD");
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("btnGbp")
+  public void onGbp(ClickEvent event) {
+    getUiHandlers().itemSelected("GBP");
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("btnMyr")
+  public void onMyr(ClickEvent event) {
+    getUiHandlers().itemSelected("MYR");
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("btnSgd")
+  public void onSgd(ClickEvent event) {
+    getUiHandlers().itemSelected("SGD");
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("btnUsd")
+  public void onUsd(ClickEvent event) {
+    getUiHandlers().itemSelected("USD");
+  }
 
   @Override
-  public HasData<CategoryProxy> getTable() {
-    return categoryTable;
+  public HasData<ExchangeRateProxy> getXrTable() {
+    return xrTable;
   }
 
   @Override
-  public void setCategoryName(String name) {
-    categoryName.setValue(name);
+  public void showTxPanel(boolean visible) {
+    txPanel.setVisible(visible);
+    xrDisplay.setVisible(!visible);
   }
 
-//  @Override
-//  public void setParentCategoryIndex(int index) {
-//    categoryParent.setSelectedIndex(index);
-//  }
-//
-//  @Override
-//  public void setParentCategoryList(List<String> names) {
-//    categoryParent.clear();
-//    for (String name : names) {
-//      categoryParent.addItem(name);
-//    }
-//  }
+  @Override
+  public void showTxNew(boolean visible) {
+    txNew.setVisible(visible);
+  }
 
-  private void setupCategoryTable() {
-    Column<CategoryProxy, String> categoryNameColumn = new Column<CategoryProxy, String>(new EditTextCell()) {
+  @Override
+  public void showTxAdd(boolean visible) {
+    txAdd.setVisible(visible);
+  }
+
+  @Override
+  public void showTxDel(boolean visible) {
+    txDel.setVisible(visible);
+  }
+
+  @Override
+  public void showTxSav(boolean visible) {
+    txSav.setVisible(visible);
+  }
+
+  @Override
+  public void setStep(String step) {
+    currentStep.setText(step);
+  }
+
+  private void setupXrTable() {
+    Column<ExchangeRateProxy, String> xrNameColumn = new Column<ExchangeRateProxy, String>(new TextCell()) {
       @Override
-      public String getValue(CategoryProxy categoryProxy) {
-        return categoryProxy.getName();
+      public String getValue(ExchangeRateProxy xrProxy) {
+        return xrProxy.getName();
       }
     };
-    categoryTable.addColumn(categoryNameColumn, "Name");
+    xrTable.addColumn(xrNameColumn, "Name");
 
-    Column<CategoryProxy, String> categoryParentNameColumn = new Column<CategoryProxy, String>(new EditTextCell()) {
+    Column<ExchangeRateProxy, String> xrCurrencyColumn = new Column<ExchangeRateProxy, String>(new TextCell()) {
       @Override
-      public String getValue(CategoryProxy categoryProxy) {
-        return categoryProxy.getParent().getName();
+      public String getValue(ExchangeRateProxy xrProxy) {
+        return xrProxy.getCurrency().getName();
       }
     };
-    categoryTable.addColumn(categoryParentNameColumn, "Parent");
+    xrTable.addColumn(xrCurrencyColumn, "Currency");
 
-    Column<CategoryProxy, Date> dateColumn = new Column<CategoryProxy, Date>(new DateCell()) {
+    Column<ExchangeRateProxy, String> xrUnitColumn = new Column<ExchangeRateProxy, String>(new TextCell()) {
       @Override
-      public Date getValue(CategoryProxy categoryProxy) {
-        return categoryProxy.getCreationDate();
+      public String getValue(ExchangeRateProxy xrProxy) {
+        return xrProxy.getUnit().toString();
       }
     };
-    categoryTable.addColumn(dateColumn, "Created on");
+    xrTable.addColumn(xrUnitColumn, "Unit");
 
-    Column<CategoryProxy, Long> linkColumn = new Column<CategoryProxy, Long>(new CategoryLinkCell()) {
+    Column<ExchangeRateProxy, String> xrAskColumn = new Column<ExchangeRateProxy, String>(new TextCell()) {
       @Override
-      public Long getValue(CategoryProxy categoryProxy) {
-        return categoryProxy.getId();
+      public String getValue(ExchangeRateProxy xrProxy) {
+        return xrProxy.getAskRate();
       }
     };
-    categoryTable.addColumn(linkColumn);
+    xrTable.addColumn(xrAskColumn, "Ask");
 
-    categoryPager.setDisplay(categoryTable);
+    Column<ExchangeRateProxy, String> xrBidColumn = new Column<ExchangeRateProxy, String>(new TextCell()) {
+      @Override
+      public String getValue(ExchangeRateProxy xrProxy) {
+        return xrProxy.getBidRate();
+      }
+    };
+    xrTable.addColumn(xrBidColumn, "Bid");
+
+    xrTable.setPageSize(20);
+
+    xrPager.setDisplay(xrTable);
   }
 }

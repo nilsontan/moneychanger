@@ -15,7 +15,7 @@
         <c:SimplePager ui:field="itemPager" location="CENTER" />
       </g:FlowPanel>
       <g:DecoratorPanel>
-        <g:FlowPanel>
+        <g:HTMLPanel>
           <g:Label text="Item Info" addStyleNames="{res.admin.formTitle}" />
           <g:Grid ui:field="itemGrid">
             <g:row>
@@ -77,7 +77,7 @@
             <g:Button ui:field="itemUpdate" text="Update Item" />
             <g:Button ui:field="itemCreate" text="Create Item" />
           </g:HorizontalPanel>
-        </g:FlowPanel>
+        </g:HTMLPanel>
       </g:DecoratorPanel>
     </g:HorizontalPanel>
   </g:FlowPanel>

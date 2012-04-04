@@ -37,6 +37,8 @@ public class TestPresenter
 
   public interface MyView extends View, HasUiHandlers<TestUiHandlers> {
     void setStatus(String message);
+
+    void showLoading(boolean visible);
   }
 
   private final MoneychangerTestData testData;
@@ -62,8 +64,14 @@ public class TestPresenter
   }
 
   @Override
+  protected void onReveal() {
+    super.onReveal();
+    getView().showLoading(false);
+  }
+
+  @Override
   public void resetData() {
-    getView().setStatus("Resetting Data. Please wait...");
+//    getView().showLoading(true);
     testData.resetAll();
     getView().setStatus("Data Reset Complete.");
   }

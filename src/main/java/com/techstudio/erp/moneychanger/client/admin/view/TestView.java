@@ -12,6 +12,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -29,6 +30,9 @@ public class TestView
   }
 
   private final Widget widget;
+
+  @UiField
+  DecoratorPanel loadingMessage;
 
   @UiField
   Button testReset;
@@ -55,6 +59,11 @@ public class TestView
   @Override
   public void setStatus(String message) {
     testStatus.setText(message);
+  }
+
+  @Override
+  public void showLoading(boolean visible) {
+    loadingMessage.setVisible(visible);
   }
 
 }

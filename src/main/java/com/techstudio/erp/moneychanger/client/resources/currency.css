@@ -1,0 +1,15 @@
+@sprite .aud {
+  gwt-image: "iCurAud";
+}
+@sprite .gbp {
+  gwt-image: "iCurGbp";
+}
+@sprite .myr {
+  gwt-image: "iCurMyr";
+}
+@sprite .sgd {
+  gwt-image: "iCurSgd";
+}
+@sprite .usd {
+  gwt-image: "iCurUsd";
+}

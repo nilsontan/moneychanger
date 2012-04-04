@@ -13,7 +13,13 @@ import com.gwtplatform.mvp.client.UiHandlers;
  * @author Nilson
  */
 public interface PosUiHandlers extends UiHandlers {
-  void setCategoryName(String name);
+  void createNewTransaction();
 
-  void setParentCategoryIndex(int name);
+  void addToTransaction();
+
+  void deleteTransaction();
+
+  void saveTransaction();
+
+  void itemSelected(String itemCode);
 }

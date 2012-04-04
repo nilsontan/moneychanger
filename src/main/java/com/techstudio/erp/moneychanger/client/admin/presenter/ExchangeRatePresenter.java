@@ -72,7 +72,7 @@ public class ExchangeRatePresenter
   }
 
   private final Provider<ExchangeRateRequest> xrRequestProvider;
-  private final ExchangeRateDataProvider itemDataProvider;
+  private final ExchangeRateDataProvider xrDataProvider;
   private final CurrencyDataProvider currencyDataProvider;
 
   private Long id;
@@ -88,13 +88,13 @@ public class ExchangeRatePresenter
                                final MyView view,
                                final MyProxy proxy,
                                final Provider<ExchangeRateRequest> xrRequestProvider,
-                               final ExchangeRateDataProvider itemDataProvider,
+                               final ExchangeRateDataProvider xrDataProvider,
                                final CurrencyDataProvider currencyDataProvider) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
     this.xrRequestProvider = xrRequestProvider;
-    this.itemDataProvider = itemDataProvider;
-    this.itemDataProvider.addDataDisplay(getView().getXrTable());
+    this.xrDataProvider = xrDataProvider;
+    this.xrDataProvider.addDataDisplay(getView().getXrTable());
     this.currencyDataProvider = currencyDataProvider;
     this.currencyDataProvider.addDataListDisplay(getView().getCurrencyList());
   }
@@ -190,7 +190,7 @@ public class ExchangeRatePresenter
                   .fire(new Receiver<ExchangeRateProxy>() {
                     @Override
                     public void onSuccess(ExchangeRateProxy response) {
-                      itemDataProvider.updateTableData();
+                      xrDataProvider.updateTableData();
                       updateView();
                     }
                   });
@@ -221,7 +221,7 @@ public class ExchangeRatePresenter
                   .fire(new Receiver<ExchangeRateProxy>() {
                     @Override
                     public void onSuccess(ExchangeRateProxy response) {
-                      itemDataProvider.updateTableData();
+                      xrDataProvider.updateTableData();
                       updateView();
                     }
                   });

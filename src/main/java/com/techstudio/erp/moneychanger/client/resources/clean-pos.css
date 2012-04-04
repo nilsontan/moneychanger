@@ -38,6 +38,10 @@
   border-left: 1px solid #C3C3C3;
 }
 
+.centerBar {
+  padding: 10px;
+}
+
 .menuTitle, a.menuTitle {
   margin-right: 20px;
   color: #888;
@@ -86,4 +90,12 @@
 .numPadV {
   width: 70px;
   height: 172px;
+}
+
+.curBtn {
+  color: #4B4A4A;
+  font-size: 12px;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: #DDF 1px 1px 0;
 }

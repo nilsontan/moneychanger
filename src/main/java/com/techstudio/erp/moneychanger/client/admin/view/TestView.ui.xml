@@ -10,6 +10,11 @@
     <g:HorizontalPanel spacing="10">
       <g:Label text="1." />
       <g:VerticalPanel>
+        <g:DecoratorPanel ui:field="loadingMessage" addStyleNames="{res.pos.centered}">
+          <g:FlowPanel>
+            <g:Image resource="{res.loadingIcon}" />
+          </g:FlowPanel>
+        </g:DecoratorPanel>
         <g:DecoratorPanel>
           <g:FlowPanel>
             <g:Label text="Reset All Data" addStyleNames="{res.admin.formTitle}" />

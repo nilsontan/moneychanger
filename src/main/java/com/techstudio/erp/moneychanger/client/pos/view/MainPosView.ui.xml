@@ -15,7 +15,7 @@
           </g:DecoratorPanel>
         </g:HTMLPanel>
         <g:HorizontalPanel spacing="5">
-          <g:Image resource="{res.logoPos}" />
+          <g:Image resource="{res.iLogoPos}" />
           <g:HTMLPanel>
             <div style="height:5px" />
             <g:Label text="Moneychanger" addStyleNames="{res.pos.formTitle}" />
@@ -26,7 +26,7 @@
     <g:center>
       <g:LayoutPanel ui:field="mainContentContainer" />
     </g:center>
-    <g:east size="396">
+    <!--<g:east size="396">
       <g:FlowPanel addStyleNames="{res.pos.eastBar}">
         <g:HorizontalPanel>
           <g:Grid>
@@ -89,6 +89,6 @@
           </g:Grid>
         </g:HorizontalPanel>
       </g:FlowPanel>
-    </g:east>
+    </g:east>-->
   </g:DockLayoutPanel>
 </ui:UiBinder>

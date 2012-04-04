@@ -7,24 +7,24 @@
 
 package com.techstudio.erp.moneychanger.client.pos.presenter;
 
+import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.pos.view.PosUiHandlers;
-import com.techstudio.erp.moneychanger.client.ui.CategoryDataProvider;
-import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
-import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
+import com.techstudio.erp.moneychanger.client.resources.Resources;
+import com.techstudio.erp.moneychanger.client.ui.ExchangeRateDataProvider;
+import com.techstudio.erp.moneychanger.shared.proxy.ExchangeRateProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 
 /**
  * @author Nilson
@@ -42,29 +42,36 @@ public class PosPresenter
   }
 
   public interface MyView extends View, HasUiHandlers<PosUiHandlers> {
-    HasData<CategoryProxy> getTable();
-
-    void setCategoryName(String name);
+    HasData<ExchangeRateProxy> getXrTable();
+    void showTxPanel(boolean visible);
+    void showTxNew(boolean visible);
+    void showTxAdd(boolean visible);
+    void showTxDel(boolean visible);
+    void showTxSav(boolean visible);
+    void setStep(String step);
   }
 
-  private final Provider<CategoryRequest> categoryRequestProvider;
-  private final CategoryDataProvider categoryDataProvider;
+  private final ExchangeRateDataProvider xrDataProvider;
 
-  private Long id;
-  private CategoryProxy categoryProxy;
-//  private List<CategoryProxy> parentCategoryList;
+  private Step step;
+  private final Resources resources;
+  //TODO:Nilson isTransacting correlated with step?
+  private boolean isTransacting;
+  private ItemProxy tempItemProxy;
+  private ItemProxy buyItemProxy;
+  private ItemProxy sellItemProxy;
 
   @Inject
   public PosPresenter(final EventBus eventBus,
                       final MyView view,
                       final MyProxy proxy,
-                      final Provider<CategoryRequest> categoryRequestProvider,
-                      final CategoryDataProvider categoryDataProvider) {
+                      final ExchangeRateDataProvider xrDataProvider,
+                      final Resources resources) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
-    this.categoryRequestProvider = categoryRequestProvider;
-    this.categoryDataProvider = categoryDataProvider;
-    this.categoryDataProvider.addDataDisplay(getView().getTable());
+    this.xrDataProvider = xrDataProvider;
+    this.xrDataProvider.addDataDisplay(getView().getXrTable());
+    this.resources = resources;
   }
 
   @Override
@@ -75,57 +82,81 @@ public class PosPresenter
   @Override
   protected void onReset() {
     super.onReset();
+  }
 
-    categoryProxy = null;
-    if (id != null) {
-      categoryRequestProvider.get().fetch(id).with(CategoryProxy.PARENT)
-          .fire(new Receiver<CategoryProxy>() {
-            @Override
-            public void onSuccess(CategoryProxy response) {
-              categoryProxy = response;
-              getView().setCategoryName(response.getName());
-            }
-          });
-    }
+  protected void onReveal() {
+    step = Step.NONE;
+    isTransacting = false;
+    updateView();
   }
 
   @Override
-  public void setCategoryName(String name) {
-    if (name == null) {
-      return;
-    }
-    if (categoryProxy == null || !name.equals(categoryProxy.getName())) {
-      CategoryRequest categoryRequest = categoryRequestProvider.get();
-      categoryProxy = getEditableCategoryProxy(categoryRequest);
-      categoryProxy.setName(name);
-      categoryRequest.save(categoryProxy).with(CategoryProxy.PARENT).fire(new Receiver<CategoryProxy>() {
-        @Override
-        public void onSuccess(CategoryProxy response) {
-          categoryProxy = response;
-          categoryDataProvider.updateAllData();
-        }
-      });
-    }
+  public void createNewTransaction() {
+    Log.debug("Creating a new tx ...");
+    step = Step.ITEMSELECT;
+    isTransacting = true;
+    updateView();
   }
 
   @Override
-  public void setParentCategoryIndex(int index) {
-  }
-
-  private CategoryProxy getEditableCategoryProxy(CategoryRequest categoryRequest) {
-    if (categoryProxy == null) {
-      categoryProxy = categoryRequest.create(CategoryProxy.class);
-    }
-    return categoryRequest.edit(categoryProxy);
+  public void addToTransaction() {
+    Log.debug("Adding to tx ...");
+    step = Step.ITEMSELECT;
+    isTransacting = true;
+    updateView();
   }
 
   @Override
-  public void prepareFromRequest(PlaceRequest placeRequest) {
-    String idString = placeRequest.getParameter("id", "");
-    try {
-      id = Long.parseLong(idString);
-    } catch (NumberFormatException e) {
-      id = null;
+  public void deleteTransaction() {
+    Log.debug("Deleting tx ...");
+    isTransacting = false;
+    updateView();
+  }
+
+  @Override
+  public void saveTransaction() {
+    Log.debug("Saving tx ...");
+    step = Step.NONE;
+    isTransacting = false;
+    updateView();
+  }
+
+  @Override
+  public void itemSelected(String itemCode) {
+    if (buyItemProxy == null && sellItemProxy == null) {
     }
+  }
+
+  private void updateView() {
+    getView().showTxPanel(isTransacting);
+    getView().showTxNew(!isTransacting);
+    getView().showTxAdd(isTransacting);
+    getView().showTxDel(isTransacting);
+    getView().showTxSav(isTransacting);
+    //TODO:Nilson merge guide into Step and add an accompanying image
+    String guide = "";
+    ImageResource imageResource = resources.iCatCur();
+    switch (step) {
+      case ITEMSELECT:
+        guide = "Select Item";
+        break;
+      default:
+    }
+    getView().setStep(guide);
+  }
+
+  /**
+   * Flow for a transaction
+   * <ol>
+   *  <li>Buy(Stock Coming In)</li>
+   *  <li>Sell(Stock Going Out)</li>
+   *  <li>Show the Rate and Ask to confirm</li>
+   *  <li>Key in amount to </li>
+   * </ol>
+   */
+  private enum Step {
+    NONE,
+    ITEMSELECT,
+    SELL
   }
 }
