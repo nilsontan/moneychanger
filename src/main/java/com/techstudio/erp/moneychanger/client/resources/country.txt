@@ -1,0 +1,4 @@
+AU,Australia,Australia,AUD
+MY,Malaysia,Malaysia,MYR
+SG,Singapore,Singapore,SGD
+US,USA,United States of America,USD

@@ -12,14 +12,14 @@ import com.gwtplatform.mvp.client.UiHandlers;
 /**
  * @author Nilson
  */
-public interface CurrencyUiHandlers extends UiHandlers {
-  void setCurrencyCode(String code);
+public interface CountryUiHandlers extends UiHandlers {
+  void setCountryCode(String code);
 
-  void setCurrencyName(String name);
+  void setCountryName(String name);
 
-  void setCurrencyFullName(String fullName);
+  void setCountryFullName(String fullName);
 
-  void createCurrency();
+  void createCountry();
 
-  void updateCurrency();
+  void updateCountry();
 }

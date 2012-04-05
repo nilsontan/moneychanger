@@ -15,7 +15,7 @@ import com.techstudio.erp.moneychanger.server.locator.ObjectifyLocator;
  * @author Nilson
  */
 @ProxyFor(value = Category.class, locator = ObjectifyLocator.class)
-public interface CategoryProxy extends BaseEntityProxy {
+public interface CategoryProxy extends MyEntityProxy {
   public static final String PARENT = "parent";
 
   CategoryProxy getParent();

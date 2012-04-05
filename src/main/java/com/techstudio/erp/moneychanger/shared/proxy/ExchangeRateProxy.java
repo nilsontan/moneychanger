@@ -15,7 +15,7 @@ import com.techstudio.erp.moneychanger.server.locator.ObjectifyLocator;
  * @author Nilson
  */
 @ProxyFor(value = ExchangeRate.class, locator = ObjectifyLocator.class)
-public interface ExchangeRateProxy extends BaseEntityProxy {
+public interface ExchangeRateProxy extends MyEntityProxy {
   public static final String CURRENCY = "currency";
 
   CurrencyProxy getCurrency();

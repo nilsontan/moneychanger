@@ -9,20 +9,23 @@
     <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getPosPage}">
       POS
     </g:InlineHyperlink>
-    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getItemPage}">
-      Item
-    </g:InlineHyperlink>
     <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getCategoryPage}">
       Category
     </g:InlineHyperlink>
     <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getCurrencyPage}">
       Currency
     </g:InlineHyperlink>
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getUomPage}">
+      Uom
+    </g:InlineHyperlink>
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getCountryPage}">
+      Country
+    </g:InlineHyperlink>
     <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getExchangeRatePage}">
       Exchange Rate
     </g:InlineHyperlink>
-    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getUomPage}">
-      Uom
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getItemPage}">
+      Item
     </g:InlineHyperlink>
     <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getTestPage}">
       Settings

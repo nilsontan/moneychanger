@@ -7,6 +7,8 @@
 
 package com.techstudio.erp.moneychanger.server.domain;
 
+import com.googlecode.objectify.annotation.Unindexed;
+
 import java.util.Date;
 
 /**
@@ -22,6 +24,7 @@ import java.util.Date;
 public class MyDatastoreObject extends DatastoreObject {
   private String code = "";
   private String name = "";
+  @Unindexed
   private final Date creationDate = new Date();
 
   public String getCode() {

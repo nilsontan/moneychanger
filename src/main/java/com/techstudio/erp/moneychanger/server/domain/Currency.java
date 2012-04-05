@@ -3,29 +3,17 @@ package com.techstudio.erp.moneychanger.server.domain;
 import com.google.common.base.Objects;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Unindexed;
 
 /**
  * @author Nilson
  */
 @Cached
 @Entity
-public class Currency extends MyDatastoreObject {
+public class Currency extends MyExDatastoreObject {
 
   public static final Currency EMPTY = new Currency();
 
-  @Unindexed
-  private String sign = "$";
-
   public Currency() {
-  }
-
-  public String getSign() {
-    return sign;
-  }
-
-  public void setSign(String sign) {
-    this.sign = sign;
   }
 
   @Override

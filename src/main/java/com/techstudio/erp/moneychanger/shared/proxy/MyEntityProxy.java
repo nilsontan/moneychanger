@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * @author Nilson
  */
-public interface BaseEntityProxy extends EntityProxy {
+public interface MyEntityProxy extends EntityProxy {
   Long getId();
   Integer getVersion();
 

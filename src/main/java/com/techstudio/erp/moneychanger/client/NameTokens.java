@@ -28,6 +28,8 @@ public class NameTokens {
 
   public static final String CATEGORY_PAGE = "!CATEGORY";
 
+  public static final String COUNTRY_PAGE = "!COUNTRY";
+
   public static final String CURRENCY_PAGE = "!CURRENCY";
 
   public static final String EXCHANGE_RATE_PAGE = "!EXCHANGE_RATE";
@@ -46,6 +48,10 @@ public class NameTokens {
 
   public static String getCategoryPage() {
     return CATEGORY_PAGE;
+  }
+
+  public static String getCountryPage() {
+    return COUNTRY_PAGE;
   }
 
   public static String getCurrencyPage() {

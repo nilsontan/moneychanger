@@ -58,6 +58,8 @@ public class MoneychangerModule extends AbstractPresenterModule {
         ItemView.class, ItemPresenter.MyProxy.class);
     bindPresenter(CategoryPresenter.class, CategoryPresenter.MyView.class,
         CategoryView.class, CategoryPresenter.MyProxy.class);
+    bindPresenter(CountryPresenter.class, CountryPresenter.MyView.class,
+        CountryView.class, CountryPresenter.MyProxy.class);
     bindPresenter(CurrencyPresenter.class, CurrencyPresenter.MyView.class,
         CurrencyView.class, CurrencyPresenter.MyProxy.class);
     bindPresenter(ExchangeRatePresenter.class, ExchangeRatePresenter.MyView.class,
@@ -89,6 +91,11 @@ public class MoneychangerModule extends AbstractPresenterModule {
   @Provides
   CategoryRequest provideCategoryService(MoneychangerRequestFactory requestFactory) {
     return requestFactory.categoryRequest();
+  }
+
+  @Provides
+  CountryRequest provideCountryService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.countryRequest();
   }
 
   @Provides

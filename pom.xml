@@ -103,13 +103,13 @@
       <scope>test</scope>
     </dependency>
     <!-- Generate the decoder needed by RequestFactory Server -->
-    <!-- Doesn't yet work in eclipse. See maven-processor-plugin below.
+    <!-- Doesn't yet work in eclipse. See maven-processor-plugin below.-->
     <dependency>
       <groupId>com.google.web.bindery</groupId>
       <artifactId>requestfactory-apt</artifactId>
-      <version>${gwtVersion}</version>
+      <version>${gwt.version}</version>
+      <scope>provided</scope>
     </dependency>
-    -->
     <dependency>
       <groupId>com.google.web.bindery</groupId>
       <artifactId>requestfactory-apt</artifactId>

@@ -45,7 +45,7 @@ public class CurrencyView
   TextBox currencyName;
 
   @UiField
-  TextBox currencySign;
+  TextBox currencyFullName;
 
   @UiField
   Button currencyUpdate;
@@ -80,9 +80,9 @@ public class CurrencyView
     getUiHandlers().setCurrencyName(event.getValue());
   }
 
-  @UiHandler("currencySign")
-  void onCurrencySignChange(ValueChangeEvent<String> event) {
-    getUiHandlers().setCurrencySign(event.getValue());
+  @UiHandler("currencyFullName")
+  void onCurrencyFullNameChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setCurrencyFullName(event.getValue());
   }
 
   @SuppressWarnings("unused")
@@ -123,8 +123,8 @@ public class CurrencyView
   }
 
   @Override
-  public void setCurrencySign(String sign) {
-    currencySign.setValue(sign);
+  public void setCurrencyFullName(String fullName) {
+    currencyFullName.setValue(fullName);
   }
 
   private void setupCurrencyTable() {
@@ -144,13 +144,13 @@ public class CurrencyView
     };
     currencyTable.addColumn(currencyNameColumn, "Name");
 
-    Column<CurrencyProxy, String> currencySignColumn = new Column<CurrencyProxy, String>(new EditTextCell()) {
+    Column<CurrencyProxy, String> currencyFullNameColumn = new Column<CurrencyProxy, String>(new EditTextCell()) {
       @Override
       public String getValue(CurrencyProxy currencyProxy) {
-        return currencyProxy.getSign();
+        return currencyProxy.getFullName();
       }
     };
-    currencyTable.addColumn(currencySignColumn, "Sign");
+    currencyTable.addColumn(currencyFullNameColumn, "Full Name");
 
     Column<CurrencyProxy, Long> linkColumn = new Column<CurrencyProxy, Long>(new CurrencyLinkCell()) {
       @Override

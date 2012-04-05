@@ -8,7 +8,7 @@
 package com.techstudio.erp.moneychanger.client.util;
 
 import com.google.common.base.Function;
-import com.techstudio.erp.moneychanger.shared.proxy.BaseEntityProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.MyEntityProxy;
 
 import javax.annotation.Nullable;
 
@@ -19,10 +19,10 @@ import javax.annotation.Nullable;
  */
 public final class Util {
 
-  public static Function<BaseEntityProxy, String> entityProxyNameFunction = new Function<BaseEntityProxy, String>() {
+  public static Function<MyEntityProxy, String> entityProxyNameFunction = new Function<MyEntityProxy, String>() {
     @Override
-    public String apply(@Nullable BaseEntityProxy baseEntityProxy) {
-      return baseEntityProxy.getName();
+    public String apply(@Nullable MyEntityProxy myEntityProxy) {
+      return myEntityProxy.getName();
     }
   };
 }

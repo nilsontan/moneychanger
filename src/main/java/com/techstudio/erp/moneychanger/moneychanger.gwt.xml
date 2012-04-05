@@ -42,4 +42,28 @@
   <define-configuration-property name="gin.ginjector" is-multi-valued="false" />
   <set-configuration-property name="gin.ginjector"
                               value="com.techstudio.erp.moneychanger.client.gin.MoneychangerGinjector" />
+
+  <!--
+       When developing, you may wish to turn on enhanced web mode stack traces.
+       Note this adds overhead to the resulting JavaScript so you generally
+       don't want to leave this on for production.
+
+       Then again, if you're debugging a production issue, you might need to anyway :)
+       Default `OFF` but allow selection of a specific log level, say `INFO`, via
+       the `log_level` URL parameter, e.g.
+       http[s]://hostame:port/path/to/your/module/Module.html?log_level=INFO
+  -->
+  <set-property name="compiler.emulatedStack" value="true" />
+  <set-configuration-property name="compiler.emulatedStack.recordLineNumbers" value="true"/>
+  <set-configuration-property name="compiler.emulatedStack.recordFileNames" value="true"/>
+
+  <!-- Loggers Enabled by default -->
+  <set-property name="log_ConsoleLogger" value="ENABLED" />
+  <set-property name="log_DivLogger" value="DISABLED" />
+  <set-property name="log_FirebugLogger" value="DISABLED" />
+  <set-property name="log_GWTLogger" value="ENABLED" />
+  <set-property name="log_SystemLogger" value="DISABLED" />
+
+  <!-- Loggers Disabled by default -->
+  <set-property name="log_WindowLogger" value="DISABLED" />
 </module>

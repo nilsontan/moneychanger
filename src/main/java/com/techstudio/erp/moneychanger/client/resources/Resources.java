@@ -25,6 +25,9 @@ public interface Resources extends ClientBundle {
   @Source("uom.txt")
   TextResource uomText();
 
+  @Source("country.txt")
+  TextResource countryText();
+
   @Source("item.txt")
   TextResource itemText();
 

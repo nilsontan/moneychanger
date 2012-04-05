@@ -214,14 +214,6 @@ public class ExchangeRateView
     };
     xrTable.addColumn(xrUnitColumn, "Unit");
 
-    Column<ExchangeRateProxy, String> xrAskColumn = new Column<ExchangeRateProxy, String>(new EditTextCell()) {
-      @Override
-      public String getValue(ExchangeRateProxy xrProxy) {
-        return xrProxy.getAskRate();
-      }
-    };
-    xrTable.addColumn(xrAskColumn, "Ask");
-
     Column<ExchangeRateProxy, String> xrBidColumn = new Column<ExchangeRateProxy, String>(new EditTextCell()) {
       @Override
       public String getValue(ExchangeRateProxy xrProxy) {
@@ -229,6 +221,14 @@ public class ExchangeRateView
       }
     };
     xrTable.addColumn(xrBidColumn, "Bid");
+
+    Column<ExchangeRateProxy, String> xrAskColumn = new Column<ExchangeRateProxy, String>(new EditTextCell()) {
+      @Override
+      public String getValue(ExchangeRateProxy xrProxy) {
+        return xrProxy.getAskRate();
+      }
+    };
+    xrTable.addColumn(xrAskColumn, "Ask");
 
     Column<ExchangeRateProxy, Long> linkColumn = new Column<ExchangeRateProxy, Long>(new ExchangeRateLinkCell()) {
       @Override

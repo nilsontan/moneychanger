@@ -23,44 +23,44 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
-import com.techstudio.erp.moneychanger.client.admin.view.CurrencyUiHandlers;
-import com.techstudio.erp.moneychanger.client.ui.CurrencyDataProvider;
-import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
-import com.techstudio.erp.moneychanger.shared.service.CurrencyRequest;
+import com.techstudio.erp.moneychanger.client.admin.view.CountryUiHandlers;
+import com.techstudio.erp.moneychanger.client.ui.CountryDataProvider;
+import com.techstudio.erp.moneychanger.shared.proxy.CountryProxy;
+import com.techstudio.erp.moneychanger.shared.service.CountryRequest;
 
 import java.util.List;
 
 /**
  * @author Nilson
  */
-public class CurrencyPresenter
-    extends Presenter<CurrencyPresenter.MyView, CurrencyPresenter.MyProxy>
-    implements CurrencyUiHandlers {
+public class CountryPresenter
+    extends Presenter<CountryPresenter.MyView, CountryPresenter.MyProxy>
+    implements CountryUiHandlers {
 
   /**
-   * {@link com.techstudio.erp.moneychanger.client.admin.presenter.CurrencyPresenter}'s proxy.
+   * {@link com.techstudio.erp.moneychanger.client.admin.presenter.CountryPresenter}'s proxy.
    */
   @ProxyCodeSplit
-  @NameToken(NameTokens.CURRENCY_PAGE)
-  public interface MyProxy extends ProxyPlace<CurrencyPresenter> {
+  @NameToken(NameTokens.COUNTRY_PAGE)
+  public interface MyProxy extends ProxyPlace<CountryPresenter> {
   }
 
-  public interface MyView extends View, HasUiHandlers<CurrencyUiHandlers> {
-    HasData<CurrencyProxy> getTable();
+  public interface MyView extends View, HasUiHandlers<CountryUiHandlers> {
+    HasData<CountryProxy> getTable();
 
     void enableCreateButton(boolean isValid);
 
     void enableUpdateButton(boolean isValid);
 
-    void setCurrencyCode(String code);
+    void setCountryCode(String code);
 
-    void setCurrencyName(String name);
+    void setCountryName(String name);
 
-    void setCurrencyFullName(String fullName);
+    void setCountryFullName(String fullName);
   }
 
-  private final Provider<CurrencyRequest> currencyRequestProvider;
-  private final CurrencyDataProvider currencyDataProvider;
+  private final Provider<CountryRequest> countryRequestProvider;
+  private final CountryDataProvider countryDataProvider;
 
   private Long id;
   private String code;
@@ -68,16 +68,16 @@ public class CurrencyPresenter
   private String fullName;
 
   @Inject
-  public CurrencyPresenter(final EventBus eventBus,
-                           final MyView view,
-                           final MyProxy proxy,
-                           final Provider<CurrencyRequest> currencyRequestProvider,
-                           final CurrencyDataProvider currencyDataProvider) {
+  public CountryPresenter(final EventBus eventBus,
+                          final MyView view,
+                          final MyProxy proxy,
+                          final Provider<CountryRequest> countryRequestProvider,
+                          final CountryDataProvider countryDataProvider) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
-    this.currencyRequestProvider = currencyRequestProvider;
-    this.currencyDataProvider = currencyDataProvider;
-    this.currencyDataProvider.addDataDisplay(getView().getTable());
+    this.countryRequestProvider = countryRequestProvider;
+    this.countryDataProvider = countryDataProvider;
+    this.countryDataProvider.addDataDisplay(getView().getTable());
   }
 
   @Override
@@ -90,10 +90,10 @@ public class CurrencyPresenter
     super.onReset();
 
     if (id != null) {
-      currencyRequestProvider.get().fetch(id)
-          .fire(new Receiver<CurrencyProxy>() {
+      countryRequestProvider.get().fetch(id)
+          .fire(new Receiver<CountryProxy>() {
             @Override
-            public void onSuccess(CurrencyProxy response) {
+            public void onSuccess(CountryProxy response) {
               code = response.getCode();
               name = response.getName();
               fullName = response.getFullName();
@@ -114,70 +114,70 @@ public class CurrencyPresenter
   }
 
   @Override
-  public void setCurrencyCode(String code) {
+  public void setCountryCode(String code) {
     this.code = code.trim().toUpperCase();
     updateView();
   }
 
   @Override
-  public void setCurrencyName(String name) {
+  public void setCountryName(String name) {
     this.name = name.trim();
     updateView();
   }
 
   @Override
-  public void setCurrencyFullName(String fullName) {
+  public void setCountryFullName(String fullName) {
     this.fullName = fullName.trim();
     updateView();
   }
 
   @Override
-  public void createCurrency() {
+  public void createCountry() {
     if (!isFormValid()) {
       return;
     }
-    currencyRequestProvider.get().fetchByProperty("code", code)
-        .fire(new Receiver<List<CurrencyProxy>>() {
+    countryRequestProvider.get().fetchByProperty("code", code)
+        .fire(new Receiver<List<CountryProxy>>() {
           @Override
-          public void onSuccess(List<CurrencyProxy> response) {
+          public void onSuccess(List<CountryProxy> response) {
             if (response.isEmpty()) {
-              CurrencyRequest request = currencyRequestProvider.get();
-              CurrencyProxy proxy = request.create(CurrencyProxy.class);
+              CountryRequest request = countryRequestProvider.get();
+              CountryProxy proxy = request.create(CountryProxy.class);
               fillData(proxy);
-              request.save(proxy).fire(new Receiver<CurrencyProxy>() {
+              request.save(proxy).fire(new Receiver<CountryProxy>() {
                 @Override
-                public void onSuccess(CurrencyProxy response) {
-                  currencyDataProvider.updateAllData();
+                public void onSuccess(CountryProxy response) {
+                  countryDataProvider.updateAllData();
                   updateView();
                 }
               });
             } else {
-              Window.alert("A currency with that code already exist!");
+              Window.alert("A country with that code already exist!");
             }
           }
         });
   }
 
   @Override
-  public void updateCurrency() {
+  public void updateCountry() {
     if (!isFormValid()) {
       return;
     }
-    currencyRequestProvider.get().fetchByProperty("code", code)
-        .fire(new Receiver<List<CurrencyProxy>>() {
+    countryRequestProvider.get().fetchByProperty("code", code)
+        .fire(new Receiver<List<CountryProxy>>() {
           @Override
-          public void onSuccess(List<CurrencyProxy> response) {
+          public void onSuccess(List<CountryProxy> response) {
             if (response.isEmpty()) {
-              Window.alert("A currency with that code does not exist!");
+              Window.alert("A country with that code does not exist!");
             } else {
-              CurrencyRequest request = currencyRequestProvider.get();
-              CurrencyProxy proxy = response.get(0);
+              CountryRequest request = countryRequestProvider.get();
+              CountryProxy proxy = response.get(0);
               proxy = request.edit(proxy);
               fillData(proxy);
-              request.save(proxy).fire(new Receiver<CurrencyProxy>() {
+              request.save(proxy).fire(new Receiver<CountryProxy>() {
                 @Override
-                public void onSuccess(CurrencyProxy response) {
-                  currencyDataProvider.updateAllData();
+                public void onSuccess(CountryProxy response) {
+                  countryDataProvider.updateAllData();
                   updateView();
                 }
               });
@@ -196,16 +196,16 @@ public class CurrencyPresenter
     }
   }
 
-  private void fillData(CurrencyProxy proxy) {
+  private void fillData(CountryProxy proxy) {
     proxy.setCode(code);
     proxy.setName(name);
     proxy.setFullName(fullName);
   }
 
   private void updateView() {
-    getView().setCurrencyCode(code);
-    getView().setCurrencyName(name);
-    getView().setCurrencyFullName(fullName);
+    getView().setCountryCode(code);
+    getView().setCountryName(name);
+    getView().setCountryFullName(fullName);
     boolean isValid = isFormValid();
     getView().enableCreateButton(isValid);
     getView().enableUpdateButton(isValid);

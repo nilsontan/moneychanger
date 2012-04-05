@@ -8,12 +8,16 @@
 package com.techstudio.erp.moneychanger.shared.proxy;
 
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
-import com.techstudio.erp.moneychanger.server.domain.Currency;
+import com.techstudio.erp.moneychanger.server.domain.Country;
 import com.techstudio.erp.moneychanger.server.locator.ObjectifyLocator;
 
 /**
  * @author Nilson
  */
-@ProxyFor(value = Currency.class, locator = ObjectifyLocator.class)
-public interface CurrencyProxy extends MyExEntityProxy {
+@ProxyFor(value = Country.class, locator = ObjectifyLocator.class)
+public interface CountryProxy extends MyExEntityProxy {
+  public static final String CURRENCY = "currency";
+
+  CurrencyProxy getCurrency();
+  void setCurrency(CurrencyProxy currencyProxy);
 }

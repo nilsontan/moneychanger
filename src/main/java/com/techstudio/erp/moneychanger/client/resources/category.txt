@@ -1,2 +1,2 @@
-CUR,Currency
+MON,Money Change
 PHO,Phone Card
