@@ -8,18 +8,29 @@
 package com.techstudio.erp.moneychanger.client.pos.view;
 
 import com.gwtplatform.mvp.client.UiHandlers;
+import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
 
 /**
  * @author Nilson
  */
 public interface PosUiHandlers extends UiHandlers {
-  void createNewTransaction();
+  void returnToTransaction();
 
   void addToTransaction();
 
   void deleteTransaction();
 
-  void saveTransaction();
+  void viewRates();
+
+  void skipStep();
 
   void itemSelected(String itemCode);
+
+  void modifyItem(LineItemProxy lineItem);
+
+  void confirmItemRate(String itemRate);
+
+  void confirmItemQuantity(String itemQuantity);
+
+  void confirmChanges();
 }

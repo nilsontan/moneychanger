@@ -48,8 +48,9 @@ public class MoneychangerModule extends AbstractPresenterModule {
     bind(TestData.class).to(MoneychangerTestData.class).in(Singleton.class);
 
     // Constants
-    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.TEST_PAGE);
-    bindConstant().annotatedWith(DefaultScale.class).to(4);
+    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.POS_PAGE);
+    bindConstant().annotatedWith(DefaultScaleForCosting.class).to(4);
+    bindConstant().annotatedWith(DefaultScaleForMoney.class).to(2);
 
     // Presenters
     bindPresenter(MainPagePresenter.class, MainPagePresenter.MyView.class,
@@ -62,8 +63,8 @@ public class MoneychangerModule extends AbstractPresenterModule {
         CountryView.class, CountryPresenter.MyProxy.class);
     bindPresenter(CurrencyPresenter.class, CurrencyPresenter.MyView.class,
         CurrencyView.class, CurrencyPresenter.MyProxy.class);
-    bindPresenter(ExchangeRatePresenter.class, ExchangeRatePresenter.MyView.class,
-        ExchangeRateView.class, ExchangeRatePresenter.MyProxy.class);
+    bindPresenter(SpotRatePresenter.class, SpotRatePresenter.MyView.class,
+        SpotRateView.class, SpotRatePresenter.MyProxy.class);
     bindPresenter(UomPresenter.class, UomPresenter.MyView.class,
         UomView.class, UomPresenter.MyProxy.class);
     bindPresenter(TestPresenter.class, TestPresenter.MyView.class,
@@ -84,11 +85,6 @@ public class MoneychangerModule extends AbstractPresenterModule {
   }
 
   @Provides
-  ItemRequest provideItemService(MoneychangerRequestFactory requestFactory) {
-    return requestFactory.itemRequest();
-  }
-
-  @Provides
   CategoryRequest provideCategoryService(MoneychangerRequestFactory requestFactory) {
     return requestFactory.categoryRequest();
   }
@@ -104,8 +100,23 @@ public class MoneychangerModule extends AbstractPresenterModule {
   }
 
   @Provides
-  ExchangeRateRequest provideExchangeRateService(MoneychangerRequestFactory requestFactory) {
-    return requestFactory.exchangeRateRequest();
+  ItemRequest provideItemService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.itemRequest();
+  }
+
+  @Provides
+  LineItemRequest provideLineItemService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.lineItemRequest();
+  }
+
+  @Provides
+  SpotRateRequest provideExchangeRateService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.spotRateRequest();
+  }
+
+  @Provides
+  TransactionRequest provideTransactionService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.transactionRequest();
   }
 
   @Provides

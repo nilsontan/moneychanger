@@ -15,7 +15,7 @@ import com.techstudio.erp.moneychanger.server.locator.ObjectifyLocator;
  * @author Nilson
  */
 @ProxyFor(value = Item.class, locator = ObjectifyLocator.class)
-public interface ItemProxy extends MyEntityProxy {
+public interface ItemProxy extends MyExEntityProxy {
   public static final String CATEGORY = "category";
   public static final String CURRENCY = "currency";
   public static final String UOM = "uom";

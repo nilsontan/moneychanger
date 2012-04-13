@@ -31,8 +31,8 @@ public interface Resources extends ClientBundle {
   @Source("item.txt")
   TextResource itemText();
 
-  @Source("exchange_rates.txt")
-  TextResource xrRatesText();
+  @Source("spotrate.txt")
+  TextResource spotRatesText();
 
   @Source("clean-admin.css")
   StyleAdmin admin();
@@ -94,6 +94,12 @@ public interface Resources extends ClientBundle {
   @Source("images/16/hand_point_270.png")
   ImageResource iItemSelect();
 
+  @Source("images/32/contrast_decrease.png")
+  ImageResource iBuy();
+
+  @Source("images/32/contrast_increase.png")
+  ImageResource iSell();
+
   public interface StylePos extends CssResource {
     String centered();
 
@@ -124,22 +130,39 @@ public interface Resources extends ClientBundle {
     String numPadV();
 
     String curBtn();
+
+    String btmBorder();
   }
 
-  @Source("images/currency/aud.png")
+  @Source("images/currency/72/aud.png")
   ImageResource iCurAud();
 
-  @Source("images/currency/gbp.png")
+  @Source("images/currency/72/gbp.png")
   ImageResource iCurGbp();
 
-  @Source("images/currency/myr.png")
+  @Source("images/currency/72/myr.png")
   ImageResource iCurMyr();
 
-  @Source("images/currency/sgd.png")
+  @Source("images/currency/72/sgd.png")
   ImageResource iCurSgd();
 
-  @Source("images/currency/usd.png")
+  @Source("images/currency/72/usd.png")
   ImageResource iCurUsd();
+
+  @Source("images/currency/72/eur.png")
+  ImageResource iCurEur();
+
+  @Source("images/currency/72/inr.png")
+  ImageResource iCurInr();
+
+  @Source("images/currency/72/idr.png")
+  ImageResource iCurIdr();
+
+  @Source("images/currency/72/jpy.png")
+  ImageResource iCurJpy();
+
+  @Source("images/currency/72/thb.png")
+  ImageResource iCurThb();
 
   public interface StyleCur extends CssResource {
     String aud();
@@ -147,5 +170,10 @@ public interface Resources extends ClientBundle {
     String myr();
     String sgd();
     String usd();
+    String eur();
+    String inr();
+    String idr();
+    String jpy();
+    String thb();
   }
 }

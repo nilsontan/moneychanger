@@ -17,13 +17,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * This annotation is used in {@link com.techstudio.erp.moneychanger.client.MoneychangerPlaceManager}
- * and is bind in {@link com.techstudio.erp.moneychanger.client.gin.MoneychangerModule}.
- * It's purpose is to bind the default scale for an exchange rate
+ * and is bind in {@link com.techstudio.erp.moneychanger.client.gin.MoneychangerModule}. It's purpose is to bind the default place to a
+ * default presenter.
  *
  * @author Nilson
  */
 @BindingAnnotation
 @Target({FIELD, PARAMETER, METHOD})
 @Retention(RUNTIME)
-public @interface DefaultScale {
+public @interface DefaultCurrency {
 }

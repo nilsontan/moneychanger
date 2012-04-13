@@ -46,7 +46,7 @@ public interface MoneychangerGinjector extends Ginjector {
 
   AsyncProvider<CurrencyPresenter> getCurrencyPresenter();
 
-  AsyncProvider<ExchangeRatePresenter> getExchangeRatePresenter();
+  AsyncProvider<SpotRatePresenter> getExchangeRatePresenter();
 
   AsyncProvider<UomPresenter> getUomPresenter();
 

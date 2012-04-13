@@ -5,26 +5,17 @@
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
 
   <g:DockLayoutPanel unit="PX">
-    <g:north size="40">
-      <g:FlowPanel addStyleNames="{res.pos.northBar}">
-        <g:HTMLPanel>
-          <g:DecoratorPanel ui:field="loadingMessage" addStyleNames="{res.pos.centered}">
-            <g:FlowPanel>
-              <g:Label text="Loading..." addStyleNames="{res.pos.formTitle}" />
-            </g:FlowPanel>
-          </g:DecoratorPanel>
-        </g:HTMLPanel>
-        <g:HorizontalPanel spacing="5">
-          <g:Image resource="{res.iLogoPos}" />
-          <g:HTMLPanel>
-            <div style="height:5px" />
-            <g:Label text="Moneychanger" addStyleNames="{res.pos.formTitle}" />
-          </g:HTMLPanel>
-        </g:HorizontalPanel>
-      </g:FlowPanel>
+    <g:north size="0">
+      <g:HTMLPanel>
+        <g:DecoratorPanel ui:field="loadingMessage" addStyleNames="{res.pos.centered}">
+          <g:FlowPanel>
+            <g:Label text="Loading..." addStyleNames="{res.pos.formTitle}" />
+          </g:FlowPanel>
+        </g:DecoratorPanel>
+      </g:HTMLPanel>
     </g:north>
     <g:center>
-      <g:LayoutPanel ui:field="mainContentContainer" />
+      <g:LayoutPanel height="100%" ui:field="mainContentContainer" />
     </g:center>
     <!--<g:east size="396">
       <g:FlowPanel addStyleNames="{res.pos.eastBar}">

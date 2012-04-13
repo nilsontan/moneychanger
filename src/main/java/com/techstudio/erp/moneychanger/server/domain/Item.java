@@ -20,7 +20,7 @@ import com.techstudio.erp.moneychanger.server.service.UomDao;
  */
 @Cached
 @Entity
-public class Item extends MyDatastoreObject {
+public class Item extends MyExDatastoreObject {
 
   public static final Item EMPTY = new Item();
 

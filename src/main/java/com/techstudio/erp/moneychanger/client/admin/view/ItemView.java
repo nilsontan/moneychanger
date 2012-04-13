@@ -7,7 +7,6 @@
 
 package com.techstudio.erp.moneychanger.client.admin.view;
 
-import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -32,8 +31,6 @@ import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
 
-import java.util.Date;
-
 /**
  * @author Nilson
  */
@@ -51,6 +48,9 @@ public class ItemView
 
   @UiField
   TextBox itemName;
+
+  @UiField
+  TextBox itemFullName;
 
   @UiField(provided = true)
   SelectOneListBox<CategoryProxy> itemCategoryList
@@ -130,6 +130,11 @@ public class ItemView
     getUiHandlers().setItemName(event.getValue());
   }
 
+  @UiHandler("itemFullName")
+  public void onItemFullNameChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setItemFullName(event.getValue());
+  }
+
   @SuppressWarnings("unused")
   @UiHandler("itemCategoryList")
   public void onItemCategoryChange(ValueChangeEvent<CategoryProxy> event) {
@@ -206,6 +211,11 @@ public class ItemView
   }
 
   @Override
+  public void setItemFullName(String fullName) {
+    itemFullName.setValue(fullName);
+  }
+
+  @Override
   public void setItemCategory(CategoryProxy categoryProxy) {
     itemCategoryList.setSelectedValue(categoryProxy);
   }
@@ -227,13 +237,29 @@ public class ItemView
   }
 
   private void setupItemTable() {
+    Column<ItemProxy, String> itemCodeColumn = new Column<ItemProxy, String>(new EditTextCell()) {
+      @Override
+      public String getValue(ItemProxy itemProxy) {
+        return itemProxy.getCode();
+      }
+    };
+    itemTable.addColumn(itemCodeColumn, "Code");
+
     Column<ItemProxy, String> itemNameColumn = new Column<ItemProxy, String>(new EditTextCell()) {
       @Override
       public String getValue(ItemProxy itemProxy) {
         return itemProxy.getName();
       }
     };
-    itemTable.addColumn(itemNameColumn, "Item Name");
+    itemTable.addColumn(itemNameColumn, "Name");
+
+    Column<ItemProxy, String> itemFullNameColumn = new Column<ItemProxy, String>(new EditTextCell()) {
+      @Override
+      public String getValue(ItemProxy itemProxy) {
+        return itemProxy.getFullName();
+      }
+    };
+    itemTable.addColumn(itemFullNameColumn, "Full Name");
 
     Column<ItemProxy, String> itemCategoryColumn = new Column<ItemProxy, String>(new EditTextCell()) {
       @Override
@@ -266,14 +292,6 @@ public class ItemView
       }
     };
     itemTable.addColumn(itemUomRateColumn, "Uom Rate");
-
-    Column<ItemProxy, Date> dateColumn = new Column<ItemProxy, Date>(new DateCell()) {
-      @Override
-      public Date getValue(ItemProxy itemProxy) {
-        return itemProxy.getCreationDate();
-      }
-    };
-    itemTable.addColumn(dateColumn, "Created on");
 
     Column<ItemProxy, Long> linkColumn = new Column<ItemProxy, Long>(new ItemLinkCell()) {
       @Override

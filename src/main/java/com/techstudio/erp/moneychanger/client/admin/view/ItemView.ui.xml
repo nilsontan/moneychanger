@@ -15,7 +15,7 @@
         <c:SimplePager ui:field="itemPager" location="CENTER" />
       </g:FlowPanel>
       <g:DecoratorPanel>
-        <g:HTMLPanel>
+        <g:FlowPanel>
           <g:Label text="Item Info" addStyleNames="{res.admin.formTitle}" />
           <g:Grid ui:field="itemGrid">
             <g:row>
@@ -32,6 +32,14 @@
               </g:customCell>
               <g:customCell>
                 <g:TextBox ui:field="itemName" />
+              </g:customCell>
+            </g:row>
+            <g:row>
+              <g:customCell>
+                <g:Label text="Full Name" addStyleNames="{res.admin.formParam}" />
+              </g:customCell>
+              <g:customCell>
+                <g:TextBox ui:field="itemFullName" />
               </g:customCell>
             </g:row>
             <g:row>
@@ -77,7 +85,7 @@
             <g:Button ui:field="itemUpdate" text="Update Item" />
             <g:Button ui:field="itemCreate" text="Create Item" />
           </g:HorizontalPanel>
-        </g:HTMLPanel>
+        </g:FlowPanel>
       </g:DecoratorPanel>
     </g:HorizontalPanel>
   </g:FlowPanel>

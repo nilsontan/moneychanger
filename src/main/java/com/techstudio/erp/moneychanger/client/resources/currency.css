@@ -13,3 +13,18 @@
 @sprite .usd {
   gwt-image: "iCurUsd";
 }
+@sprite .eur {
+  gwt-image: "iCurEur";
+}
+@sprite .inr {
+  gwt-image: "iCurInr";
+}
+@sprite .idr {
+  gwt-image: "iCurIdr";
+}
+@sprite .jpy {
+  gwt-image: "iCurJpy";
+}
+@sprite .thb {
+  gwt-image: "iCurThb";
+}

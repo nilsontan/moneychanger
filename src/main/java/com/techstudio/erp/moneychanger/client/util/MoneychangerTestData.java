@@ -14,6 +14,7 @@ import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.shared.proxy.*;
 import com.techstudio.erp.moneychanger.shared.service.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +33,12 @@ public final class MoneychangerTestData implements TestData {
   private List<MyUom> uoms;
   private List<MyCountry> countries;
   private List<MyItem> items;
-  private List<MyExchangeRate> exchangeRates;
+  private List<MySpotRate> spotRates;
 
   private Map<String, CategoryProxy> categoryMap;
   private Map<String, CurrencyProxy> currencyMap;
   private Map<String, UomProxy> uomMap;
+  private Map<String, ItemProxy> itemMap;
 
   private static final CharMatcher NEWLINE = CharMatcher.is('\n');
 
@@ -45,7 +47,7 @@ public final class MoneychangerTestData implements TestData {
   private final Provider<UomRequest> uomRequestProvider;
   private final Provider<CountryRequest> countryRequestProvider;
   private final Provider<ItemRequest> itemRequestProvider;
-  private final Provider<ExchangeRateRequest> xrRequestProvider;
+  private final Provider<SpotRateRequest> spotRateRequestProvider;
 
   private boolean categorySetupCompleted = false;
   private boolean currencySetupCompleted = false;
@@ -58,7 +60,7 @@ public final class MoneychangerTestData implements TestData {
       final Provider<UomRequest> uomRequestProvider,
       final Provider<CountryRequest> countryRequestProvider,
       final Provider<ItemRequest> itemRequestProvider,
-    final Provider<ExchangeRateRequest> xrRequestProvider) {
+      final Provider<SpotRateRequest> spotRateRequestProvider) {
     Resources resources = GWT.create(Resources.class);
 
     this.categoryRequestProvider = categoryRequestProvider;
@@ -66,7 +68,7 @@ public final class MoneychangerTestData implements TestData {
     this.uomRequestProvider = uomRequestProvider;
     this.countryRequestProvider = countryRequestProvider;
     this.itemRequestProvider = itemRequestProvider;
-    this.xrRequestProvider = xrRequestProvider;
+    this.spotRateRequestProvider = spotRateRequestProvider;
 
     categories = Lists.newArrayList();
     for (ArrayList<String> category : readFromResource(resources.categoryText())) {
@@ -98,6 +100,7 @@ public final class MoneychangerTestData implements TestData {
 
     countries = Lists.newArrayList();
     for (ArrayList<String> country : readFromResource(resources.countryText())) {
+      assert country.size() == 4 : "Country not of size 4: " + country;
       MyCountry myCountry = new MyCountry();
       myCountry.code = country.get(0);
       myCountry.name = country.get(1);
@@ -112,24 +115,21 @@ public final class MoneychangerTestData implements TestData {
       MyItem myItem = new MyItem();
       myItem.code = item.get(0);
       myItem.name = item.get(1);
-      myItem.category = item.get(2);
-      myItem.currency = item.get(3);
+      myItem.fullName = item.get(2);
+      myItem.category = item.get(3);
       myItem.uom = item.get(4);
       myItem.uomRate = item.get(5);
       items.add(myItem);
     }
 
-    exchangeRates = Lists.newArrayList();
-    for (ArrayList<String> exchangeRate : readFromResource(resources.xrRatesText())) {
-      assert exchangeRate.size() == 6 : "Exchange Rate not of size 6: " + exchangeRate;
-      MyExchangeRate myExchangeRate = new MyExchangeRate();
-      myExchangeRate.code = exchangeRate.get(0);
-      myExchangeRate.name = exchangeRate.get(1);
-      myExchangeRate.currency = exchangeRate.get(2);
-      myExchangeRate.unit = exchangeRate.get(3);
-      myExchangeRate.bid = exchangeRate.get(4);
-      myExchangeRate.ask = exchangeRate.get(5);
-      exchangeRates.add(myExchangeRate);
+    spotRates = Lists.newArrayList();
+    for (ArrayList<String> spotRate : readFromResource(resources.spotRatesText())) {
+      assert spotRate.size() == 3 : "Spot Rate not of size 6: " + spotRate;
+      MySpotRate mySpotRate = new MySpotRate();
+      mySpotRate.code = spotRate.get(0);
+      mySpotRate.bid = spotRate.get(1);
+      mySpotRate.ask = spotRate.get(2);
+      spotRates.add(mySpotRate);
     }
   }
 
@@ -140,16 +140,18 @@ public final class MoneychangerTestData implements TestData {
   }
 
   private void onCategorySetupCompleted() {
+    categorySetupCompleted = true;
     onDomainDataSetupCompleted();
   }
 
   private void onCurrencySetupCompleted() {
+    currencySetupCompleted = true;
     resetCountries();
-    resetExchangeRates();
     onDomainDataSetupCompleted();
   }
 
   private void onUomSetupCompleted() {
+    uomSetupCompleted = true;
     onDomainDataSetupCompleted();
   }
 
@@ -160,14 +162,16 @@ public final class MoneychangerTestData implements TestData {
       resetItems();
     }
   }
-  
+
   private void onCountrySetupCompleted() {
   }
 
   private void onItemSetupCompleted() {
+    resetSpotRates();
   }
 
-  private void onXrSetupCompleted() {
+  private void onSpotRateSetupCompleted() {
+    Log.debug("Test data setup completed");
   }
 
   private List<ArrayList<String>> readFromResource(TextResource textResource) {
@@ -215,7 +219,6 @@ public final class MoneychangerTestData implements TestData {
                     for (CategoryProxy proxy : response) {
                       categoryMap.put(proxy.getCode(), proxy);
                     }
-                    categorySetupCompleted = true;
                     Log.debug("Categories setup done");
                     onCategorySetupCompleted();
                   }
@@ -261,7 +264,6 @@ public final class MoneychangerTestData implements TestData {
                     for (CurrencyProxy proxy : response) {
                       currencyMap.put(proxy.getCode(), proxy);
                     }
-                    currencySetupCompleted = true;
                     Log.debug("Currencies setup done");
                     onCurrencySetupCompleted();
                   }
@@ -306,7 +308,6 @@ public final class MoneychangerTestData implements TestData {
                     for (UomProxy proxy : response) {
                       uomMap.put(proxy.getCode(), proxy);
                     }
-                    uomSetupCompleted = true;
                     Log.debug("Uoms setup done");
                     onUomSetupCompleted();
                   }
@@ -352,7 +353,7 @@ public final class MoneychangerTestData implements TestData {
           }
         });
       }
-    });  
+    });
   }
 
   private void resetItems() {
@@ -373,8 +374,9 @@ public final class MoneychangerTestData implements TestData {
               ItemProxy proxy1 = request2.create(ItemProxy.class);
               proxy1.setCode(myItem.code);
               proxy1.setName(myItem.name);
+              proxy1.setFullName(myItem.fullName);
               proxy1.setCategory(categoryMap.get(myItem.category));
-              proxy1.setCurrency(currencyMap.get(myItem.currency));
+              proxy1.setCurrency(currencyMap.get("SGD"));
               proxy1.setUom(uomMap.get(myItem.uom));
               proxy1.setUomRate(Integer.valueOf(myItem.uomRate));
               request2.save(proxy1);
@@ -383,8 +385,17 @@ public final class MoneychangerTestData implements TestData {
             request2.fire(new Receiver<Void>() {
               @Override
               public void onSuccess(Void response) {
-                Log.debug("Items setup done");
-                onItemSetupCompleted();
+                itemRequestProvider.get().fetchAll().fire(new Receiver<List<ItemProxy>>() {
+                  @Override
+                  public void onSuccess(List<ItemProxy> response) {
+                    itemMap = Maps.newHashMap();
+                    for (ItemProxy proxy : response) {
+                      itemMap.put(proxy.getCode(), proxy);
+                    }
+                    Log.debug("Items setup done");
+                    onItemSetupCompleted();
+                  }
+                });
               }
             });
           }
@@ -393,36 +404,39 @@ public final class MoneychangerTestData implements TestData {
     });
   }
 
-  private void resetExchangeRates() {
-    Log.debug("Exchange Rates fetchAll");
-    xrRequestProvider.get().fetchAll().fire(new Receiver<List<ExchangeRateProxy>>() {
+  private void resetSpotRates() {
+    Log.debug("Spot Rates fetchAll");
+    spotRateRequestProvider.get().fetchAll().fire(new Receiver<List<SpotRateProxy>>() {
       @Override
-      public void onSuccess(List<ExchangeRateProxy> response) {
-        ExchangeRateRequest request1 = xrRequestProvider.get();
-        for (ExchangeRateProxy xrProxy : response) {
-          request1.purge(xrProxy);
+      public void onSuccess(List<SpotRateProxy> response) {
+        SpotRateRequest request1 = spotRateRequestProvider.get();
+        for (SpotRateProxy spotRateProxy : response) {
+          request1.purge(spotRateProxy);
         }
-        Log.debug("Exchange Rates purgeAll");
+        Log.debug("Spot Rates purgeAll");
         request1.fire(new Receiver<Void>() {
           @Override
           public void onSuccess(Void response) {
-            ExchangeRateRequest request2 = xrRequestProvider.get();
-            for (MyExchangeRate myXr : exchangeRates) {
-              ExchangeRateProxy proxy1 = request2.create(ExchangeRateProxy.class);
-              proxy1.setCode(myXr.code);
-              proxy1.setName(myXr.name);
-              proxy1.setCurrency(currencyMap.get(myXr.currency));
-              proxy1.setUnit(Integer.valueOf(myXr.unit));
-              proxy1.setAskRate(myXr.ask);
-              proxy1.setBidRate(myXr.bid);
+            SpotRateRequest request2 = spotRateRequestProvider.get();
+            for (MySpotRate mySpotRate : spotRates) {
+              SpotRateProxy proxy1 = request2.create(SpotRateProxy.class);
+              proxy1.setCode(mySpotRate.code);
+              proxy1.setName(itemMap.get(mySpotRate.code).getName());
+              proxy1.setAskRate(new BigDecimal(mySpotRate.ask));
+              proxy1.setBidRate(new BigDecimal(mySpotRate.bid));
               request2.save(proxy1);
             }
-            Log.debug("Exchange Rates saveAll");
+            Log.debug("Spot Rates saveAll");
             request2.fire(new Receiver<Void>() {
               @Override
               public void onSuccess(Void response) {
-                Log.debug("Exchange Rates setup done");
-                onXrSetupCompleted();
+                spotRateRequestProvider.get().fetchAll().fire(new Receiver<List<SpotRateProxy>>() {
+                  @Override
+                  public void onSuccess(List<SpotRateProxy> response) {
+                    Log.debug("Spot Rates setup done");
+                    onSpotRateSetupCompleted();
+                  }
+                });
               }
             });
           }
@@ -437,14 +451,12 @@ public final class MoneychangerTestData implements TestData {
   }
 
   private class MyCurrency {
-
     String code;
     String name;
     String fullName;
   }
 
   private class MyUom {
-
     String code;
     String name;
   }
@@ -456,11 +468,8 @@ public final class MoneychangerTestData implements TestData {
     String currency;
   }
 
-  private class MyExchangeRate {
+  private class MySpotRate {
     String code;
-    String name;
-    String currency;
-    String unit;
     String bid;
     String ask;
   }
@@ -468,8 +477,8 @@ public final class MoneychangerTestData implements TestData {
   private class MyItem {
     String code;
     String name;
+    String fullName;
     String category;
-    String currency;
     String uom;
     String uomRate;
 

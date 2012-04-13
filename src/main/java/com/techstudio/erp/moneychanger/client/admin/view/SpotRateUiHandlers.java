@@ -13,20 +13,16 @@ import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 /**
  * @author Nilson
  */
-public interface ExchangeRateUiHandlers extends UiHandlers {
-  void setXrCode(String code);
+public interface SpotRateUiHandlers extends UiHandlers {
+  void setSpotRateCode(String code);
 
-  void setXrName(String name);
+  void setSpotRateName(String name);
 
-  void setXrCurrency(CurrencyProxy currency);
+  void setSpotRateAskRate(String askRate);
 
-  void setXrUnit(Integer unit);
+  void setSpotRateBidRate(String bidRate);
 
-  void setXrAskRate(String askRate);
+  void createSpotRate();
 
-  void setXrBidRate(String bidRate);
-
-  void createXr();
-
-  void updateXr();
+  void updateSpotRate();
 }

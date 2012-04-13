@@ -20,6 +20,8 @@ public interface ItemUiHandlers extends UiHandlers {
 
   void setItemName(String name);
 
+  void setItemFullName(String fullName);
+
   void setItemCategory(CategoryProxy category);
 
   void setItemCurrency(CurrencyProxy currency);

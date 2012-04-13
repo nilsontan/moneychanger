@@ -12,7 +12,7 @@ import com.techstudio.erp.moneychanger.client.NameTokens;
 /**
  * @author Nilson
  */
-public class ExchangeRateLinkCell extends AbstractLinkCell {
+public class SpotRateLinkCell extends AbstractLinkCell {
   @Override
   String getPageName() {
     return NameTokens.EXCHANGE_RATE_PAGE;

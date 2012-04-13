@@ -6,6 +6,7 @@ import com.googlecode.objectify.ObjectifyOpts;
 import com.googlecode.objectify.impl.conv.Converter;
 import com.googlecode.objectify.impl.conv.ConverterLoadContext;
 import com.googlecode.objectify.impl.conv.ConverterSaveContext;
+import org.joda.money.Money;
 
 import java.math.BigDecimal;
 
@@ -37,6 +38,23 @@ public class MyObjectifyService {
       public Object forDatastore(Object value, ConverterSaveContext ctx) {
         if (value instanceof BigDecimal)
           return value.toString();
+        else
+          return null;
+      }
+    });
+    objectifyFactory.getConversions().add(new Converter() {
+      @Override
+      public Object forDatastore(Object value, ConverterSaveContext ctx) {
+        if (value instanceof Money)
+          return (value).toString();
+        else
+          return null;
+      }
+
+      @Override
+      public Object forPojo(Object value, Class<?> fieldType, ConverterLoadContext ctx, Object onPojo) {
+        if (value instanceof String && Money.class.isAssignableFrom(fieldType))
+          return Money.parse((String)value);
         else
           return null;
       }

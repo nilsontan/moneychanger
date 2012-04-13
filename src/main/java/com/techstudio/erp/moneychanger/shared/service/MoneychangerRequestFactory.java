@@ -15,15 +15,19 @@ import com.google.web.bindery.requestfactory.shared.RequestFactory;
  * @author Nilson
  */
 public interface MoneychangerRequestFactory extends RequestFactory {
-  ItemRequest itemRequest();
-
   CategoryRequest categoryRequest();
 
   CountryRequest countryRequest();
-  
+
   CurrencyRequest currencyRequest();
 
-  ExchangeRateRequest exchangeRateRequest();
+  ItemRequest itemRequest();
+
+  LineItemRequest lineItemRequest();
+
+  SpotRateRequest spotRateRequest();
+
+  TransactionRequest transactionRequest();
 
   UomRequest uomRequest();
 }

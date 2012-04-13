@@ -1,24 +1,23 @@
-AUD,A-Dollar,MON,AUD,UN,1
-GBP,Pound,MON,GBP,UN,1
-CAD,C-Dollar,MON,CAD,UN,1
-DKK,D-Krone,MON,DKK,UN,100
-EUR,Euro,MON,EUR,UN,1
-HKD,HK-Dollar,MON,HKD,UN,100
-INR,Rupee,MON,INR,UN,100
-IDR,Rupiah,MON,IDR,UN,100000
-JPY,Yen,MON,JPY,UN,1000
-KRW,Won,MON,KRW,UN,1000
-MYR,Ringgit,MON,MYR,UN,100
-NOK,N-Krone,MON,NOK,UN,100
-NZD,NZ-Dollar,MON,NZD,UN,1
-PHP,Peso,MON,PHP,UN,100
-SAR,Riyal,MON,SAR,UN,100
-SGD,S-Dollar,MON,SGD,UN,1
-ZAR,Rand,MON,ZAR,UN,100
-SEK,S-Krona,MON,SEK,UN,100
-CHF,Franc,MON,CHF,UN,1
-TWD,TW-Dollar,MON,TWD,UN,100
-THB,Baht,MON,THB,UN,100
-AED,Dirham,MON,AED,UN,100
-USD,US-Dollar,MON,USD,UN,1
-VND,Dong,MON,VND,UN,1000
+AUD,Australian Dollar,Australian Dollar,MON,UN,1
+GBP,British Pound,British Pound,MON,UN,1
+CAD,Canadian Dollar,Canadian Dollar,MON,UN,1
+DKK,Danish Krone,Danish Krone,MON,UN,100
+EUR,Euro,Euro,MON,UN,1
+HKD,Hong Kong Dollar,Hong Kong Dollar,MON,UN,100
+INR,Indian Rupee,Indian Rupee,MON,UN,100
+IDR,Indonesian Rupiah,Indonesian Rupiah,MON,UN,100000
+JPY,Japanese Yen,Japanese Yen,MON,UN,1000
+KRW,Korean Won,Korean Won,MON,UN,1000
+MYR,Malaysian Ringgit,Malaysian Ringgit,MON,UN,100
+NOK,Norwegian Krone,Norwegian Krone,MON,UN,100
+NZD,NZ Dollar,New Zealand Dollar,MON,UN,1
+PHP,Philippine Peso,Philippine Peso,MON,UN,100
+SAR,Saudi Riyal,Saudi Arabian Riyal,MON,UN,100
+ZAR,South African Rand,South African Rand,MON,UN,100
+SEK,Swedish Krona,Swedish Krona,MON,UN,100
+CHF,Swiss Franc,Swiss Franc,MON,UN,1
+TWD,Taiwan Dollar,New Taiwan Dollar,MON,UN,100
+THB,Thai Baht,Thai Baht,MON,UN,100
+AED,UAE Dirham,UAE Dirham,MON,UN,100
+USD,US Dollar,United States Dollar,MON,UN,1
+VND,Vietnam Dong,Vietnam Dong,MON,UN,1000

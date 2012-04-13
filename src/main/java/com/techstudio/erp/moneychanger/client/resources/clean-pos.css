@@ -93,9 +93,14 @@
 }
 
 .curBtn {
+  background: whitesmoke;
   color: #4B4A4A;
   font-size: 12px;
   text-align: center;
   font-weight: bold;
   text-shadow: #DDF 1px 1px 0;
+}
+
+.btmBorder {
+  border-bottom: 1px solid #C3C3C3;
 }

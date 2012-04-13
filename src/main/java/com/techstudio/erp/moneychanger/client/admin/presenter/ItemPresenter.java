@@ -63,6 +63,8 @@ public class ItemPresenter
 
     void setItemName(String name);
 
+    void setItemFullName(String fullName);
+
     void setItemCategory(CategoryProxy categoryProxy);
 
     void setItemCurrency(CurrencyProxy currencyProxy);
@@ -81,6 +83,7 @@ public class ItemPresenter
   private Long id;
   private String code;
   private String name;
+  private String fullName;
   private CategoryProxy category;
   private CurrencyProxy currency;
   private UomProxy uom;
@@ -117,15 +120,7 @@ public class ItemPresenter
   protected void onReset() {
     super.onReset();
 
-    if (id == null) {
-      code = "";
-      name = "";
-      category = categoryDataProvider.getDefaultCategory();
-      currency = currencyDataProvider.getDefaultCurrency();
-      uom = uomDataProvider.getDefaultUom();
-      uomRate = 1;
-      updateView();
-    } else {
+    if (id != null) {
       itemRequestProvider.get().fetch(id)
           .with(ItemProxy.CATEGORY)
           .with(ItemProxy.CURRENCY)
@@ -135,6 +130,7 @@ public class ItemPresenter
             public void onSuccess(ItemProxy response) {
               code = response.getCode();
               name = response.getName();
+              fullName = response.getFullName();
               category = response.getCategory();
               currency = response.getCurrency();
               uom = response.getUom();
@@ -157,7 +153,17 @@ public class ItemPresenter
       Window.alert("There are no available Currencies. Please create a Currency first");
     } else if (uomDataProvider.getDefaultUom() == null) {
       Window.alert("There are no available Uoms. Please create a Uom first");
+    } else {
+      code = "";
+      name = "";
+      fullName = "";
+      category = categoryDataProvider.getDefaultCategory();
+      currency = currencyDataProvider.getDefaultCurrency();
+      uom = uomDataProvider.getDefaultUom();
+      uomRate = 1;
+      updateView();
     }
+
   }
 
   @Override
@@ -173,6 +179,12 @@ public class ItemPresenter
   }
 
   @Override
+  public void setItemFullName(String fullName) {
+    this.fullName = fullName;
+    updateItem();
+  }
+
+  @Override
   public void setItemCategory(final CategoryProxy categoryProxy) {
     this.category = categoryProxy;
     updateView();
@@ -185,7 +197,7 @@ public class ItemPresenter
   }
 
   @Override
-  public void setItemUom(UomProxy uomProxy) {
+  public void setItemUom(final UomProxy uomProxy) {
     this.uom = uomProxy;
     updateView();
   }
@@ -272,6 +284,7 @@ public class ItemPresenter
   private void fillData(ItemProxy proxy) {
     proxy.setCode(code);
     proxy.setName(name);
+    proxy.setFullName(fullName);
     proxy.setCategory(category);
     proxy.setCurrency(currency);
     proxy.setUom(uom);
@@ -281,6 +294,7 @@ public class ItemPresenter
   private void updateView() {
     getView().setItemCode(code);
     getView().setItemName(name);
+    getView().setItemFullName(fullName);
     getView().setItemCategory(category);
     getView().setItemCurrency(currency);
     getView().setItemUom(uom);
@@ -293,6 +307,7 @@ public class ItemPresenter
   private boolean isFormValid() {
     return !Strings.isNullOrEmpty(code)
         && !Strings.isNullOrEmpty(name)
+        && !Strings.isNullOrEmpty(fullName)
         && category != null
         && currency != null
         && uom != null

@@ -7,10 +7,10 @@
 
 package com.techstudio.erp.moneychanger.server.service;
 
-import com.techstudio.erp.moneychanger.server.domain.ExchangeRate;
+import com.techstudio.erp.moneychanger.server.domain.Transaction;
 
 /**
  * @author Nilson
  */
-public class ExchangeRateDao extends MyObjectifyDao<ExchangeRate> {
+public class TransactionDao extends MyObjectifyDao<Transaction> {
 }
