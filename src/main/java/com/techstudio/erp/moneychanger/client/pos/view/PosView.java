@@ -98,7 +98,7 @@ public class PosView
    */
 
   @UiField
-  DecoratorPanel itemPanel;
+  Grid itemPanel;
 
   @UiField
   Button btnAud;
@@ -451,7 +451,7 @@ public class PosView
       }
     };
     lineItemTable.addColumn(lineItemTxTypeColumn, "Type");*/
-    Column<LineItemProxy, ImageResource> lineItemProxyImageColumn =
+    /*Column<LineItemProxy, ImageResource> lineItemProxyImageColumn =
         new Column<LineItemProxy, ImageResource>(new ImageResourceCell()) {
           @Override
           public ImageResource getValue(LineItemProxy lineItemProxy) {
@@ -465,7 +465,7 @@ public class PosView
             }
           }
         };
-    lineItemTable.addColumn(lineItemProxyImageColumn, "");
+    lineItemTable.addColumn(lineItemProxyImageColumn, "");*/
 
     Column<LineItemProxy, String> lineItemNameColumn = new Column<LineItemProxy, String>(new TextCell()) {
       @Override
@@ -514,7 +514,7 @@ public class PosView
             }
           }
           totalPrice = totalPrice.setScale(2, RoundingMode.HALF_UP);
-          return "Total: " + totalPrice;
+          return totalPrice.toString();
         }
       }
     };

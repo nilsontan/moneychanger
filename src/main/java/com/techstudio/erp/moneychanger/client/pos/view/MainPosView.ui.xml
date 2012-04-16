@@ -3,7 +3,11 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
-
+  <ui:style>
+    .blackBg {
+      background-color: black;
+    }
+  </ui:style>
   <g:DockLayoutPanel unit="PX">
     <g:north size="0">
       <g:HTMLPanel>
@@ -15,7 +19,7 @@
       </g:HTMLPanel>
     </g:north>
     <g:center>
-      <g:LayoutPanel height="100%" ui:field="mainContentContainer" />
+      <g:LayoutPanel height="100%" ui:field="mainContentContainer" addStyleNames="{style.blackBg}" />
     </g:center>
     <!--<g:east size="396">
       <g:FlowPanel addStyleNames="{res.pos.eastBar}">

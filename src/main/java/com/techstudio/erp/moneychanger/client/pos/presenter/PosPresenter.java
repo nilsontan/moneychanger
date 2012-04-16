@@ -232,7 +232,7 @@ public class PosPresenter
     if (!pendingList.isEmpty()) {
       pendingItem = pendingList.remove(0);
       itemUomRate = new BigDecimal(pendingItem.getItem().getUomRate());
-      BigDecimal sellQuantity = subTotal.multiply(itemUomRate)
+      BigDecimal sellQuantity = subTotal
           .multiply(itemUomRate, MathContext.UNLIMITED)
           .divide(pendingItem.getUnitPrice(), 4, RoundingMode.HALF_UP);
       pendingItem.setQuantity(sellQuantity);
@@ -342,6 +342,8 @@ public class PosPresenter
   private final static Ordering<LineItemProxy> byLineNumber = new Ordering<LineItemProxy>() {
     @Override
     public int compare(@Nullable LineItemProxy left, @Nullable LineItemProxy right) {
+      if (left == null) return 1;
+      else if (right == null) return -1;
       return Ints.compare(left.getLine(), right.getLine());
     }
   };
