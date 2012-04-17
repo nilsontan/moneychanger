@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2004-2012 TechStudio Solutions Pte Ltd. All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of TechStudio
+ * Solution Pte Ltd ("Confidential Information").
+ */
+
 /**
  * The file contains styles for GWT widgets in the Clean theme.
  *
@@ -18,7 +25,7 @@ body, table td, select, button {
 }
 
 pre {
-  font-family: "courier new", courier;
+  font-family: "courier new", courier, serif;
   font-size: small;
 }
 
@@ -54,7 +61,6 @@ select {
 .gwt-Reference-clean {
   height: 5px;
   width: 5px;
-  zoom: 1;
 }
 
 .gwt-Button {
@@ -63,11 +69,9 @@ select {
   text-decoration: none;
   cursor: pointer;
   font-size: small;
-  background: url("../images/hborder.png") repeat-x 0 -2077px;
+  background: url("hborder.png") repeat-x 0 -2077px;
   border: 1px solid #bbb;
   border-bottom: 1px solid #a0a0a0;
-  border-radius: 3px;
-  -moz-border-radius: 3px;
 }
 
 .gwt-Button:active {
@@ -134,33 +138,28 @@ select {
 .gwt-DecoratorPanel .bottomRightInner {
   width: 5px;
   height: 5px;
-  zoom: 1;
   font-size: 1px;
   overflow: hidden;
 }
 
 .gwt-DecoratorPanel .topLeft {
   line-height: 0;
-  background: url(../images/circles.png) no-repeat 0 -6px;
-  -background: url(images/circles_ie6.png) no-repeat 0 -6px;
+  background: url(circles.png) no-repeat 0 -6px;
 }
 
 .gwt-DecoratorPanel .topRight {
   line-height: 0;
-  background: url(../images/circles.png) no-repeat -5px -6px;
-  -background: url(images/circles_ie6.png) no-repeat -5px -6px;
+  background: url(circles.png) no-repeat -5px -6px;
 }
 
 .gwt-DecoratorPanel .bottomLeft {
   line-height: 0;
-  background: url(../images/circles.png) no-repeat 0 -11px;
-  -background: url(images/circles_ie6.png) no-repeat 0 -11px;
+  background: url(circles.png) no-repeat 0 -11px;
 }
 
 .gwt-DecoratorPanel .bottomRight {
   line-height: 0;
-  background: url(../images/circles.png) no-repeat -5px -11px;
-  -background: url(images/circles_ie6.png) no-repeat -5px -11px;
+  background: url(circles.png) no-repeat -5px -11px;
 }
 
 * html .gwt-DecoratorPanel .topLeftInner,
@@ -191,60 +190,50 @@ select {
 }
 
 .gwt-DialogBox .dialogBottomCenter {
-  background: url(../images/hborder.png) repeat-x 0 -2945px;
-  -background: url(images/hborder_ie6.png) repeat-x 0 -2144px;
+  background: url(hborder.png) repeat-x 0 -2945px;
 }
 
 .gwt-DialogBox .dialogMiddleLeft {
-  background: url(../images/vborder.png) repeat-y -31px 0;
+  background: url(vborder.png) repeat-y -31px 0;
 }
 
 .gwt-DialogBox .dialogMiddleRight {
-  background: url(../images/vborder.png) repeat-y -32px 0;
-  -background: url(images/vborder_ie6.png) repeat-y -32px 0;
+  background: url(vborder.png) repeat-y -32px 0;
 }
 
 .gwt-DialogBox .dialogTopLeftInner {
   width: 10px;
   height: 8px;
-  zoom: 1;
 }
 
 .gwt-DialogBox .dialogTopRightInner {
   width: 12px;
-  zoom: 1;
 }
 
 .gwt-DialogBox .dialogBottomLeftInner {
   width: 10px;
   height: 12px;
-  zoom: 1;
 }
 
 .gwt-DialogBox .dialogBottomRightInner {
   width: 12px;
   height: 12px;
-  zoom: 1;
 }
 
 .gwt-DialogBox .dialogTopLeft {
-  background: url(../images/circles.png) no-repeat -20px 0;
-  -background: url(images/circles_ie6.png) no-repeat -20px 0;
+  background: url(circles.png) no-repeat -20px 0;
 }
 
 .gwt-DialogBox .dialogTopRight {
-  background: url(../images/circles.png) no-repeat -28px 0;
-  -background: url(images/circles_ie6.png) no-repeat -28px 0;
+  background: url(circles.png) no-repeat -28px 0;
 }
 
 .gwt-DialogBox .dialogBottomLeft {
-  background: url(../images/circles.png) no-repeat 0 -36px;
-  -background: url(images/circles_ie6.png) no-repeat 0 -36px;
+  background: url(circles.png) no-repeat 0 -36px;
 }
 
 .gwt-DialogBox .dialogBottomRight {
-  background: url(../images/circles.png) no-repeat -8px -36px;
-  -background: url(images/circles_ie6.png) no-repeat -8px -36px;
+  background: url(circles.png) no-repeat -8px -36px;
 }
 
 * html .gwt-DialogBox .dialogTopLeftInner {
@@ -351,7 +340,7 @@ select {
 }
 
 .gwt-MenuBar-horizontal {
-  background: #e3e8f3 url(../images/hborder.png) repeat-x 0 -2003px;
+  background: #e3e8f3 url(hborder.png) repeat-x 0 -2003px;
   border: 1px solid #e0e0e0;
 }
 
@@ -416,66 +405,55 @@ select {
 }
 
 .gwt-MenuBarPopup .menuPopupTopCenter {
-  background: url(../images/hborder.png) 0 -12px repeat-x;
+  background: url(hborder.png) 0 -12px repeat-x;
 }
 
 .gwt-MenuBarPopup .menuPopupBottomCenter {
-  background: url(../images/hborder.png) 0 -13px repeat-x;
-  -background: url(images/hborder_ie6.png) 0 -13px repeat-x;
+  background: url(hborder.png) 0 -13px repeat-x;
 }
 
 .gwt-MenuBarPopup .menuPopupMiddleLeft {
-  background: url(../images/vborder.png) -12px 0 repeat-y;
-  -background: url(images/vborder_ie6.png) -12px 0 repeat-y;
+  background: url(vborder.png) -12px 0 repeat-y;
 }
 
 .gwt-MenuBarPopup .menuPopupMiddleRight {
-  background: url(../images/vborder.png) -13px 0 repeat-y;
-  -background: url(images/vborder_ie6.png) -13px 0 repeat-y;
+  background: url(vborder.png) -13px 0 repeat-y;
 }
 
 .gwt-MenuBarPopup .menuPopupTopLeftInner {
   width: 5px;
   height: 5px;
-  zoom: 1;
 }
 
 .gwt-MenuBarPopup .menuPopupTopRightInner {
   width: 8px;
   height: 5px;
-  zoom: 1;
 }
 
 .gwt-MenuBarPopup .menuPopupBottomLeftInner {
   width: 5px;
   height: 8px;
-  zoom: 1;
 }
 
 .gwt-MenuBarPopup .menuPopupBottomRightInner {
   width: 8px;
   height: 8px;
-  zoom: 1;
 }
 
 .gwt-MenuBarPopup .menuPopupTopLeft {
-  background: url(../images/corner.png) no-repeat 0 -36px;
-  -background: url(images/corner_ie6.png) no-repeat 0 -36px;
+  background: url(corner.png) no-repeat 0 -36px;
 }
 
 .gwt-MenuBarPopup .menuPopupTopRight {
-  background: url(../images/corner.png) no-repeat -5px -36px;
-  -background: url(images/corner_ie6.png) no-repeat -5px -36px;
+  background: url(corner.png) no-repeat -5px -36px;
 }
 
 .gwt-MenuBarPopup .menuPopupBottomLeft {
-  background: url(../images/corner.png) no-repeat 0 -41px;
-  -background: url(images/corner_ie6.png) no-repeat 0 -41px;
+  background: url(corner.png) no-repeat 0 -41px;
 }
 
 .gwt-MenuBarPopup .menuPopupBottomRight {
-  background: url(../images/corner.png) no-repeat -5px -41px;
-  -background: url(images/corner_ie6.png) no-repeat -5px -41px;
+  background: url(corner.png) no-repeat -5px -41px;
 }
 
 * html .gwt-MenuBarPopup .menuPopupTopLeftInner {
@@ -528,65 +506,55 @@ select {
 }
 
 .gwt-DecoratedPopupPanel .popupTopCenter {
-  background: url(../images/hborder.png) 0 -2937px repeat-x;
+  background: url(hborder.png) 0 -2937px repeat-x;
 }
 
 .gwt-DecoratedPopupPanel .popupBottomCenter {
-  background: url(../images/hborder.png) repeat-x 0 -2938px;
-  -background: url(images/hborder_ie6.png) repeat-x 0 -2138px;
+  background: url(hborder.png) repeat-x 0 -2938px;
 }
 
 .gwt-DecoratedPopupPanel .popupMiddleLeft {
-  background: url(../images/vborder.png) -21px 0 repeat-y;
+  background: url(vborder.png) -21px 0 repeat-y;
 }
 
 .gwt-DecoratedPopupPanel .popupMiddleRight {
-  background: url(../images/vborder.png) repeat-y -24px 0;
-  -background: url(images/vborder_ie6.png) repeat-y -24px 0;
+  background: url(vborder.png) repeat-y -24px 0;
 }
 
 .gwt-DecoratedPopupPanel .popupTopLeftInner {
   width: 6px;
   height: 5px;
-  zoom: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupTopRightInner {
   width: 6px;
   height: 5px;
-  zoom: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupBottomLeftInner {
   width: 6px;
   height: 6px;
-  zoom: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupBottomRightInner {
   width: 6px;
   height: 6px;
-  zoom: 1;
 }
 
 .gwt-DecoratedPopupPanel .popupTopLeft {
-  background: url(../images/circles.png) no-repeat 0 -16px;
-  -background: url(images/circles_ie6.png) no-repeat 0 -16px;
+  background: url(circles.png) no-repeat 0 -16px;
 }
 
 .gwt-DecoratedPopupPanel .popupTopRight {
-  background: url(../images/circles.png) no-repeat -6px -16px;
-  -background: url(images/circles_ie6.png) no-repeat -6px -16px;
+  background: url(circles.png) no-repeat -6px -16px;
 }
 
 .gwt-DecoratedPopupPanel .popupBottomLeft {
-  background: url(../images/circles.png) no-repeat 0 -21px;
-  -background: url(images/circles_ie6.png) no-repeat 0 -21px;
+  background: url(circles.png) no-repeat 0 -21px;
 }
 
 .gwt-DecoratedPopupPanel .popupBottomRight {
-  background: url(../images/circles.png) no-repeat -6px -21px;
-  -background: url(images/circles_ie6.png) no-repeat -6px -21px;
+  background: url(circles.png) no-repeat -6px -21px;
 }
 
 * html .gwt-DecoratedPopupPanel .popupTopLeftInner {
@@ -616,7 +584,6 @@ select {
 .gwt-PopupPanelGlass {
   background-color: #000;
   opacity: 0.3;
-  filter: alpha(opacity = 30);
 }
 
 .gwt-PushButton-up,
@@ -627,9 +594,7 @@ select {
 .gwt-PushButton-down-disabled {
   margin: 0;
   text-decoration: none;
-  background: url("../images/hborder.png") repeat-x 0 -27px;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
+  background: url("hborder.png") repeat-x 0 -27px;
 }
 
 .gwt-PushButton-up,
@@ -653,8 +618,6 @@ select {
   border: 1px solid #bbb;
   cursor: default;
   opacity: .5;
-  filter: alpha(opacity = 45);
-  zoom: 1;
 }
 
 .gwt-PushButton-down,
@@ -679,8 +642,6 @@ select {
   border: 1px outset #ccc;
   cursor: default;
   opacity: 0.5;
-  filter: alpha(opacity = 45);
-  zoom: 1;
 }
 
 .gwt-RadioButton {
@@ -698,7 +659,7 @@ select {
 }
 
 .gwt-RichTextToolbar {
-  background: #e3e8f3 url(../images/hborder.png) repeat-x 0 -2003px;
+  background: #e3e8f3 url(hborder.png) repeat-x 0 -2003px;
   border-bottom: 1px solid #BBBBBB;
   padding: 3px;
   margin: 0;
@@ -772,7 +733,7 @@ select {
   padding: 3px;
   border: 1px solid #bbbbbb;
   border-bottom: 0;
-  background: #d3def6 url(../images/hborder.png) repeat-x 0 -989px;
+  background: #d3def6 url(hborder.png) repeat-x 0 -989px;
 }
 
 .gwt-StackPanel .gwt-StackPanelContent {
@@ -801,19 +762,16 @@ select {
 .gwt-DecoratedStackPanel .stackItemTopRight {
   height: 6px;
   width: 6px;
-  zoom: 1;
 }
 
 .gwt-DecoratedStackPanel .stackItemTopLeft {
   border-left: 1px solid #bbbbbb;
-  background: #d3def6 url(../images/corner.png) no-repeat 0 -49px;
-  -background: #d3def6 url(images/corner_ie6.png) no-repeat 0 -49px;
+  background: #d3def6 url(corner.png) no-repeat 0 -49px;
 }
 
 .gwt-DecoratedStackPanel .stackItemTopRight {
   border-right: 1px solid #bbbbbb;
-  background: #d3def6 url(../images/corner.png) no-repeat -6px -49px;
-  -background: #d3def6 url(images/corner_ie6.png) no-repeat -6px -49px;
+  background: #d3def6 url(corner.png) no-repeat -6px -49px;
 }
 
 .gwt-DecoratedStackPanel .stackItemTopLeftInner,
@@ -830,11 +788,11 @@ select {
 }
 
 .gwt-DecoratedStackPanel .stackItemTopCenter {
-  background: url(../images/hborder.png) 0 -21px repeat-x;
+  background: url(hborder.png) 0 -21px repeat-x;
 }
 
 .gwt-DecoratedStackPanel .stackItemMiddleLeft {
-  background: #d3def6 url(../images/hborder.png) repeat-x 0 -989px;
+  background: #d3def6 url(hborder.png) repeat-x 0 -989px;
   border-left: 1px solid #bbbbbb;
 }
 
@@ -845,14 +803,14 @@ select {
 }
 
 .gwt-DecoratedStackPanel .stackItemMiddleRight {
-  background: #d3def6 url(../images/hborder.png) repeat-x 0 -989px;
+  background: #d3def6 url(hborder.png) repeat-x 0 -989px;
   border-right: 1px solid #bbbbbb;
 }
 
 .gwt-DecoratedStackPanel .stackItemMiddleCenter {
   font-weight: bold;
   font-size: 1.3em;
-  background: #d3def6 url(../images/hborder.png) repeat-x 0 -989px;
+  background: #d3def6 url(hborder.png) repeat-x 0 -989px;
 }
 
 .gwt-DecoratedStackPanel .gwt-StackPanelItem-first .stackItemTopRight,
@@ -923,51 +881,43 @@ select {
 .gwt-SuggestBoxPopup .suggestPopupTopLeftInner {
   width: 0;
   height: 0;
-  zoom: 1;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupTopRightInner {
   width: 0;
   height: 0;
-  zoom: 1;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupBottomLeftInner {
   width: 0;
   height: 0;
-  zoom: 1;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupBottomRightInner {
   width: 0;
   height: 0;
-  zoom: 1;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupTopLeft {
-  background: url(../images/circles.png) no-repeat 0 -6px;
-  -background: url(images/circles_ie6.png) no-repeat 0 -6px;
+  background: url(circles.png) no-repeat 0 -6px;
   width: 5px;
   height: 5px;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupTopRight {
-  background: url(../images/circles.png) no-repeat -5px -6px;
-  -background: url(images/circles_ie6.png) no-repeat -5px -6px;
+  background: url(circles.png) no-repeat -5px -6px;
   width: 5px;
   height: 5px;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupBottomLeft {
-  background: url(../images/circles.png) no-repeat 0 -11px;
-  -background: url(images/circles_ie6.png) no-repeat 0 -11px;
+  background: url(circles.png) no-repeat 0 -11px;
   width: 5px;
   height: 5px;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupBottomRight {
-  background: url(../images/circles.png) no-repeat -5px -11px;
-  -background: url(images/circles_ie6.png) no-repeat -5px -11px;
+  background: url(circles.png) no-repeat -5px -11px;
   width: 5px;
   height: 5px;
 }
@@ -1016,8 +966,6 @@ select {
   font-weight: normal;
   text-align: center;
   background: #8E8E8E;
-  -moz-border-radius: 3px 3px 0 0;
-  border-radius: 3px 3px 0 0;
 }
 
 .gwt-TabBar .gwt-TabBarItem-selected {
@@ -1067,7 +1015,6 @@ select {
 .gwt-DecoratedTabBar .tabTopLeft,
 .gwt-DecoratedTabBar .tabTopRight {
   padding: 0;
-  zoom: 1;
 }
 
 .gwt-DecoratedTabBar .tabTopLeftInner,
@@ -1077,13 +1024,11 @@ select {
 }
 
 .gwt-DecoratedTabBar .tabTopLeft {
-  background: url(../images/circles.png) no-repeat 0 0;
-  -background: url(images/circles_ie6.png) no-repeat 0 0;
+  background: url(circles.png) no-repeat 0 0;
 }
 
 .gwt-DecoratedTabBar .tabTopRight {
-  background: url(../images/circles.png) no-repeat -3px 0;
-  -background: url(images/circles_ie6.png) no-repeat -3px 0;
+  background: url(circles.png) no-repeat -3px 0;
 }
 
 * html .gwt-DecoratedTabBar .tabTopLeftInner,
@@ -1120,13 +1065,11 @@ select {
 }
 
 .gwt-DecoratedTabBar .gwt-TabBarItem-selected .tabTopLeft {
-  background: url(../images/circles.png) no-repeat -6px 0;
-  -background: url(images/circles_ie6.png) no-repeat -6px 0;
+  background: url(circles.png) no-repeat -6px 0;
 }
 
 .gwt-DecoratedTabBar .gwt-TabBarItem-selected .tabTopRight {
-  background: url(../images/circles.png) no-repeat -9px 0;
-  -background: url(images/circles_ie6.png) no-repeat -9px 0;
+  background: url(circles.png) no-repeat -9px 0;
 }
 
 .gwt-DecoratedTabBar .gwt-TabBarItem-selected .tabMiddleLeft,
@@ -1178,9 +1121,7 @@ select {
 .gwt-ToggleButton-down-disabled {
   margin: 0;
   text-decoration: none;
-  background: url("../images/hborder.png") repeat-x 0 -27px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  background: url("hborder.png") repeat-x 0 -27px;
 }
 
 .gwt-ToggleButton-up,
@@ -1204,8 +1145,6 @@ select {
   border: 1px solid #bbb;
   cursor: default;
   opacity: .5;
-  zoom: 1;
-  filter: alpha(opacity = 45);
 }
 
 .gwt-ToggleButton-down,
@@ -1232,8 +1171,6 @@ select {
   border: 1px inset #ccc;
   cursor: default;
   opacity: .5;
-  zoom: 1;
-  filter: alpha(opacity = 45);
 }
 
 .gwt-Tree .gwt-TreeItem {
@@ -1348,7 +1285,7 @@ select {
 .datePickerDayIsToday {
   padding: 3px;
   color: #fff;
-  background: url(../images/hborder.png) repeat-x 0 -2607px;
+  background: url(hborder.png) repeat-x 0 -2607px;
 }
 
 .datePickerMonthSelector {
@@ -1388,7 +1325,7 @@ td.datePickerMonth {
   padding: 3px;
   border: 1px solid #bbbbbb;
   border-bottom: 0;
-  background: #d3def6 url(../images/hborder.png) repeat-x 0 -989px;
+  background: #d3def6 url(hborder.png) repeat-x 0 -989px;
 }
 
 .gwt-StackLayoutPanel .gwt-StackLayoutPanelHeader-hovering {
@@ -1429,8 +1366,6 @@ td.datePickerMonth {
   font-weight: normal;
   text-align: center;
   background: #8E8E8E;
-  -moz-border-radius: 3px 3px 0 0;
-  border-radius: 3px 3px 0 0;
 }
 
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
@@ -1441,11 +1376,11 @@ td.datePickerMonth {
 }
 
 .gwt-SplitLayoutPanel-HDragger {
-  background: #e7e7e7 url(../images/thumb_vertical.png) center center no-repeat;
+  background: #e7e7e7 url(thumb_vertical.png) center center no-repeat;
   cursor: col-resize;
 }
 
 .gwt-SplitLayoutPanel-VDragger {
-  background: #e7e7e7 url(../images/thumb_horz.png) center center no-repeat;
+  background: #e7e7e7 url(thumb_horz.png) center center no-repeat;
   cursor: row-resize;
 }

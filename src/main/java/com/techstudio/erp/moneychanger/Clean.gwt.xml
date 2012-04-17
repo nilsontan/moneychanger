@@ -5,5 +5,5 @@
   Solution Pte Ltd ("Confidential Information").
 -->
 <module>
-  <stylesheet src="/css/clean.css" />
+  <stylesheet src="clean.css" />
 </module>

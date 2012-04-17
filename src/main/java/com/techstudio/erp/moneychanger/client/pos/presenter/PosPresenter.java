@@ -203,8 +203,22 @@ public class PosPresenter
 
   @Override
   public void modifyItem(LineItemProxy lineItem) {
-    lineItems.remove(lineItem);
     pendingList.add(lineItem);
+    int line = lineItem.getLine();
+
+    for (LineItemProxy lineItemProxy : lineItems) {
+      int curLine = lineItemProxy.getLine();
+      if (curLine < line) {
+      } else if (curLine == line) {
+        if (!lineItemProxy.equals(lineItem)) {
+          pendingList.add(lineItemProxy);
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+
     advanceToStep(Step.DETAILS);
   }
 
@@ -227,7 +241,6 @@ public class PosPresenter
         .multiply(pendingItem.getQuantity(), MathContext.UNLIMITED)
         .divide(itemUomRate);
     pendingItem.setSubTotal(subTotal);
-    lineItems.add(pendingItem);
 
     if (!pendingList.isEmpty()) {
       pendingItem = pendingList.remove(0);
@@ -237,10 +250,8 @@ public class PosPresenter
           .divide(pendingItem.getUnitPrice(), 4, RoundingMode.HALF_UP);
       pendingItem.setQuantity(sellQuantity);
       pendingItem.setSubTotal(subTotal);
-      lineItems.add(pendingItem);
     }
 
-    lineItems = byLineNumber.sortedCopy(lineItems);
     advanceToStep(Step.CONFIRM);
   }
 
@@ -285,33 +296,37 @@ public class PosPresenter
   private void setItemAndMove(ItemProxy itemProxy) {
     switch (step) {
       case BUY:
-        LineItemRequest request = lineItemRequestProvider.get();
-        LineItemProxy proxy = request.create(LineItemProxy.class);
-        proxy.setTransactionType(TransactionType.PURCHASE);
-        proxy.setItem(itemProxy);
-        SpotRateProxy spotRateProxy = spotRateDataProvider.getSpotRateForCode(itemProxy.getCode());
-        proxy.setUnitPrice(spotRateProxy.getBidRate());
-        proxy.setQuantity(BigDecimal.ONE);
-        proxy.setLine(nextLine++);
+        LineItemProxy proxy = createLineItem(itemProxy, TransactionType.PURCHASE);
         pendingList.add(proxy);
+        lineItems.add(proxy);
         advanceToStep(Step.SELL);
         break;
       case SELL:
-        request = lineItemRequestProvider.get();
-        proxy = request.create(LineItemProxy.class);
-        proxy.setTransactionType(TransactionType.SALE);
-        proxy.setItem(itemProxy);
-        spotRateProxy = spotRateDataProvider.getSpotRateForCode(itemProxy.getCode());
-        proxy.setUnitPrice(spotRateProxy.getAskRate());
-        proxy.setQuantity(BigDecimal.ONE);
-        proxy.setLine(nextLine++);
+        proxy = createLineItem(itemProxy, TransactionType.SALE);
         pendingList.add(proxy);
+        lineItems.add(proxy);
         advanceToStep(Step.DETAILS);
         break;
       default:
     }
   }
-  
+
+  private LineItemProxy createLineItem(ItemProxy itemProxy, TransactionType transactionType) {
+    boolean isSelling = transactionType.equals(TransactionType.SALE);
+
+    LineItemRequest request = lineItemRequestProvider.get();
+    LineItemProxy proxy = request.create(LineItemProxy.class);
+    proxy.setTransactionType(transactionType);
+    proxy.setItem(itemProxy);
+    SpotRateProxy spotRateProxy = spotRateDataProvider.getSpotRateForCode(itemProxy.getCode());
+    proxy.setUnitPrice(isSelling ? spotRateProxy.getBidRate() : spotRateProxy.getAskRate());
+    proxy.setQuantity(BigDecimal.ONE);
+    proxy.setLine(nextLine);
+    if (isSelling) nextLine++;
+
+    return proxy;
+  }
+
   private void flipToTxView(boolean showTxView) {
     getView().showTxPanel(showTxView);
     getView().showTxNew(!showTxView);
@@ -338,15 +353,6 @@ public class PosPresenter
       getView().setItemQuantity(pendingItem.getQuantity().toString());
     }
   }
-
-  private final static Ordering<LineItemProxy> byLineNumber = new Ordering<LineItemProxy>() {
-    @Override
-    public int compare(@Nullable LineItemProxy left, @Nullable LineItemProxy right) {
-      if (left == null) return 1;
-      else if (right == null) return -1;
-      return Ints.compare(left.getLine(), right.getLine());
-    }
-  };
 
   /**
    * Flow for a transaction
