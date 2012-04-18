@@ -37,14 +37,14 @@ public interface Resources extends ClientBundle {
   @Source("clean-admin.css")
   StyleAdmin admin();
 
-  @Source("currency.css")
-  StyleCur cur();
-
   @Source("loading.gif")
   ImageResource loadingIcon();
 
   @Source("logo.png")
   ImageResource logo();
+
+  @Source("images/nia.png")
+  ImageResource noImageAvailable();
 
   public interface StyleAdmin extends CssResource {
 
@@ -93,12 +93,6 @@ public interface Resources extends ClientBundle {
 
   @Source("images/16/hand_point_270.png")
   ImageResource iItemSelect();
-
-  @Source("images/32/contrast_decrease.png")
-  ImageResource iBuy();
-
-  @Source("images/32/contrast_increase.png")
-  ImageResource iSell();
 
   public interface StylePos extends CssResource {
     String centered();
@@ -163,17 +157,4 @@ public interface Resources extends ClientBundle {
 
   @Source("images/currency/72/thb.png")
   ImageResource iCurThb();
-
-  public interface StyleCur extends CssResource {
-    String aud();
-    String gbp();
-    String myr();
-    String sgd();
-    String usd();
-    String eur();
-    String inr();
-    String idr();
-    String jpy();
-    String thb();
-  }
 }

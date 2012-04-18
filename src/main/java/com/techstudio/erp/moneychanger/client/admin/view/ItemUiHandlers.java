@@ -30,6 +30,8 @@ public interface ItemUiHandlers extends UiHandlers {
 
   void setItemUomRate(String uomRate);
 
+  void setItemImageUrl(String itemImageUrl);
+
   void createItem();
 
   void updateItem();

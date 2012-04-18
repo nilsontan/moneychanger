@@ -77,6 +77,7 @@
     <gwt.version>2.4.0</gwt.version>
     <gwt-log.version>3.1.8</gwt-log.version>
     <gwtp.version>0.7</gwtp.version>
+    <gwtupload.version>0.6.4</gwtupload.version>
     <hibernate-validator.version>4.2.0.Final</hibernate-validator.version>
     <htmlunit.version>2.8</htmlunit.version>
     <javax.inject.version>1</javax.inject.version>
@@ -304,6 +305,17 @@
       <groupId>org.joda</groupId>
       <artifactId>joda-money</artifactId>
       <version>${joda-money.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.gwtupload</groupId>
+      <artifactId>gwtupload-gae</artifactId>
+      <version>${gwtupload.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.appengine</groupId>
+          <artifactId>appengine-tools-sdk</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
   </dependencies>

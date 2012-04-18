@@ -2,9 +2,15 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:c="urn:import:com.google.gwt.user.cellview.client"
-             xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui">
+             xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui"
+    >
 
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+  <ui:style>
+    .centered {
+      margin: 0 auto;
+    }
+  </ui:style>
 
   <g:FlowPanel>
     <g:Label text="Item List" addStyleNames="{res.admin.pageTitle}" />
@@ -17,6 +23,7 @@
       <g:DecoratorPanel>
         <g:FlowPanel>
           <g:Label text="Item Info" addStyleNames="{res.admin.formTitle}" />
+          <m:ItemMenuImageUploader ui:field="itemImageUploader" autoSubmit="true" addStyleNames="{style.centered}" />
           <g:Grid ui:field="itemGrid">
             <g:row>
               <g:customCell>

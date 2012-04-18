@@ -17,19 +17,25 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.admin.presenter.ItemPresenter;
+import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
 import com.techstudio.erp.moneychanger.client.ui.ItemLinkCell;
+import com.techstudio.erp.moneychanger.client.ui.ItemMenuImageUploader;
 import com.techstudio.erp.moneychanger.client.ui.SelectOneListBox;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
+import gwtupload.client.IUploadStatus;
+import gwtupload.client.IUploader;
+import gwtupload.client.PreloadedImage;
 
 /**
  * @author Nilson
@@ -42,6 +48,13 @@ public class ItemView
   }
 
   private final Widget widget;
+
+  final Resources resources;
+
+  final Image noImage;
+
+  @UiField
+  ItemMenuImageUploader itemImageUploader;
 
   @UiField
   TextBox itemCode;
@@ -110,9 +123,22 @@ public class ItemView
   SimplePager itemPager = new SimplePager();
 
   @Inject
-  public ItemView(Binder binder) {
+  public ItemView(Binder binder, final Resources resources) {
+    this.resources = resources;
+    this.noImage = new Image(resources.noImageAvailable());
     widget = binder.createAndBindUi(this);
     setupItemTable();
+    IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
+      public void onFinish(IUploader uploader) {
+        if (uploader.getStatus() == IUploadStatus.Status.SUCCESS) {
+//          String url = uploader.getServletPath() + "?blob-key=" + uploader.getServerInfo().message;
+          String url = uploader.fileUrl();
+          new PreloadedImage(url, showImage);
+          getUiHandlers().setItemImageUrl(url);
+        }
+      }
+    };
+    itemImageUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
   }
 
   @Override
@@ -236,6 +262,15 @@ public class ItemView
     itemUomRate.setValue(uomRate);
   }
 
+  @Override
+  public void setItemImageUrl(String itemImageUrl) {
+    if (!itemImageUrl.isEmpty()) {
+      new PreloadedImage(itemImageUrl, showImage);
+    } else {
+      itemImageUploader.setImage(noImage);
+    }
+  }
+
   private void setupItemTable() {
     Column<ItemProxy, String> itemCodeColumn = new Column<ItemProxy, String>(new EditTextCell()) {
       @Override
@@ -305,4 +340,12 @@ public class ItemView
 
     itemPager.setDisplay(itemTable);
   }
+
+  // Attach an image to the pictures viewer
+  private PreloadedImage.OnLoadPreloadedImageHandler showImage = new PreloadedImage.OnLoadPreloadedImageHandler() {
+    public void onLoad(PreloadedImage image) {
+      image.setWidth("72px");
+      itemImageUploader.setImage(image);
+    }
+  };
 }

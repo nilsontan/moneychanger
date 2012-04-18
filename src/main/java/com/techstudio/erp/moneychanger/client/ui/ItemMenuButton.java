@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Image;
  */
 public class ItemMenuButton extends Button {
   private String text;
+  private Element imgElement;
 
   public ItemMenuButton() {
     super();
@@ -25,8 +26,16 @@ public class ItemMenuButton extends Button {
 
   public void setResource(ImageResource imageResource) {
     Image img = new Image(imageResource);
-    String definedStyles = img.getElement().getAttribute("style");
-    img.getElement().setAttribute("style", definedStyles + "; vertical-align:middle;");
+    setImage(img);
+  }
+
+  public void setImage(Image img) {
+    if (imgElement != null) {
+      DOM.removeChild(getElement(), imgElement);
+    }
+    imgElement = img.getElement();
+    String definedStyles = imgElement.getAttribute("style");
+    imgElement.setAttribute("style", definedStyles + "; vertical-align:middle;");
     DOM.insertBefore(getElement(), img.getElement(), DOM.getFirstChild(getElement()));
   }
 

@@ -10,7 +10,6 @@ package com.techstudio.erp.moneychanger.client.ui;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
@@ -45,11 +44,11 @@ public class NumberBox extends Composite {
     SetValue(e, value);
   }
 
-  private final native String GetValue(JavaScriptObject elem) /*-{
+  native String GetValue(JavaScriptObject elem) /*-{
     return elem.value;
   }-*/;
 
-  private final native String SetValue(JavaScriptObject elem, String value) /*-{
+  native String SetValue(JavaScriptObject elem, String value) /*-{
     elem.value = value;
   }-*/;
 }

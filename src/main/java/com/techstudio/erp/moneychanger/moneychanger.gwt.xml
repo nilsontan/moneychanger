@@ -18,6 +18,8 @@
 
   <inherits name="com.google.common.collect.Collect" />
 
+  <inherits name="gwtupload.GWTUpload" />
+
   <!-- logging -->
   <inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
 
@@ -30,6 +32,7 @@
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
   <!-- Other module inherits                                      -->
+  <stylesheet src="Upload.css" />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.techstudio.erp.moneychanger.client.Moneychanger' />
@@ -54,8 +57,8 @@
        http[s]://hostame:port/path/to/your/module/Module.html?log_level=INFO
   -->
   <set-property name="compiler.emulatedStack" value="true" />
-  <set-configuration-property name="compiler.emulatedStack.recordLineNumbers" value="true"/>
-  <set-configuration-property name="compiler.emulatedStack.recordFileNames" value="true"/>
+  <set-configuration-property name="compiler.emulatedStack.recordLineNumbers" value="true" />
+  <set-configuration-property name="compiler.emulatedStack.recordFileNames" value="true" />
 
   <!-- Loggers Enabled by default -->
   <set-property name="log_ConsoleLogger" value="ENABLED" />

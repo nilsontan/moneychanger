@@ -11,6 +11,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Unindexed;
 import com.techstudio.erp.moneychanger.server.service.CategoryDao;
 import com.techstudio.erp.moneychanger.server.service.CurrencyDao;
 import com.techstudio.erp.moneychanger.server.service.UomDao;
@@ -31,6 +32,9 @@ public class Item extends MyExDatastoreObject {
   private Key<Uom> uom;
 
   private Integer uomRate;
+
+  @Unindexed
+  private String imageUrl = "";
 
   public Item() {
   }
@@ -95,6 +99,14 @@ public class Item extends MyExDatastoreObject {
 
   public void setUomRate(Integer uomRate) {
     this.uomRate = uomRate;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
   }
 
 }

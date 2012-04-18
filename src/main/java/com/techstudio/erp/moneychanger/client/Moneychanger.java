@@ -50,7 +50,6 @@ public class Moneychanger implements EntryPoint {
 
     ginjector.getResources().admin().ensureInjected();
     ginjector.getResources().pos().ensureInjected();
-    ginjector.getResources().cur().ensureInjected();
 
     ginjector.getPlaceManager().revealCurrentPlace();
 

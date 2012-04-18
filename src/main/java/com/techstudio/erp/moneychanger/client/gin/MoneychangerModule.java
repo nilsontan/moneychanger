@@ -48,7 +48,7 @@ public class MoneychangerModule extends AbstractPresenterModule {
     bind(TestData.class).to(MoneychangerTestData.class).in(Singleton.class);
 
     // Constants
-    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.POS_PAGE);
+    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.TEST_PAGE);
     bindConstant().annotatedWith(DefaultScaleForCosting.class).to(4);
     bindConstant().annotatedWith(DefaultScaleForMoney.class).to(2);
 

@@ -72,6 +72,8 @@ public class ItemPresenter
     void setItemUom(UomProxy uomProxy);
 
     void setItemUomRate(String uomRate);
+
+    void setItemImageUrl(String itemImageUrl);
   }
 
   private final Provider<ItemRequest> itemRequestProvider;
@@ -88,6 +90,7 @@ public class ItemPresenter
   private CurrencyProxy currency;
   private UomProxy uom;
   private Integer uomRate;
+  private String imageUrl;
 
   @Inject
   public ItemPresenter(final EventBus eventBus,
@@ -135,6 +138,7 @@ public class ItemPresenter
               currency = response.getCurrency();
               uom = response.getUom();
               uomRate = response.getUomRate();
+              imageUrl = response.getImageUrl();
               updateView();
             }
           });
@@ -161,6 +165,7 @@ public class ItemPresenter
       currency = currencyDataProvider.getDefaultCurrency();
       uom = uomDataProvider.getDefaultUom();
       uomRate = 1;
+      imageUrl = "";
       updateView();
     }
 
@@ -205,6 +210,12 @@ public class ItemPresenter
   @Override
   public void setItemUomRate(String uomRate) {
     this.uomRate = returnUomRate(uomRate);
+    updateView();
+  }
+
+  @Override
+  public void setItemImageUrl(String itemImageUrl) {
+    this.imageUrl = itemImageUrl;
     updateView();
   }
 
@@ -289,6 +300,7 @@ public class ItemPresenter
     proxy.setCurrency(currency);
     proxy.setUom(uom);
     proxy.setUomRate(uomRate);
+    proxy.setImageUrl(imageUrl);
   }
 
   private void updateView() {
@@ -299,6 +311,7 @@ public class ItemPresenter
     getView().setItemCurrency(currency);
     getView().setItemUom(uom);
     getView().setItemUomRate(uomRate.toString());
+    getView().setItemImageUrl(imageUrl);
     boolean isValid = isFormValid();
     getView().enableCreateButton(isValid);
     getView().enableUpdateButton(isValid);

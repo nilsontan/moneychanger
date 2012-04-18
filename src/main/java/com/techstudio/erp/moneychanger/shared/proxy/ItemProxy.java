@@ -35,4 +35,8 @@ public interface ItemProxy extends MyExEntityProxy {
   Integer getUomRate();
 
   void setUomRate(Integer uomRate);
+
+  String getImageUrl();
+
+  void setImageUrl(String imageUrl);
 }
