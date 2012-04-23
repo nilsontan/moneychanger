@@ -37,56 +37,14 @@
       <g:VerticalPanel ui:field="mainPanel" spacing="10" width="100%">
         <g:Label ui:field="currentStep" addStyleNames="{res.admin.formTitle}" />
         <g:FlowPanel width="100%">
-          <g:Grid ui:field="itemPanel" addStyleNames="{style.centered}">
-            <g:row>
-              <g:customCell>
-                <m:ItemMenuButton ui:field="btnAud"
-                                  text="AUD" resource="{res.iCurAud}" addStyleNames="{res.pos.curBtn}" />
-              </g:customCell>
-              <g:customCell>
-                <m:ItemMenuButton ui:field="btnGbp"
-                                  text="GBP" resource="{res.iCurGbp}" addStyleNames="{res.pos.curBtn}" />
-              </g:customCell>
-              <g:customCell>
-                <m:ItemMenuButton ui:field="btnMyr"
-                                  text="MYR" resource="{res.iCurMyr}" addStyleNames="{res.pos.curBtn}" />
-              </g:customCell>
-              <g:customCell>
-                <m:ItemMenuButton ui:field="btnSgd"
-                                  text="SGD" resource="{res.iCurSgd}" addStyleNames="{res.pos.curBtn}" />
-              </g:customCell>
-              <g:customCell>
-                <m:ItemMenuButton ui:field="btnUsd"
-                                  text="USD" resource="{res.iCurUsd}" addStyleNames="{res.pos.curBtn}" />
-              </g:customCell>
-            </g:row>
-            <g:row>
-              <g:customCell>
-                <m:ItemMenuButton ui:field="btnEur"
-                                  text="EUR" resource="{res.iCurEur}" addStyleNames="{res.pos.curBtn}" />
-              </g:customCell>
-              <g:customCell>
-                <m:ItemMenuButton ui:field="btnInr"
-                                  text="INR" resource="{res.iCurInr}" addStyleNames="{res.pos.curBtn}" />
-              </g:customCell>
-              <g:customCell>
-                <m:ItemMenuButton ui:field="btnIdr"
-                                  text="IDR" resource="{res.iCurIdr}" addStyleNames="{res.pos.curBtn}" />
-              </g:customCell>
-              <g:customCell>
-                <m:ItemMenuButton ui:field="btnJpy"
-                                  text="JPY" resource="{res.iCurJpy}" addStyleNames="{res.pos.curBtn}" />
-              </g:customCell>
-              <g:customCell>
-                <m:ItemMenuButton ui:field="btnThb"
-                                  text="THB" resource="{res.iCurThb}" addStyleNames="{res.pos.curBtn}" />
-              </g:customCell>
-            </g:row>
-          </g:Grid>
+          <g:FlowPanel ui:field="itemPanel" width="100%">
+            <c:CellTable ui:field="itemTable" addStyleNames="{style.centered}" />
+            <c:SimplePager ui:field="itemPager" location="CENTER" addStyleNames="{style.centered}" />
+          </g:FlowPanel>
           <g:DecoratorPanel ui:field="qtyPanel" addStyleNames="{style.centered}">
             <g:VerticalPanel>
               <g:HorizontalPanel width="100%" spacing="5" addStyleNames="{res.pos.btmBorder}">
-                <g:Image resource="{res.iCurSgd}" />
+                <g:Image resource="{res.noImageAvailable}" />
                 <g:Grid>
                   <g:row>
                     <g:customCell>

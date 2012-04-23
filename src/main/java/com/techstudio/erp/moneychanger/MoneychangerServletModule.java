@@ -12,6 +12,7 @@ import com.google.inject.servlet.ServletModule;
 import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 import com.gwtplatform.dispatch.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.shared.ActionImpl;
+import com.techstudio.erp.moneychanger.server.gae.MyUploadAction;
 import gwtupload.server.UploadServlet;
 import gwtupload.server.gae.FilesApiUploadAction;
 
@@ -42,9 +43,9 @@ public class MoneychangerServletModule extends ServletModule {
     serve("/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
 
     // gwtUpload
-    bind(UploadServlet.class).to(FilesApiUploadAction.class).in(Singleton.class);
-    bind(FilesApiUploadAction.class).in(Singleton.class);
-    serve("*.gupld").with(FilesApiUploadAction.class);
-    serve("/upload").with(FilesApiUploadAction.class);
+    bind(UploadServlet.class).to(MyUploadAction.class).in(Singleton.class);
+    bind(MyUploadAction.class).in(Singleton.class);
+    serve("*.gupld").with(MyUploadAction.class);
+    serve("/upload").with(MyUploadAction.class);
   }
 }

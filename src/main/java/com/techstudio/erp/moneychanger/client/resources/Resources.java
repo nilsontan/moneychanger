@@ -11,6 +11,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.TextResource;
+import com.google.gwt.user.cellview.client.CellTable;
 
 /**
  * @author Nilson
@@ -97,64 +98,149 @@ public interface Resources extends ClientBundle {
   public interface StylePos extends CssResource {
     String centered();
 
-    String mainTitle();
-
-    String mainSubtitle();
-
     String northBar();
-
-    String north2Bar();
-
-    String eastBar();
-
-    String centerBar();
-
-    String menuTitle();
-
-    String pageTitle();
-
-    String pageDescription();
 
     String formTitle();
 
     String formParam();
-
-    String numPad();
-
-    String numPadV();
 
     String curBtn();
 
     String btmBorder();
   }
 
-  @Source("images/currency/72/aud.png")
-  ImageResource iCurAud();
+  TableResources tableResources();
 
-  @Source("images/currency/72/gbp.png")
-  ImageResource iCurGbp();
+  public interface TableResources extends CellTable.Resources {
+    @Override
+    @Source("clean-custom.css")
+    TableStyle cellTableStyle();
+  }
 
-  @Source("images/currency/72/myr.png")
-  ImageResource iCurMyr();
+  public interface TableStyle extends CellTable.Style {
+    /**
+     * Applied to every cell.
+     */
+    String cellTableCell();
 
-  @Source("images/currency/72/sgd.png")
-  ImageResource iCurSgd();
+    /**
+     * Applied to even rows.
+     */
+    String cellTableEvenRow();
 
-  @Source("images/currency/72/usd.png")
-  ImageResource iCurUsd();
+    /**
+     * Applied to cells in even rows.
+     */
+    String cellTableEvenRowCell();
 
-  @Source("images/currency/72/eur.png")
-  ImageResource iCurEur();
+    /**
+     * Applied to the first column.
+     */
+    String cellTableFirstColumn();
 
-  @Source("images/currency/72/inr.png")
-  ImageResource iCurInr();
+    /**
+     * Applied to the first column footers.
+     */
+    String cellTableFirstColumnFooter();
 
-  @Source("images/currency/72/idr.png")
-  ImageResource iCurIdr();
+    /**
+     * Applied to the first column headers.
+     */
+    String cellTableFirstColumnHeader();
 
-  @Source("images/currency/72/jpy.png")
-  ImageResource iCurJpy();
+    /**
+     * Applied to footers cells.
+     */
+    String cellTableFooter();
 
-  @Source("images/currency/72/thb.png")
-  ImageResource iCurThb();
+    /**
+     * Applied to headers cells.
+     */
+    String cellTableHeader();
+
+    /**
+     * Applied to the hovered row.
+     */
+    String cellTableHoveredRow();
+
+    /**
+     * Applied to the cells in the hovered row.
+     */
+    String cellTableHoveredRowCell();
+
+    /**
+     * Applied to the keyboard selected cell.
+     */
+    String cellTableKeyboardSelectedCell();
+
+    /**
+     * Applied to the keyboard selected row.
+     */
+    String cellTableKeyboardSelectedRow();
+
+    /**
+     * Applied to the cells in the keyboard selected row.
+     */
+    String cellTableKeyboardSelectedRowCell();
+
+    /**
+     * Applied to the last column.
+     */
+    String cellTableLastColumn();
+
+    /**
+     * Applied to the last column footers.
+     */
+    String cellTableLastColumnFooter();
+
+    /**
+     * Applied to the last column headers.
+     */
+    String cellTableLastColumnHeader();
+
+    /**
+     * Applied to the loading indicator.
+     */
+    String cellTableLoading();
+
+    /**
+     * Applied to odd rows.
+     */
+    String cellTableOddRow();
+
+    /**
+     * Applied to cells in odd rows.
+     */
+    String cellTableOddRowCell();
+
+    /**
+     * Applied to selected rows.
+     */
+    String cellTableSelectedRow();
+
+    /**
+     * Applied to cells in selected rows.
+     */
+    String cellTableSelectedRowCell();
+
+    /**
+     * Applied to header cells that are sortable.
+     */
+    String cellTableSortableHeader();
+
+    /**
+     * Applied to header cells that are sorted in ascending order.
+     */
+    String cellTableSortedHeaderAscending();
+
+    /**
+     * Applied to header cells that are sorted in descending order.
+     */
+    String cellTableSortedHeaderDescending();
+
+    /**
+     * Applied to the table.
+     */
+    String cellTableWidget();
+  }
 }

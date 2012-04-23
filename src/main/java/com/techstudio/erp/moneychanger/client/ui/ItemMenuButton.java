@@ -7,49 +7,60 @@
 
 package com.techstudio.erp.moneychanger.client.ui;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.*;
+import com.google.inject.Inject;
 
 /**
  * @author Nilson
  */
-public class ItemMenuButton extends Button {
-  private String text;
-  private Element imgElement;
+public class ItemMenuButton extends Composite
+    implements HasText, HasClickHandlers {
 
-  public ItemMenuButton() {
-    super();
+  @Override
+  public HandlerRegistration addClickHandler(ClickHandler handler) {
+    return addDomHandler(handler, ClickEvent.getType());
+  }
+
+  public interface Binder extends UiBinder<Widget, ItemMenuButton> {
+  }
+
+  @UiField
+  SimplePanel pane;
+
+  @UiField
+  Label label;
+
+  @UiField
+  Image image;
+
+  @Inject
+  public ItemMenuButton(final Binder binder) {
+    initWidget(binder.createAndBindUi(this));
   }
 
   public void setResource(ImageResource imageResource) {
-    Image img = new Image(imageResource);
-    setImage(img);
+    image.setResource(imageResource);
   }
 
-  public void setImage(Image img) {
-    if (imgElement != null) {
-      DOM.removeChild(getElement(), imgElement);
-    }
-    imgElement = img.getElement();
-    String definedStyles = imgElement.getAttribute("style");
-    imgElement.setAttribute("style", definedStyles + "; vertical-align:middle;");
-    DOM.insertBefore(getElement(), img.getElement(), DOM.getFirstChild(getElement()));
+  public void setImageUrl(String imgUrl) {
+    image.setUrl(imgUrl);
+    image.setSize("72px", "72px");
   }
 
   @Override
   public void setText(String text) {
-    this.text = text;
-    Element span = DOM.createElement("span");
-    span.setInnerText(text);
-
-    DOM.insertChild(getElement(), span, 0);
+    label.setText(text);
   }
 
   @Override
   public String getText() {
-    return this.text;
+    return label.getText();
   }
 }

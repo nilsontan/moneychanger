@@ -10,8 +10,6 @@ package com.techstudio.erp.moneychanger.client.pos.presenter;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Ints;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -27,6 +25,7 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.pos.view.PosUiHandlers;
 import com.techstudio.erp.moneychanger.client.ui.LineItemDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.MenuItemDataProvider;
 import com.techstudio.erp.moneychanger.client.ui.SpotRateDataProvider;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
@@ -35,7 +34,6 @@ import com.techstudio.erp.moneychanger.shared.proxy.SpotRateProxy;
 import com.techstudio.erp.moneychanger.shared.service.ItemRequest;
 import com.techstudio.erp.moneychanger.shared.service.LineItemRequest;
 
-import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -59,9 +57,9 @@ public class PosPresenter
   public interface MyView extends View, HasUiHandlers<PosUiHandlers> {
     HasData<SpotRateProxy> getSpotRateTable();
 
-    HasData<LineItemProxy> getLineItemTable();
+    HasData<List<ItemProxy>> getItemTable();
 
-    void resetAllItems();
+    HasData<LineItemProxy> getLineItemTable();
 
     void showTxPanel(boolean visible);
 
@@ -99,6 +97,7 @@ public class PosPresenter
   private final Provider<ItemRequest> itemRequestProvider;
   private final Provider<LineItemRequest> lineItemRequestProvider;
   private final SpotRateDataProvider spotRateDataProvider;
+  private final MenuItemDataProvider menuItemDataProvider;
   private final LineItemDataProvider lineItemDataProvider;
 
   private Step step;
@@ -106,6 +105,8 @@ public class PosPresenter
   private List<LineItemProxy> lineItems;
   private List<LineItemProxy> pendingList;
   private int nextLine;
+
+  private String buyItemCode;
 
   private BigDecimal itemRate;
   private BigDecimal itemQuantity;
@@ -115,6 +116,7 @@ public class PosPresenter
                       final MyView view,
                       final MyProxy proxy,
                       final SpotRateDataProvider spotRateDataProvider,
+                      final MenuItemDataProvider menuItemDataProvider,
                       final LineItemDataProvider lineItemDataProvider,
                       final Provider<ItemRequest> itemRequestProvider,
                       final Provider<LineItemRequest> lineItemRequestProvider) {
@@ -124,6 +126,8 @@ public class PosPresenter
     this.lineItemRequestProvider = lineItemRequestProvider;
     this.spotRateDataProvider = spotRateDataProvider;
     this.spotRateDataProvider.addDataDisplay(getView().getSpotRateTable());
+    this.menuItemDataProvider = menuItemDataProvider;
+    this.menuItemDataProvider.addDataDisplay(getView().getItemTable());
     this.lineItemDataProvider = lineItemDataProvider;
     this.lineItemDataProvider.addDataDisplay(getView().getLineItemTable());
   }
@@ -167,20 +171,12 @@ public class PosPresenter
   }
 
   @Override
-  public void skipStep() {
-    Log.debug("Transacting with default currency ...");
-    switch (step) {
-      case BUY:
-        advanceToStep(Step.SELL);
-        break;
-      case SELL:
-        advanceToStep(Step.DETAILS);
-        break;
-    }
-  }
-
-  @Override
   public void itemSelected(final String itemCode) {
+    if (itemCode.equals(buyItemCode))
+      return;
+    else
+      buyItemCode = itemCode;
+
     Log.debug("Selected item: " + itemCode);
     switch (step) {
       case BUY:
@@ -260,6 +256,7 @@ public class PosPresenter
     lineItems = Lists.newArrayList();
     pendingList = Lists.newArrayList();
     nextLine = 1;
+    buyItemCode = "";
     flipToTxView(true);
     advanceToStep(Step.BUY);
   }
@@ -268,7 +265,7 @@ public class PosPresenter
     switch (nextStep) {
       case BUY:
         step = Step.BUY;
-        getView().resetAllItems();
+        buyItemCode = "";
         break;
       case SELL:
         step = Step.SELL;

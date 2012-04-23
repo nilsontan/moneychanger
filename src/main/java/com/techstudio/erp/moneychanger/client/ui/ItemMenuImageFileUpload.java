@@ -1,26 +1,29 @@
 package com.techstudio.erp.moneychanger.client.ui;
 
+import com.google.gwt.core.client.GWT;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import gwtupload.client.DecoratedFileUpload;
 import gwtupload.client.IFileInput;
 
 /**
  * @author Nilson
  */
-public class ItemMenuImageInput extends DecoratedFileUpload implements IFileInput {
+public class ItemMenuImageFileUpload extends DecoratedFileUpload implements IFileInput {
 
   private ItemMenuButton itemMenuButton;
 
-  public ItemMenuImageInput() {
-    this(new ItemMenuButton());
-  }
+  Provider<IFileInput> iFileInputProvider;
 
-  public ItemMenuImageInput(ItemMenuButton itemMenuButton) {
+  @Inject
+  public ItemMenuImageFileUpload(ItemMenuButton itemMenuButton, Provider<IFileInput> iFileInputProvider) {
     super(itemMenuButton);
     this.itemMenuButton = itemMenuButton;
+    this.iFileInputProvider = iFileInputProvider;
   }
 
   public IFileInput newInstance() {
-    return new ItemMenuImageInput();
+    return iFileInputProvider.get();
   }
 
   public void setLength(int length) {

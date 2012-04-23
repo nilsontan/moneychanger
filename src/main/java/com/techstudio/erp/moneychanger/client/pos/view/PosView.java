@@ -8,10 +8,14 @@
 package com.techstudio.erp.moneychanger.client.pos.view;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.cell.client.ImageResourceCell;
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.dom.client.TableCellElement;
+import com.google.gwt.dom.client.TableElement;
+import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -25,10 +29,12 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter.MyView;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
+import com.techstudio.erp.moneychanger.client.ui.ItemMenuCell;
 import com.techstudio.erp.moneychanger.client.ui.NumberBox;
 import com.techstudio.erp.moneychanger.client.ui.PosLogo;
 import com.techstudio.erp.moneychanger.client.ui.TxSubTotalCell;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
+import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.SpotRateProxy;
 
@@ -97,38 +103,14 @@ public class PosView
    * Item Panel (itp)
    */
 
-  @UiField
-  Grid itemPanel;
+  @UiField(provided = true)
+  CellTable<List<ItemProxy>> itemTable = new CellTable<List<ItemProxy>>();
 
   @UiField
-  Button btnAud;
+  SimplePager itemPager = new SimplePager();
 
   @UiField
-  Button btnGbp;
-
-  @UiField
-  Button btnMyr;
-
-  @UiField
-  Button btnSgd;
-
-  @UiField
-  Button btnUsd;
-
-  @UiField
-  Button btnEur;
-
-  @UiField
-  Button btnInr;
-
-  @UiField
-  Button btnIdr;
-
-  @UiField
-  Button btnJpy;
-
-  @UiField
-  Button btnThb;
+  FlowPanel itemPanel;
 
   /**
    * Quantity Panel (qtp)
@@ -181,8 +163,10 @@ public class PosView
     this.res = res;
     this.qtpItemUnitPrice = numBoxUnitPrice;
     this.qtpItemQuantity = numBoxQuantity;
+    this.itemTable = new CellTable<List<ItemProxy>>(4, res.tableResources());
     widget = binder.createAndBindUi(this);
     setupSpotRateTable();
+    setupItemTable();
     setupLineItemTable();
   }
 
@@ -216,76 +200,6 @@ public class PosView
   }
 
   @SuppressWarnings("unused")
-  @UiHandler("btnAud")
-  public void onAud(ClickEvent event) {
-    btnAud.setEnabled(false);
-    getUiHandlers().itemSelected("AUD");
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("btnGbp")
-  public void onGbp(ClickEvent event) {
-    btnGbp.setEnabled(false);
-    getUiHandlers().itemSelected("GBP");
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("btnMyr")
-  public void onMyr(ClickEvent event) {
-    btnMyr.setEnabled(false);
-    getUiHandlers().itemSelected("MYR");
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("btnSgd")
-  public void onSgd(ClickEvent event) {
-    btnSgd.setEnabled(false);
-    getUiHandlers().skipStep();
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("btnUsd")
-  public void onUsd(ClickEvent event) {
-    btnUsd.setEnabled(false);
-    getUiHandlers().itemSelected("USD");
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("btnEur")
-  public void onEur(ClickEvent event) {
-    btnEur.setEnabled(false);
-    getUiHandlers().itemSelected("EUR");
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("btnInr")
-  public void onInr(ClickEvent event) {
-    btnInr.setEnabled(false);
-    getUiHandlers().itemSelected("INR");
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("btnIdr")
-  public void onIdr(ClickEvent event) {
-    btnIdr.setEnabled(false);
-    getUiHandlers().itemSelected("IDR");
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("btnJpy")
-  public void onJpy(ClickEvent event) {
-    btnJpy.setEnabled(false);
-    getUiHandlers().itemSelected("JPY");
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("btnThb")
-  public void onThb(ClickEvent event) {
-    btnThb.setEnabled(false);
-    getUiHandlers().itemSelected("THB");
-  }
-
-  @SuppressWarnings("unused")
   @UiHandler("qtpOK")
   public void onConfirmAmount(ClickEvent event) {
     try {
@@ -303,22 +217,13 @@ public class PosView
   }
 
   @Override
-  public HasData<LineItemProxy> getLineItemTable() {
-    return lineItemTable;
+  public HasData<List<ItemProxy>> getItemTable() {
+    return itemTable;
   }
 
   @Override
-  public void resetAllItems() {
-    btnAud.setEnabled(true);
-    btnGbp.setEnabled(true);
-    btnMyr.setEnabled(true);
-    btnSgd.setEnabled(true);
-    btnUsd.setEnabled(true);
-    btnEur.setEnabled(true);
-    btnInr.setEnabled(true);
-    btnIdr.setEnabled(true);
-    btnJpy.setEnabled(true);
-    btnThb.setEnabled(true);
+  public HasData<LineItemProxy> getLineItemTable() {
+    return lineItemTable;
   }
 
   @Override
@@ -427,46 +332,69 @@ public class PosView
     };
     spotRateTable.addColumn(spotRateAskColumn, "Ask");
 
-//    spotRateTable.setPageSize(10);
-
     spotRatePager.setDisplay(spotRateTable);
   }
 
-  private void setupLineItemTable() {
-    /*Column<LineItemProxy, String> lineItemTxTypeColumn = new Column<LineItemProxy, String>(new TextCell()) {
+  private void setupItemTable() {
+    FieldUpdater<List<ItemProxy>, ItemProxy> itemMenuFieldUpdater = new FieldUpdater<List<ItemProxy>, ItemProxy>() {
       @Override
-      public String getValue(LineItemProxy lineItemProxy) {
-        String transactionType = "";
-        switch(lineItemProxy.getTransactionType()) {
-          case PURCHASE:
-            transactionType = "BUY";
-            break;
-          case SALE:
-            transactionType = "SELL";
-            break;
-          default:
-            throw new AssertionError("Uncatered transaction type: " + lineItemProxy.getTransactionType());
-        }
-        return transactionType;
+      public void update(int index, List<ItemProxy> object, ItemProxy value) {
+        getUiHandlers().itemSelected(value.getCode());
       }
     };
-    lineItemTable.addColumn(lineItemTxTypeColumn, "Type");*/
-    /*Column<LineItemProxy, ImageResource> lineItemProxyImageColumn =
-        new Column<LineItemProxy, ImageResource>(new ImageResourceCell()) {
+
+    Column<List<ItemProxy>, ItemProxy> item1stColumn =
+        new Column<List<ItemProxy>, ItemProxy>(new ItemMenuCell()) {
           @Override
-          public ImageResource getValue(LineItemProxy lineItemProxy) {
-            switch (lineItemProxy.getTransactionType()) {
-              case PURCHASE:
-                return res.iBuy();
-              case SALE:
-                return res.iSell();
-              default:
-                throw new AssertionError("Uncatered transaction type: " + lineItemProxy.getTransactionType());
-            }
+          public ItemProxy getValue(List<ItemProxy> list) {
+            return list.get(0);
           }
         };
-    lineItemTable.addColumn(lineItemProxyImageColumn, "");*/
+    item1stColumn.setFieldUpdater(itemMenuFieldUpdater);
+    itemTable.addColumn(item1stColumn);
 
+    Column<List<ItemProxy>, ItemProxy> item2ndColumn =
+        new Column<List<ItemProxy>, ItemProxy>(new ItemMenuCell()) {
+          @Override
+          public ItemProxy getValue(List<ItemProxy> list) {
+            return list.get(1);
+          }
+        };
+    item2ndColumn.setFieldUpdater(itemMenuFieldUpdater);
+    itemTable.addColumn(item2ndColumn);
+
+    Column<List<ItemProxy>, ItemProxy> item3rdColumn =
+        new Column<List<ItemProxy>, ItemProxy>(new ItemMenuCell()) {
+          @Override
+          public ItemProxy getValue(List<ItemProxy> list) {
+            return list.get(2);
+          }
+        };
+    item3rdColumn.setFieldUpdater(itemMenuFieldUpdater);
+    itemTable.addColumn(item3rdColumn);
+
+    Column<List<ItemProxy>, ItemProxy> item4thColumn =
+        new Column<List<ItemProxy>, ItemProxy>(new ItemMenuCell()) {
+          @Override
+          public ItemProxy getValue(List<ItemProxy> list) {
+            return list.get(3);
+          }
+        };
+    item4thColumn.setFieldUpdater(itemMenuFieldUpdater);
+    itemTable.addColumn(item4thColumn);
+
+    Column<List<ItemProxy>, ItemProxy> item5thColumn =
+        new Column<List<ItemProxy>, ItemProxy>(new ItemMenuCell()) {
+          @Override
+          public ItemProxy getValue(List<ItemProxy> list) {
+            return list.get(4);
+          }
+        };
+    item5thColumn.setFieldUpdater(itemMenuFieldUpdater);
+    itemTable.addColumn(item5thColumn);
+  }
+
+  private void setupLineItemTable() {
     Column<LineItemProxy, String> lineItemNameColumn = new Column<LineItemProxy, String>(new TextCell()) {
       @Override
       public String getValue(LineItemProxy lineItemProxy) {
@@ -509,7 +437,7 @@ public class PosView
           for (LineItemProxy lineItem : lineItems) {
             if (lineItem.getTransactionType().equals(TransactionType.SALE)) {
               totalPrice = totalPrice.add(lineItem.getSubTotal());
-            }  else {
+            } else {
               totalPrice = totalPrice.subtract(lineItem.getSubTotal());
             }
           }

@@ -3,7 +3,7 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:c="urn:import:com.google.gwt.user.cellview.client"
              xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui"
-    >
+             xmlns:u="urn:import:gwtupload.client">
 
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
   <ui:style>
@@ -24,6 +24,7 @@
         <g:FlowPanel>
           <g:Label text="Item Info" addStyleNames="{res.admin.formTitle}" />
           <m:ItemMenuImageUploader ui:field="itemImageUploader" autoSubmit="true" addStyleNames="{style.centered}" />
+          <!--<u:SingleUploader type="BUTTON" ui:field="itemImageUploader" autoSubmit="true" addStyleNames="{style.centered}" />-->
           <g:Grid ui:field="itemGrid">
             <g:row>
               <g:customCell>

@@ -22,8 +22,6 @@ public interface PosUiHandlers extends UiHandlers {
 
   void viewRates();
 
-  void skipStep();
-
   void itemSelected(String itemCode);
 
   void modifyItem(LineItemProxy lineItem);

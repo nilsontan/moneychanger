@@ -28,9 +28,11 @@ import com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter;
 import com.techstudio.erp.moneychanger.client.pos.view.MainPosView;
 import com.techstudio.erp.moneychanger.client.pos.view.PosView;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
+import com.techstudio.erp.moneychanger.client.ui.ItemMenuImageFileUpload;
 import com.techstudio.erp.moneychanger.client.util.MoneychangerTestData;
 import com.techstudio.erp.moneychanger.client.util.TestData;
 import com.techstudio.erp.moneychanger.shared.service.*;
+import gwtupload.client.IFileInput;
 
 /**
  * @author Nilson
@@ -48,7 +50,7 @@ public class MoneychangerModule extends AbstractPresenterModule {
     bind(TestData.class).to(MoneychangerTestData.class).in(Singleton.class);
 
     // Constants
-    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.TEST_PAGE);
+    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.POS_PAGE);
     bindConstant().annotatedWith(DefaultScaleForCosting.class).to(4);
     bindConstant().annotatedWith(DefaultScaleForMoney.class).to(2);
 
@@ -122,5 +124,10 @@ public class MoneychangerModule extends AbstractPresenterModule {
   @Provides
   UomRequest provideUomService(MoneychangerRequestFactory requestFactory) {
     return requestFactory.uomRequest();
+  }
+
+  @Provides
+  IFileInput provideFileUpload(ItemMenuImageFileUpload itemMenuImageFileUpload) {
+    return itemMenuImageFileUpload;
   }
 }

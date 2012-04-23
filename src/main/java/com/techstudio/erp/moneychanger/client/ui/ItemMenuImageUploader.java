@@ -1,6 +1,8 @@
 package com.techstudio.erp.moneychanger.client.ui;
 
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import gwtupload.client.IFileInput;
 import gwtupload.client.SingleUploader;
 
@@ -9,22 +11,36 @@ import gwtupload.client.SingleUploader;
  */
 public class ItemMenuImageUploader extends SingleUploader {
 
-  private ItemMenuImageInput itemMenuImageInput;
+  private ItemMenuImageFileUpload itemMenuImageFileUpload;
 
-  public ItemMenuImageUploader() {
+  Provider<IFileInput> provider;
+
+  @Inject
+  public ItemMenuImageUploader(Provider<IFileInput> iFileInputProvider) {
     super(IFileInput.FileInputType.BUTTON);
+    this.provider = iFileInputProvider;
+    itemMenuImageFileUpload = (ItemMenuImageFileUpload) provider.get();
+    setFileInput(itemMenuImageFileUpload);
   }
 
   @Override
   public void setFileInput(IFileInput input) {
+    if (provider == null) {
+      return;
+    }
+
     if (getFileInput() != null) {
       getFileInput().getWidget().removeFromParent();
     }
-    itemMenuImageInput = new ItemMenuImageInput();
-    super.setFileInput(itemMenuImageInput);
+    itemMenuImageFileUpload = (ItemMenuImageFileUpload) provider.get();
+    super.setFileInput(itemMenuImageFileUpload);
   }
 
-  public void setImage(Image image) {
-    itemMenuImageInput.getButton().setImage(image);
+  public void setImageUrl(String url) {
+    itemMenuImageFileUpload.getButton().setImageUrl(url);
+  }
+
+  public void setImageResource(ImageResource imageResource) {
+    itemMenuImageFileUpload.getButton().setResource(imageResource);
   }
 }
