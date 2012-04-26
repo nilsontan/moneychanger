@@ -44,11 +44,19 @@ public class NumberBox extends Composite {
     SetValue(e, value);
   }
 
+  public void focus() {
+    SetFocus(e);
+  }
+
   native String GetValue(JavaScriptObject elem) /*-{
     return elem.value;
   }-*/;
 
   native String SetValue(JavaScriptObject elem, String value) /*-{
     elem.value = value;
+  }-*/;
+
+  native String SetFocus(JavaScriptObject elem) /*-{
+    elem.focus();
   }-*/;
 }

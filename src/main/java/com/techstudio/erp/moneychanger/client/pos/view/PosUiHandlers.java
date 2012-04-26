@@ -14,13 +14,15 @@ import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
  * @author Nilson
  */
 public interface PosUiHandlers extends UiHandlers {
-  void returnToTransaction();
+  void switchView();
 
   void addToTransaction();
 
   void deleteTransaction();
 
-  void viewRates();
+  void saveTransaction();
+
+  void skipStep();
 
   void itemSelected(String itemCode);
 

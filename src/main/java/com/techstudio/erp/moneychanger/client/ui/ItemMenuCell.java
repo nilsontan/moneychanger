@@ -72,9 +72,9 @@ public class ItemMenuCell extends AbstractCell<ItemProxy> {
 
     String btnClass = resources.pos().curBtn();
     SafeUri itemImgUrl = item.getImageUrl().isEmpty() ?
-        resources.noImageAvailable().getSafeUri() :
-        UriUtils.fromTrustedString(item.getImageUrl());
-    SafeStyles imgStyle = SafeStylesUtils.fromTrustedString("width:72px;height:72px;vertical-align:middle;");
+        resources.iNoImageAvailable().getSafeUri() :
+        UriUtils.fromTrustedString(item.getImageUrl() + "=s72");
+    SafeStyles imgStyle = SafeStylesUtils.fromTrustedString("vertical-align:middle;");
     SafeHtml itemCode = SafeHtmlUtils.fromString(item.getCode());
 
     sb.append(TEMPLATES.cell(btnClass, itemImgUrl, imgStyle, itemCode));

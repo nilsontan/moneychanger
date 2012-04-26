@@ -10,46 +10,28 @@ package com.techstudio.erp.moneychanger.client.resources;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.resources.client.TextResource;
 import com.google.gwt.user.cellview.client.CellTable;
 
 /**
  * @author Nilson
  */
 public interface Resources extends ClientBundle {
-  @Source("category.txt")
-  TextResource categoryText();
-
-  @Source("currency.txt")
-  TextResource currencyText();
-
-  @Source("uom.txt")
-  TextResource uomText();
-
-  @Source("country.txt")
-  TextResource countryText();
-
-  @Source("item.txt")
-  TextResource itemText();
-
-  @Source("spotrate.txt")
-  TextResource spotRatesText();
-
   @Source("clean-admin.css")
   StyleAdmin admin();
 
-  @Source("loading.gif")
-  ImageResource loadingIcon();
+  @Source("images/loading.gif")
+  ImageResource iLoadingIcon();
 
-  @Source("logo.png")
-  ImageResource logo();
+  @Source("images/logo.png")
+  ImageResource iLogo();
 
   @Source("images/nia.png")
-  ImageResource noImageAvailable();
+  ImageResource iNoImageAvailable();
+
+  @Source("images/32/accept.png")
+  ImageResource iAccept();
 
   public interface StyleAdmin extends CssResource {
-
-    String centered();
 
     String mainTitle();
 
@@ -74,19 +56,19 @@ public interface Resources extends ClientBundle {
   @Source("clean-pos.css")
   StylePos pos();
 
-  @Source("logo_pos.png")
+  @Source("images/logo_pos.png")
   ImageResource iLogoPos();
 
-  @Source("images/32/note.png")
-  ImageResource iTxNew();
+  @Source("images/32/circulate.png")
+  ImageResource iTxViewRate();
 
-  @Source("images/32/note_add.png")
+  @Source("images/32/add.png")
   ImageResource iTxAdd();
 
-  @Source("images/32/note_delete.png")
+  @Source("images/32/delete.png")
   ImageResource iTxDel();
 
-  @Source("images/32/note_go.png")
+  @Source("images/32/accept.png")
   ImageResource iTxSav();
 
   @Source("images/16/money.png")

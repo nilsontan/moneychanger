@@ -19,32 +19,47 @@
       position: relative;
       top: 5px;
     }
+
+    .loweredImage {
+      position: relative;
+      top: 2px;
+    }
+
+    .topLeftBar {
+      height: 57px;
+      position: absolute;
+      width: 12px;
+      top: 0;
+      left: 0;
+    }
   </ui:style>
 
   <g:FlowPanel width="480px" addStyleNames="{style.centered}, {style.whiteBg}">
     <g:VerticalPanel width="100%">
       <g:HorizontalPanel spacing="10" addStyleNames="{res.pos.northBar}" width="100%">
+        <g:Button ui:field="txView" addStyleNames="{style.topLeftBar}" />
         <m:PosLogo ui:field="logo" />
-        <g:Image ui:field="txNew" resource="{res.iTxNew}" />
-        <g:Image ui:field="txAdd" resource="{res.iTxAdd}" />
-        <g:Image ui:field="txDel" resource="{res.iTxDel}" />
-        <g:Image ui:field="txSav" resource="{res.iTxSav}" />
+        <g:Image ui:field="txAdd" resource="{res.iTxAdd}" addStyleNames="{style.loweredImage}" />
+        <g:Image ui:field="txDel" resource="{res.iTxDel}" addStyleNames="{style.loweredImage}" />
+        <g:Image ui:field="txSav" resource="{res.iTxSav}" addStyleNames="{style.loweredImage}" />
       </g:HorizontalPanel>
-      <g:FlowPanel ui:field="spotRateDisplay">
-        <c:CellTable ui:field="spotRateTable" addStyleNames="{style.centered}" />
-        <c:SimplePager ui:field="spotRatePager" location="CENTER" addStyleNames="{style.centered}" />
+      <g:FlowPanel ui:field="spotRateDisplay" width="100%">
+        <g:VerticalPanel width="100%" spacing="20">
+          <c:CellTable ui:field="spotRateTable" addStyleNames="{style.centered}" />
+          <c:SimplePager ui:field="spotRatePager" location="CENTER" addStyleNames="{style.centered}" />
+        </g:VerticalPanel>
       </g:FlowPanel>
       <g:VerticalPanel ui:field="mainPanel" spacing="10" width="100%">
         <g:Label ui:field="currentStep" addStyleNames="{res.admin.formTitle}" />
         <g:FlowPanel width="100%">
           <g:FlowPanel ui:field="itemPanel" width="100%">
             <c:CellTable ui:field="itemTable" addStyleNames="{style.centered}" />
-            <c:SimplePager ui:field="itemPager" location="CENTER" addStyleNames="{style.centered}" />
+            <!--<c:SimplePager ui:field="itemPager" location="CENTER" addStyleNames="{style.centered}" />-->
           </g:FlowPanel>
           <g:DecoratorPanel ui:field="qtyPanel" addStyleNames="{style.centered}">
             <g:VerticalPanel>
               <g:HorizontalPanel width="100%" spacing="5" addStyleNames="{res.pos.btmBorder}">
-                <g:Image resource="{res.noImageAvailable}" />
+                <g:Image ui:field="qtpItemImage" />
                 <g:Grid>
                   <g:row>
                     <g:customCell>
@@ -87,9 +102,11 @@
               </g:HorizontalPanel>
             </g:VerticalPanel>
           </g:DecoratorPanel>
-          <g:DecoratorPanel ui:field="transactionPanel" addStyleNames="{style.centered}">
-            <c:CellTable ui:field="lineItemTable" />
-          </g:DecoratorPanel>
+          <g:VerticalPanel ui:field="transactionPanel" addStyleNames="{style.centered}">
+            <g:DecoratorPanel>
+              <c:CellTable ui:field="lineItemTable" />
+            </g:DecoratorPanel>
+          </g:VerticalPanel>
         </g:FlowPanel>
       </g:VerticalPanel>
     </g:VerticalPanel>

@@ -8,13 +8,8 @@
 package com.techstudio.erp.moneychanger.client.pos.view;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
-import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.TableCellElement;
-import com.google.gwt.dom.client.TableElement;
-import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -29,10 +24,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter.MyView;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
-import com.techstudio.erp.moneychanger.client.ui.ItemMenuCell;
-import com.techstudio.erp.moneychanger.client.ui.NumberBox;
-import com.techstudio.erp.moneychanger.client.ui.PosLogo;
-import com.techstudio.erp.moneychanger.client.ui.TxSubTotalCell;
+import com.techstudio.erp.moneychanger.client.ui.*;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
@@ -65,7 +57,7 @@ public class PosView
    */
 
   @UiField
-  Image txNew;
+  Button txView;
 
   @UiField
   Image txAdd;
@@ -106,8 +98,8 @@ public class PosView
   @UiField(provided = true)
   CellTable<List<ItemProxy>> itemTable = new CellTable<List<ItemProxy>>();
 
-  @UiField
-  SimplePager itemPager = new SimplePager();
+//  @UiField
+//  SimplePager itemPager = new SimplePager();
 
   @UiField
   FlowPanel itemPanel;
@@ -118,6 +110,9 @@ public class PosView
 
   @UiField
   DecoratorPanel qtyPanel;
+
+  @UiField
+  Image qtpItemImage;
 
   @UiField
   Label qtpItemCode;
@@ -148,7 +143,7 @@ public class PosView
    */
 
   @UiField
-  DecoratorPanel transactionPanel;
+  VerticalPanel transactionPanel;
 
   @UiField
   CellTable<LineItemProxy> lineItemTable = new CellTable<LineItemProxy>();
@@ -176,9 +171,9 @@ public class PosView
   }
 
   @SuppressWarnings("unused")
-  @UiHandler("txNew")
-  public void onTxNew(ClickEvent event) {
-    getUiHandlers().returnToTransaction();
+  @UiHandler("txView")
+  public void onTxView(ClickEvent event) {
+    getUiHandlers().switchView();
   }
 
   @SuppressWarnings("unused")
@@ -196,7 +191,7 @@ public class PosView
   @SuppressWarnings("unused")
   @UiHandler("txSav")
   public void onTxSav(ClickEvent event) {
-    getUiHandlers().viewRates();
+    getUiHandlers().saveTransaction();
   }
 
   @SuppressWarnings("unused")
@@ -240,16 +235,14 @@ public class PosView
   @Override
   public void showAmtPanel(boolean visible) {
     qtyPanel.setVisible(visible);
+    if(visible) {
+      qtpItemQuantity.focus();
+    }
   }
 
   @Override
   public void showRatePanel(boolean visible) {
     transactionPanel.setVisible(visible);
-  }
-
-  @Override
-  public void showTxNew(boolean visible) {
-    txNew.setVisible(visible);
   }
 
   @Override
@@ -270,6 +263,15 @@ public class PosView
   @Override
   public void setStep(String step) {
     currentStep.setText(step);
+  }
+
+  @Override
+  public void setItemImage(String imageUrl) {
+    if (imageUrl.isEmpty()) {
+      qtpItemImage.setResource(res.iNoImageAvailable());
+    } else {
+      qtpItemImage.setUrl(imageUrl + "=s100");
+    }
   }
 
   @Override
@@ -395,6 +397,18 @@ public class PosView
   }
 
   private void setupLineItemTable() {
+    Column<LineItemProxy, String> lineItemImageColumn = new Column<LineItemProxy, String>(new MyImageCell()) {
+      @Override
+      public String getValue(LineItemProxy lineItemProxy) {
+        String imgUrl = lineItemProxy.getItem().getImageUrl();
+        if (imgUrl.isEmpty()) {
+          return imgUrl;
+        }
+        return imgUrl + "=s32";
+      }
+    };
+    lineItemTable.addColumn(lineItemImageColumn, "");
+
     Column<LineItemProxy, String> lineItemNameColumn = new Column<LineItemProxy, String>(new TextCell()) {
       @Override
       public String getValue(LineItemProxy lineItemProxy) {

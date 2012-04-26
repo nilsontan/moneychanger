@@ -127,9 +127,10 @@ public class ItemView
     IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
       public void onFinish(IUploader uploader) {
         if (uploader.getStatus() == IUploadStatus.Status.SUCCESS) {
-          String url = uploader.getServletPath() + "?blob-key=" + uploader.getServerInfo().message;
+//          String url = uploader.getServletPath() + "?blob-key=" + uploader.getServerInfo().message;
 //          String url = uploader.fileUrl();
 //          new PreloadedImage(url, showImage);
+          String url = uploader.getServerInfo().message;
           getUiHandlers().setItemImageUrl(url);
         }
       }
@@ -261,7 +262,7 @@ public class ItemView
   @Override
   public void setItemImageUrl(String itemImageUrl) {
     if (itemImageUrl.isEmpty()) {
-      itemImageUploader.setImageResource(resources.noImageAvailable());
+      itemImageUploader.setImageResource(resources.iNoImageAvailable());
     } else {
       itemImageUploader.setImageUrl(itemImageUrl);
     }

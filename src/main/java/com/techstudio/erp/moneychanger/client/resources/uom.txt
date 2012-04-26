@@ -1,2 +1,0 @@
-UN,Unit
-EA,Each

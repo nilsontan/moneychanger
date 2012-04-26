@@ -13,6 +13,7 @@ NOK,Norwegian Krone,Norwegian Krone,MON,UN,100
 NZD,NZ Dollar,New Zealand Dollar,MON,UN,1
 PHP,Philippine Peso,Philippine Peso,MON,UN,100
 SAR,Saudi Riyal,Saudi Arabian Riyal,MON,UN,100
+SGD,Singapore Dollar,Singapore Dollar,MON,UN,1
 ZAR,South African Rand,South African Rand,MON,UN,100
 SEK,Swedish Krona,Swedish Krona,MON,UN,100
 CHF,Swiss Franc,Swiss Franc,MON,UN,1

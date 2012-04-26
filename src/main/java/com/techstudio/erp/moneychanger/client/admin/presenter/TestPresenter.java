@@ -19,6 +19,7 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.TestUiHandlers;
 import com.techstudio.erp.moneychanger.client.util.MoneychangerTestData;
+import com.techstudio.erp.moneychanger.client.util.TestData;
 
 /**
  * @author Nilson
@@ -51,7 +52,16 @@ public class TestPresenter
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
     this.testData = testData;
+    testData.addOnSuccessfulResetHandler(onSuccessfulReset);
   }
+
+  TestData.OnSuccessfulReset onSuccessfulReset = new TestData.OnSuccessfulReset() {
+    @Override
+    public void onSuccess(TestData testData) {
+      getView().showLoading(false);
+      getView().setStatus("Data Reset Complete.");
+    }
+  };
 
   @Override
   protected void revealInParent() {
@@ -71,9 +81,9 @@ public class TestPresenter
 
   @Override
   public void resetData() {
-//    getView().showLoading(true);
+    getView().showLoading(true);
+    getView().setStatus("Resetting ...");
     testData.resetAll();
-    getView().setStatus("Data Reset Complete.");
   }
 
 }

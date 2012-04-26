@@ -69,8 +69,6 @@ public class PosPresenter
 
     void showRatePanel(boolean visible);
 
-    void showTxNew(boolean visible);
-
     void showTxAdd(boolean visible);
 
     void showTxDel(boolean visible);
@@ -78,6 +76,8 @@ public class PosPresenter
     void showTxSav(boolean visible);
 
     void setStep(String step);
+
+    void setItemImage(String imageUrl);
 
     void setItemCode(String itemCode);
 
@@ -110,6 +110,8 @@ public class PosPresenter
 
   private BigDecimal itemRate;
   private BigDecimal itemQuantity;
+
+  private Screen screen;
 
   @Inject
   public PosPresenter(final EventBus eventBus,
@@ -147,9 +149,9 @@ public class PosPresenter
   }
 
   @Override
-  public void returnToTransaction() {
-    Log.debug("Returning to previous tx ...");
-    flipToTxView(true);
+  public void switchView() {
+    Log.debug("Switching views ...");
+    flipViews();
   }
 
   @Override
@@ -165,9 +167,22 @@ public class PosPresenter
   }
 
   @Override
-  public void viewRates() {
-    Log.debug("Viewing rates ...");
-    flipToTxView(false);
+  public void saveTransaction() {
+    Log.debug("Saving tx ...");
+    reset();
+  }
+
+  @Override
+  public void skipStep() {
+    Log.debug("Transacting with default currency ...");
+    switch (step) {
+      case BUY:
+        advanceToStep(Step.SELL);
+        break;
+      case SELL:
+        advanceToStep(Step.DETAILS);
+        break;
+    }
   }
 
   @Override
@@ -178,6 +193,11 @@ public class PosPresenter
       buyItemCode = itemCode;
 
     Log.debug("Selected item: " + itemCode);
+    if (itemCode.equals("SGD")) {
+      skipStep();
+      return;
+    }
+
     switch (step) {
       case BUY:
       case SELL:
@@ -257,8 +277,9 @@ public class PosPresenter
     pendingList = Lists.newArrayList();
     nextLine = 1;
     buyItemCode = "";
-    flipToTxView(true);
+    screen = Screen.TRX;
     advanceToStep(Step.BUY);
+    flipViews();
   }
 
   private void advanceToStep(Step nextStep) {
@@ -324,12 +345,22 @@ public class PosPresenter
     return proxy;
   }
 
-  private void flipToTxView(boolean showTxView) {
+  private void flipViews() {
+    boolean showTxView = true;
+    switch (screen) {
+      case RATES:
+        showTxView = false;
+        screen = Screen.TRX;
+        break;
+      case TRX:
+        showTxView = true;
+        screen = Screen.RATES;
+        break;
+    }
     getView().showTxPanel(showTxView);
-    getView().showTxNew(!showTxView);
-    getView().showTxAdd(showTxView);
-    getView().showTxDel(showTxView);
-    getView().showTxSav(showTxView);
+    getView().showTxAdd(showTxView && (!(step.amtEntering || step.itemSelecting)));
+    getView().showTxDel(showTxView && !lineItems.isEmpty());
+    getView().showTxSav(showTxView && (!(step.amtEntering || step.itemSelecting)));
   }
 
   private void updateView() {
@@ -337,6 +368,9 @@ public class PosPresenter
     getView().showItemPanel(step.itemSelecting);
     getView().showAmtPanel(step.amtEntering);
     getView().showRatePanel(!(step.amtEntering || step.itemSelecting));
+    getView().showTxAdd(!(step.amtEntering || step.itemSelecting));
+    getView().showTxDel(!lineItems.isEmpty());
+    getView().showTxSav(!(step.amtEntering || step.itemSelecting));
     getView().setStep(step.inst);
 
     if (pendingItem != null && step.equals(Step.DETAILS)) {
@@ -345,9 +379,12 @@ public class PosPresenter
       getView().setItemName(item.getName());
       getView().setItemUomRate(item.getUomRate().toString());
       getView().setItemUOM(item.getUom().getName());
+      getView().setItemImage(item.getImageUrl());
       getView().setTxType(pendingItem.getTransactionType().print());
       getView().setItemUnitPrice(pendingItem.getUnitPrice().toString());
       getView().setItemQuantity(pendingItem.getQuantity().toString());
+    } else {
+      getView().setItemImage("");
     }
   }
 
@@ -377,5 +414,10 @@ public class PosPresenter
     final boolean transacting;
     final boolean amtEntering;
     final boolean itemSelecting;
+  }
+
+  private enum Screen {
+    RATES,
+    TRX
   }
 }

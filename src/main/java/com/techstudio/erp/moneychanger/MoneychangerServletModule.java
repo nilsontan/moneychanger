@@ -12,9 +12,10 @@ import com.google.inject.servlet.ServletModule;
 import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 import com.gwtplatform.dispatch.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.shared.ActionImpl;
+import com.techstudio.erp.moneychanger.client.util.DataResetService;
+import com.techstudio.erp.moneychanger.server.gae.DataReset;
 import com.techstudio.erp.moneychanger.server.gae.MyUploadAction;
 import gwtupload.server.UploadServlet;
-import gwtupload.server.gae.FilesApiUploadAction;
 
 /**
  * Guice module used to bind guice-injected servlets and filters with their URL.
@@ -47,5 +48,9 @@ public class MoneychangerServletModule extends ServletModule {
     bind(MyUploadAction.class).in(Singleton.class);
     serve("*.gupld").with(MyUploadAction.class);
     serve("/upload").with(MyUploadAction.class);
+
+    bind(DataResetService.class).to(DataReset.class).in(Singleton.class);
+    bind(DataReset.class).in(Singleton.class);
+    serve("*resetService").with(DataReset.class);
   }
 }

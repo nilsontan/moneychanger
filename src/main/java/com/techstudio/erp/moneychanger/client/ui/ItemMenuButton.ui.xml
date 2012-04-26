@@ -51,8 +51,8 @@
     }
   </ui:style>
   <g:SimplePanel ui:field="pane" styleName="{style.button}">
-    <g:VerticalPanel width="72px" height="72px">
-      <g:Image ui:field="image" width="72px" styleName="{style.pane}" />
+    <g:VerticalPanel>
+      <g:Image ui:field="image" styleName="{style.pane}" />
       <g:Label ui:field="label" />
     </g:VerticalPanel>
   </g:SimplePanel>

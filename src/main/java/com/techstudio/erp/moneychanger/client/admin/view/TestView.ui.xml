@@ -12,7 +12,7 @@
       <g:VerticalPanel>
         <g:DecoratorPanel ui:field="loadingMessage" addStyleNames="{res.pos.centered}">
           <g:FlowPanel>
-            <g:Image resource="{res.loadingIcon}" />
+            <g:Image resource="{res.iLoadingIcon}" />
           </g:FlowPanel>
         </g:DecoratorPanel>
         <g:DecoratorPanel>

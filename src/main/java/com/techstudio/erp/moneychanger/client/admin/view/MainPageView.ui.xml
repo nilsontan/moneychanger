@@ -17,7 +17,7 @@
           </g:DecoratorPanel>
         </g:HTMLPanel>
         <g:HorizontalPanel spacing="5">
-          <g:Image resource="{res.logo}" />
+          <g:Image resource="{res.iLogo}" />
           <g:HTMLPanel>
             <g:Label text="Moneychanger" addStyleNames="{res.admin.mainTitle}" />
             <g:Label text="A Web-based POS" addStyleNames="{res.admin.mainSubtitle}" />
