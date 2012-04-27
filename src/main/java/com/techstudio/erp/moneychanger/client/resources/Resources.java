@@ -10,6 +10,7 @@ package com.techstudio.erp.moneychanger.client.resources;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.user.cellview.client.CellTable;
 
 /**
@@ -77,7 +78,15 @@ public interface Resources extends ClientBundle {
   @Source("images/16/hand_point_270.png")
   ImageResource iItemSelect();
 
+  @Source("images/background-light.png")
+  @ImageOptions(repeatStyle = ImageResource.RepeatStyle.Both)
+  ImageResource mainBg();
+
   public interface StylePos extends CssResource {
+    String mainBg();
+
+    String subBg();
+
     String centered();
 
     String northBar();
@@ -86,7 +95,7 @@ public interface Resources extends ClientBundle {
 
     String formParam();
 
-    String curBtn();
+    String menuItemBtn();
 
     String btmBorder();
   }

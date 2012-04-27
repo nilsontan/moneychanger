@@ -34,9 +34,9 @@
     }
   </ui:style>
 
-  <g:FlowPanel width="480px" addStyleNames="{style.centered}, {style.whiteBg}">
+  <g:FlowPanel addStyleNames="{style.centered}, {res.pos.mainBg}">
     <g:VerticalPanel width="100%">
-      <g:HorizontalPanel spacing="10" addStyleNames="{res.pos.northBar}" width="100%">
+      <g:HorizontalPanel spacing="10" addStyleNames="{res.pos.northBar}, {res.pos.subBg}" width="100%">
         <g:Button ui:field="txView" addStyleNames="{style.topLeftBar}" />
         <m:PosLogo ui:field="logo" />
         <g:Image ui:field="txAdd" resource="{res.iTxAdd}" addStyleNames="{style.loweredImage}" />
@@ -56,7 +56,7 @@
             <c:CellTable ui:field="itemTable" addStyleNames="{style.centered}" />
             <!--<c:SimplePager ui:field="itemPager" location="CENTER" addStyleNames="{style.centered}" />-->
           </g:FlowPanel>
-          <g:DecoratorPanel ui:field="qtyPanel" addStyleNames="{style.centered}">
+          <g:DecoratorPanel ui:field="qtyPanel" addStyleNames="{style.centered}, {res.pos.subBg}">
             <g:VerticalPanel>
               <g:HorizontalPanel width="100%" spacing="5" addStyleNames="{res.pos.btmBorder}">
                 <g:Image ui:field="qtpItemImage" />
@@ -102,7 +102,7 @@
               </g:HorizontalPanel>
             </g:VerticalPanel>
           </g:DecoratorPanel>
-          <g:VerticalPanel ui:field="transactionPanel" addStyleNames="{style.centered}">
+          <g:VerticalPanel ui:field="transactionPanel" addStyleNames="{style.centered}, {res.pos.subBg}">
             <g:DecoratorPanel>
               <c:CellTable ui:field="lineItemTable" />
             </g:DecoratorPanel>

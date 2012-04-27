@@ -51,7 +51,6 @@ public class ItemMenuButton extends Composite
 
   public void setImageUrl(String imgUrl) {
     image.setUrl(imgUrl);
-    image.setSize("72px", "72px");
   }
 
   @Override

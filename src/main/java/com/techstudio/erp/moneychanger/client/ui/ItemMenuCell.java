@@ -26,7 +26,7 @@ import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 public class ItemMenuCell extends AbstractCell<ItemProxy> {
 
   interface Template extends SafeHtmlTemplates {
-    @Template("<button type=\"button\" class=\"gwt-Button {0}\">" +
+    @Template("<button type=\"button\" class=\"{0}\">" +
         "<img src=\"{1}\" style=\"{2}\" border=\"0\" class=\"gwt-Image\">" +
         "<span>{3}</span></button>")
     SafeHtml cell(String buttonStyle, SafeUri itemImgUrl, SafeStyles imgStyle, SafeHtml itemCode);
@@ -34,7 +34,9 @@ public class ItemMenuCell extends AbstractCell<ItemProxy> {
 
   private static final Template TEMPLATES = GWT.create(Template.class);
 
-  private static final Resources resources = GWT.create(Resources.class);
+  private static final Resources RESOURCES = GWT.create(Resources.class);
+
+  private static final String BUTTON_STYLE = RESOURCES.pos().menuItemBtn();
 
   /**
    * Construct a new ItemMenuCell.
@@ -70,13 +72,12 @@ public class ItemMenuCell extends AbstractCell<ItemProxy> {
       return;
     }
 
-    String btnClass = resources.pos().curBtn();
     SafeUri itemImgUrl = item.getImageUrl().isEmpty() ?
-        resources.iNoImageAvailable().getSafeUri() :
+        RESOURCES.iNoImageAvailable().getSafeUri() :
         UriUtils.fromTrustedString(item.getImageUrl() + "=s72");
     SafeStyles imgStyle = SafeStylesUtils.fromTrustedString("vertical-align:middle;");
     SafeHtml itemCode = SafeHtmlUtils.fromString(item.getCode());
 
-    sb.append(TEMPLATES.cell(btnClass, itemImgUrl, imgStyle, itemCode));
+    sb.append(TEMPLATES.cell(BUTTON_STYLE, itemImgUrl, imgStyle, itemCode));
   }
 }

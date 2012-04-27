@@ -65,7 +65,6 @@
 
   .cellTableSortableHeader {
     cursor: pointer;
-    cursor: hand;
   }
 
   .cellTableSortableHeader:hover {
@@ -81,53 +80,41 @@
   }
 
   .cellTableEvenRow {
-    background: #ffffff;
   }
 
   .cellTableEvenRowCell {
-    border: selectionBorderWidth solid #ffffff;
   }
 
   .cellTableOddRow {
-    background: #f3f7fb;
   }
 
   .cellTableOddRowCell {
-    border: selectionBorderWidth solid #f3f7fb;
   }
 
   .cellTableHoveredRow {
-    background: #eee;
   }
 
   .cellTableHoveredRowCell {
-    border: selectionBorderWidth solid #eee;
   }
 
   .cellTableKeyboardSelectedRow {
-    background: #ffc;
   }
 
   .cellTableKeyboardSelectedRowCell {
-    border: selectionBorderWidth solid #ffc;
   }
 
   .cellTableSelectedRow {
-    background: #628cd5;
-    color: white;
     height: auto;
     overflow: auto;
   }
 
   .cellTableSelectedRowCell {
-    border: selectionBorderWidth solid #628cd5;
   }
 
     /**
     * The keyboard selected cell is visible over selection.
     */
   .cellTableKeyboardSelectedCell {
-    border: selectionBorderWidth solid #d7dde8;
   }
 
   .cellTableLoading {

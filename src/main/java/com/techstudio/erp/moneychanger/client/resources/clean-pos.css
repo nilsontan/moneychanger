@@ -1,3 +1,23 @@
+@sprite .mainBg {
+  gwt-image: "mainBg";
+}
+
+  /*
+  @sprite .subBg {
+    gwt-image: "subBg";
+    background-color: #F8F8F8!important;
+  }*/
+
+.subBg {
+  background-color: #FFF;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFF), color-stop(100%, #EEE));
+  background-image: -webkit-linear-gradient(top, #FFF, #EEE);
+  background-image: -moz-linear-gradient(top, #FFF, #EEE);
+  background-image: -ms-linear-gradient(top, #FFF, #EEE);
+  background-image: -o-linear-gradient(top, #FFF, #EEE);
+  background-image: linear-gradient(top, #FFF, #EEE);
+}
+
 .centered {
   display: block;
   position: absolute;
@@ -12,7 +32,7 @@
   height: 57px;
 }
 
-/* Form styling */
+  /* Form styling */
 .formTitle {
   color: #4B4A4A;
   text-align: center;
@@ -24,14 +44,53 @@
   font-weight: bold;
 }
 
-.curBtn {
-  background: whitesmoke;
+.menuItemBtn {
   color: #4B4A4A;
   font-size: 12px;
   text-align: center;
   font-weight: bold;
+  text-decoration: none;
   text-shadow: #DDF 1px 1px 0;
-  padding: 1px;
+  margin: 0;
+  padding: 2px;
+  cursor: pointer;
+  border: 1px solid #BBB;
+  border-bottom: 1px solid #A0A0A0;
+  border-right: 1px solid #A0A0A0;
+  width: 90px;
+
+  background-color: #FFF;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFF), color-stop(100%, #EEE));
+  background-image: -webkit-linear-gradient(top, #FFF, #EEE);
+  background-image: -moz-linear-gradient(top, #FFF, #EEE);
+  background-image: -ms-linear-gradient(top, #FFF, #EEE);
+  background-image: -o-linear-gradient(top, #FFF, #EEE);
+  background-image: linear-gradient(top, #FFF, #EEE);
+}
+
+.menuItemBtn:active {
+  border: 1px inset #ccc;
+}
+
+.menuItemBtn:hover {
+  border-color: #939393;
+
+  background-color: #FFF;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFF), color-stop(100%, #DDD));
+  background-image: -webkit-linear-gradient(top, #FFF, #DDD);
+  background-image: -moz-linear-gradient(top, #FFF, #DDD);
+  background-image: -ms-linear-gradient(top, #FFF, #DDD);
+  background-image: -o-linear-gradient(top, #FFF, #DDD);
+  background-image: linear-gradient(top, #FFF, #DDD);
+}
+
+.menuItemBtn[disabled] {
+  cursor: default;
+  color: #888;
+}
+
+.menuItemBtn[disabled]:hover {
+  border: 1px outset #ccc;
 }
 
 .btmBorder {
