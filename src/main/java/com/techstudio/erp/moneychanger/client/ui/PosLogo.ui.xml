@@ -3,14 +3,22 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+  <ui:style>
+    .logo {
+      padding-bottom: 4px;
+    }
 
-  <g:AbsolutePanel width="160px" height="35px">
+    .loweredLabel {
+      padding-top: 5px;
+    }
+  </ui:style>
+
+  <g:SimplePanel width="170px" height="37px" addStyleNames="{style.logo}">
     <g:HorizontalPanel spacing="5">
       <g:Image resource="{res.iLogoPos}" />
       <g:HTMLPanel>
-        <div style="height:5px" />
-        <g:Label text="Moneychanger" addStyleNames="{res.pos.formTitle}" />
+        <g:Label text="Moneychanger" addStyleNames="{res.pos.formTitle}, {style.loweredLabel}" />
       </g:HTMLPanel>
     </g:HorizontalPanel>
-  </g:AbsolutePanel>
+  </g:SimplePanel>
 </ui:UiBinder> 

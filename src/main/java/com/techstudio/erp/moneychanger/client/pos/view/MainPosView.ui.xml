@@ -1,16 +1,29 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui">
 
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
   <ui:style>
-    .blackBg {
-      background-color: black;
+    .centered {
+      margin: 0 auto;
+    }
+
+    .homeBtn {
+      width: 40px;
+      height: 37px;
+      border-top: none;
+      border-bottom: 1px solid #3378A5;
+      padding: 4px 5px 1px;
+      display: inline-block;
     }
   </ui:style>
-  <g:DockLayoutPanel unit="PX">
-    <g:north size="0">
-      <g:HTMLPanel>
+
+  <g:DockLayoutPanel unit="PX" addStyleNames="{style.centered}, {res.pos.mainBg}">
+    <g:north size="43">
+      <g:HTMLPanel addStyleNames="{res.pos.northBar}, {res.pos.subBg}" width="100%">
+        <m:ItemMenuButton ui:field="homeBtn" resource="{res.iHome}" addStyleNames="{style.homeBtn}" />
+        <m:PosLogo ui:field="logo" />
         <g:DecoratorPanel ui:field="loadingMessage" addStyleNames="{res.pos.centered}">
           <g:FlowPanel>
             <g:Label text="Loading..." addStyleNames="{res.pos.formTitle}" />
@@ -19,7 +32,7 @@
       </g:HTMLPanel>
     </g:north>
     <g:center>
-      <g:LayoutPanel height="100%" ui:field="mainContentContainer" addStyleNames="{style.blackBg}" />
+      <g:LayoutPanel height="100%" ui:field="mainContentContainer" />
     </g:center>
     <!--<g:east size="396">
       <g:FlowPanel addStyleNames="{res.pos.eastBar}">

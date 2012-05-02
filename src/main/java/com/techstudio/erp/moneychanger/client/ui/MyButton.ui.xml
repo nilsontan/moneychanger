@@ -3,19 +3,26 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui">
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
   <ui:style>
-    .center {
+    .btnStyle {
       margin: 0 auto;
     }
 
-    .centerSpan {
-      text-align: center;
+    .btnText {
+      vertical-align: middle;
+      text-align: left;
     }
   </ui:style>
 
   <g:SimplePanel ui:field="pane" styleName="{res.pos.button}">
-    <g:VerticalPanel styleName="{style.center}">
-      <g:Image ui:field="image" />
-      <g:Label ui:field="label" addStyleNames="{style.centerSpan}" />
-    </g:VerticalPanel>
+    <g:Grid width="100%" styleName="{style.btnStyle}">
+      <g:row>
+        <g:customCell>
+          <g:Image ui:field="image" />
+        </g:customCell>
+        <g:customCell>
+          <g:Label ui:field="label" addStyleNames="{style.btnText}" />
+        </g:customCell>
+      </g:row>
+    </g:Grid>
   </g:SimplePanel>
 </ui:UiBinder> 

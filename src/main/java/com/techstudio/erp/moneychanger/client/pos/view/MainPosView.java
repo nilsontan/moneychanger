@@ -7,8 +7,10 @@
 
 package com.techstudio.erp.moneychanger.client.pos.view;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -17,6 +19,8 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.techstudio.erp.moneychanger.client.pos.presenter.MainPosPresenter;
 import com.techstudio.erp.moneychanger.client.pos.presenter.MainPosPresenter.MyView;
+import com.techstudio.erp.moneychanger.client.ui.ItemMenuButton;
+import com.techstudio.erp.moneychanger.client.ui.PosLogo;
 
 /**
  * This is the top-level view of the POS application. Every time another presenter
@@ -32,6 +36,12 @@ public class MainPosView extends ViewImpl implements MyView {
 
   private final DockLayoutPanel widget;
 
+  @UiField(provided = true)
+  PosLogo logo;
+
+  @UiField(provided = true)
+  ItemMenuButton homeBtn;
+
   @UiField
   DecoratorPanel loadingMessage;
 
@@ -39,7 +49,11 @@ public class MainPosView extends ViewImpl implements MyView {
   LayoutPanel mainContentContainer;
 
   @Inject
-  public MainPosView(final Binder binder) {
+  public MainPosView(final Binder binder,
+                     final ItemMenuButton homeButton,
+                     final PosLogo logo) {
+    this.logo = logo;
+    this.homeBtn = homeButton;
     widget = binder.createAndBindUi(this);
   }
 
@@ -57,6 +71,12 @@ public class MainPosView extends ViewImpl implements MyView {
     } else {
       super.setInSlot(slot, content);
     }
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("homeBtn")
+  public void onTxView(ClickEvent event) {
+//    getUiHandlers().switchView();
   }
 
   private void setTopBarContent(Widget topBarContent) {

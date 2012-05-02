@@ -60,13 +60,16 @@ public interface Resources extends ClientBundle {
   @Source("images/logo_pos.png")
   ImageResource iLogoPos();
 
+  @Source("images/32/house.png")
+  ImageResource iHome();
+
   @Source("images/32/circulate.png")
   ImageResource iTxViewRate();
 
   @Source("images/32/add.png")
   ImageResource iTxAdd();
 
-  @Source("images/32/delete.png")
+  @Source("images/32/cancel.png")
   ImageResource iTxDel();
 
   @Source("images/32/accept.png")
@@ -87,6 +90,8 @@ public interface Resources extends ClientBundle {
 
     String subBg();
 
+    String step();
+
     String centered();
 
     String northBar();
@@ -94,6 +99,8 @@ public interface Resources extends ClientBundle {
     String formTitle();
 
     String formParam();
+
+    String button();
 
     String menuItemBtn();
 

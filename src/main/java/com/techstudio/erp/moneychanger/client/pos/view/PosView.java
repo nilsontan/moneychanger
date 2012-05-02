@@ -10,6 +10,7 @@ package com.techstudio.erp.moneychanger.client.pos.view;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -49,24 +50,18 @@ public class PosView
   @UiField(provided = true)
   final Resources res;
 
-  @UiField(provided = true)
-  PosLogo logo;
-
   /**
    * Top Menu Panel
    */
 
-  @UiField
-  Button txView;
+  @UiField(provided = true)
+  MyButton txAdd;
 
-  @UiField
-  Image txAdd;
+  @UiField(provided = true)
+  MyButton txDel;
 
-  @UiField
-  Image txDel;
-
-  @UiField
-  Image txSav;
+  @UiField(provided = true)
+  MyButton txSav;
 
   /**
    * Main Panel
@@ -151,11 +146,15 @@ public class PosView
   @Inject
   public PosView(final Binder binder,
                  final Resources res,
+                 final MyButton addBtn,
+                 final MyButton savBtn,
+                 final MyButton delBtn,
                  final NumberBox numBoxUnitPrice,
-                 final NumberBox numBoxQuantity,
-                 final PosLogo logo) {
-    this.logo = logo;
+                 final NumberBox numBoxQuantity) {
     this.res = res;
+    this.txAdd = addBtn;
+    this.txSav = savBtn;
+    this.txDel = delBtn;
     this.qtpItemUnitPrice = numBoxUnitPrice;
     this.qtpItemQuantity = numBoxQuantity;
     this.itemTable = new CellTable<List<ItemProxy>>(4, res.tableResources());
@@ -168,12 +167,6 @@ public class PosView
   @Override
   public Widget asWidget() {
     return widget;
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("txView")
-  public void onTxView(ClickEvent event) {
-    getUiHandlers().switchView();
   }
 
   @SuppressWarnings("unused")
@@ -235,7 +228,7 @@ public class PosView
   @Override
   public void showAmtPanel(boolean visible) {
     qtyPanel.setVisible(visible);
-    if(visible) {
+    if (visible) {
       qtpItemQuantity.focus();
     }
   }
@@ -394,6 +387,13 @@ public class PosView
         };
     item5thColumn.setFieldUpdater(itemMenuFieldUpdater);
     itemTable.addColumn(item5thColumn);
+
+    itemTable.setWidth("100%", true);
+    itemTable.setColumnWidth(item1stColumn, 20.0, Style.Unit.PCT);
+    itemTable.setColumnWidth(item2ndColumn, 20.0, Style.Unit.PCT);
+    itemTable.setColumnWidth(item3rdColumn, 20.0, Style.Unit.PCT);
+    itemTable.setColumnWidth(item4thColumn, 20.0, Style.Unit.PCT);
+    itemTable.setColumnWidth(item5thColumn, 20.0, Style.Unit.PCT);
   }
 
   private void setupLineItemTable() {
