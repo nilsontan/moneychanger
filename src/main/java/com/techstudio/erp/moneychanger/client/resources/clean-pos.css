@@ -1,23 +1,3 @@
-@sprite .mainBg {
-  gwt-image: "mainBg";
-}
-
-  /*
-  @sprite .subBg {
-    gwt-image: "subBg";
-    background-color: #F8F8F8!important;
-  }*/
-
-.subBg {
-  background-color: #FFF;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFF), color-stop(100%, #EEE));
-  background-image: -webkit-linear-gradient(top, #FFF, #EEE);
-  background-image: -moz-linear-gradient(top, #FFF, #EEE);
-  background-image: -ms-linear-gradient(top, #FFF, #EEE);
-  background-image: -o-linear-gradient(top, #FFF, #EEE);
-  background-image: linear-gradient(top, #FFF, #EEE);
-}
-
 .centered {
   display: block;
   position: absolute;
@@ -26,22 +6,7 @@
   width: 350px;
 }
 
-.northBar {
-  border-bottom: 1px solid #3378A5;
-}
-
-.northBar div {
-  display: inline-block;
-}
-
   /* Form styling */
-.step {
-  color: #F8FCFF;
-  text-align: center;
-  font-weight: bold;
-  text-shadow: none;
-}
-
 .formTitle {
   color: #4B4A4A;
   text-align: center;
@@ -49,61 +14,10 @@
   text-shadow: #DDF 1px 1px 0;
 }
 
-.formParam {
+.step {
+  color: #3E3E3E;
   font-weight: bold;
-}
-
-.menuItemBtn {
-  padding: 0;
-  width: 100%;
-  min-width: 72px;
-}
-
-.button {
-  color: #4B4A4A;
   text-align: center;
-  text-decoration: none;
-  font-weight: bold;
-  margin: 0;
-  cursor: pointer;
-  border: 1px solid #BBB;
-  border-bottom: 1px solid #A0A0A0;
-  border-right: 1px solid #A0A0A0;
-
-  background-color: #FFF;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFF), color-stop(100%, #EEE));
-  background-image: -webkit-linear-gradient(top, #FFF, #EEE);
-  background-image: -moz-linear-gradient(top, #FFF, #EEE);
-  background-image: -ms-linear-gradient(top, #FFF, #EEE);
-  background-image: -o-linear-gradient(top, #FFF, #EEE);
-  background-image: linear-gradient(top, #FFF, #EEE);
-}
-
-.button:active {
-  border: 1px inset #ccc;
-}
-
-.button:hover {
-  border-color: #939393;
-
-  background-color: #FFF;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFF), color-stop(100%, #DDD));
-  background-image: -webkit-linear-gradient(top, #FFF, #DDD);
-  background-image: -moz-linear-gradient(top, #FFF, #DDD);
-  background-image: -ms-linear-gradient(top, #FFF, #DDD);
-  background-image: -o-linear-gradient(top, #FFF, #DDD);
-  background-image: linear-gradient(top, #FFF, #DDD);
-}
-
-.button[disabled] {
-  cursor: default;
-  color: #888;
-}
-
-.button[disabled]:hover {
-  border: 1px outset #ccc;
-}
-
-.btmBorder {
-  border-bottom: 1px solid #C3C3C3;
+  text-shadow: 0 1px 0 white;
+  text-transform: uppercase;
 }

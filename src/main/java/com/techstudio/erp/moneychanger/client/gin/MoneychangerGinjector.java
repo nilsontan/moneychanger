@@ -10,6 +10,7 @@ package com.techstudio.erp.moneychanger.client.gin;
 import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
+import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.client.gin.DispatchAsyncModule;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
@@ -52,7 +53,7 @@ public interface MoneychangerGinjector extends Ginjector {
 
   AsyncProvider<TestPresenter> getTestPresenter();
 
-  AsyncProvider<MainPosPresenter> getMainPosPresenter();
+  Provider<MainPosPresenter> getMainPosPresenter();
 
   AsyncProvider<PosPresenter> getPosPresenter();
 

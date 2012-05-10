@@ -6,11 +6,8 @@
 
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
   <ui:style>
-    .topTopLayer {
-      /*background-color: #084A5E;*/
-      background-color: #053454;
-      height: 36px;
-      border-bottom: #3378A5;
+    .stepPosition {
+      padding-top: 0.7em;
     }
 
     .noBg {
@@ -21,12 +18,6 @@
       margin: 0 auto;
     }
 
-    .loweredButton {
-      height: 100%;
-      position: relative;
-      top: 5px;
-    }
-
     .txButtons {
       width: 7.5em;
       margin: 0 auto;
@@ -35,83 +26,69 @@
       -moz-border-radius: 8px;
       border-radius: 8px;
     }
+
+    .starContainer {
+      position: relative;
+    }
   </ui:style>
 
-  <g:FlowPanel>
-    <g:VerticalPanel width="100%">
-      <g:FlowPanel addStyleNames="{style.topTopLayer}">
-        <g:FlowPanel ui:field="spotRateDisplay" width="100%">
-          <g:VerticalPanel width="100%" spacing="20">
-            <c:CellTable ui:field="spotRateTable" addStyleNames="{style.centered}" />
-            <c:SimplePager ui:field="spotRatePager" location="CENTER" addStyleNames="{style.centered}" />
-          </g:VerticalPanel>
-        </g:FlowPanel>
-        <g:VerticalPanel ui:field="mainPanel" spacing="10" width="100%">
-          <g:Label ui:field="currentStep" addStyleNames="{res.pos.step}" />
-          <g:FlowPanel width="100%">
-            <g:FlowPanel ui:field="itemPanel" width="100%">
-              <c:CellTable ui:field="itemTable" addStyleNames="{style.centered}" />
-              <!--<c:SimplePager ui:field="itemPager" location="CENTER" addStyleNames="{style.centered}" />-->
-            </g:FlowPanel>
-            <g:DecoratorPanel ui:field="qtyPanel" addStyleNames="{style.centered}, {res.pos.subBg}">
-              <g:VerticalPanel>
-                <g:HorizontalPanel width="100%" spacing="5" addStyleNames="{res.pos.btmBorder}">
-                  <g:Image ui:field="qtpItemImage" />
-                  <g:Grid>
-                    <g:row>
-                      <g:customCell>
-                        <g:Label ui:field="qtpItemCode" />
-                      </g:customCell>
-                      <g:customCell>
-                        <g:Label ui:field="qtpItemName" />
-                      </g:customCell>
-                    </g:row>
-                    <g:row>
-                      <g:customCell>
-                        <g:Label ui:field="qtpItemUom" />
-                      </g:customCell>
-                      <g:customCell>
-                        <g:Label ui:field="qtpItemUomRate" />
-                      </g:customCell>
-                    </g:row>
-                  </g:Grid>
-                </g:HorizontalPanel>
-                <g:HorizontalPanel spacing="5">
-                  <g:Grid>
-                    <g:row>
-                      <g:customCell>
-                        <g:Label text="Rate" addStyleNames="{res.pos.formParam}" />
-                      </g:customCell>
-                      <g:customCell>
-                        <m:NumberBox ui:field="qtpItemUnitPrice" />
-                      </g:customCell>
-                    </g:row>
-                    <g:row>
-                      <g:customCell>
-                        <g:Label ui:field="qtpTxType" addStyleNames="{res.pos.formParam}" />
-                      </g:customCell>
-                      <g:customCell>
-                        <m:NumberBox ui:field="qtpItemQuantity" />
-                      </g:customCell>
-                    </g:row>
-                  </g:Grid>
-                  <g:Button ui:field="qtpOK" text="Confirm" addStyleNames="{style.loweredButton}" />
-                </g:HorizontalPanel>
-              </g:VerticalPanel>
-            </g:DecoratorPanel>
-            <g:VerticalPanel ui:field="transactionPanel" addStyleNames="{style.centered}">
-              <g:DecoratorPanel addStyleNames="{res.pos.subBg}">
-                <c:CellTable ui:field="lineItemTable" />
-              </g:DecoratorPanel>
-              <g:HorizontalPanel spacing="10" width="100%" addStyleNames="{style.noBg}">
-                <m:MyButton ui:field="txAdd" text="Add" resource="{res.iTxAdd}" addStyleNames="{style.txButtons}" />
-                <m:MyButton ui:field="txSav" text="OK" resource="{res.iTxSav}" addStyleNames="{style.txButtons}" />
-                <m:MyButton ui:field="txDel" text="Cancel" resource="{res.iTxDel}" addStyleNames="{style.txButtons}" />
-              </g:HorizontalPanel>
-            </g:VerticalPanel>
-          </g:FlowPanel>
+  <g:HTMLPanel>
+    <div style="border-width:1px 0; height:3em;" class="bar">
+      <g:Label ui:field="currentStep" addStyleNames="{res.pos.step}, {style.stepPosition}" />
+    </div>
+    <div class="content bodyBg">
+      <g:FlowPanel ui:field="spotRateDisplay" width="100%">
+        <g:VerticalPanel width="100%" spacing="20">
+          <c:CellTable ui:field="spotRateTable" addStyleNames="{style.centered}" />
+          <c:SimplePager ui:field="spotRatePager" location="CENTER" addStyleNames="{style.centered}" />
         </g:VerticalPanel>
       </g:FlowPanel>
-    </g:VerticalPanel>
-  </g:FlowPanel>
-</ui:UiBinder> 
+      <g:HTMLPanel ui:field="mainPanel" width="100%">
+        <g:HTMLPanel ui:field="itemPanel" addStyleNames="itemListing">
+          <m:OrderedList ui:field="itemMenu" width="100%" />
+        </g:HTMLPanel>
+        <g:HTMLPanel ui:field="qtyPanel" addStyleNames="{style.centered}">
+          <g:VerticalPanel>
+            <g:HorizontalPanel width="100%" spacing="5">
+              <g:Image ui:field="qtpItemImage" />
+              <g:Grid>
+                <g:row>
+                  <g:customCell>
+                    <g:Label ui:field="qtpItemCode" />
+                  </g:customCell>
+                  <g:customCell>
+                    <g:Label ui:field="qtpItemName" />
+                  </g:customCell>
+                </g:row>
+                <g:row>
+                  <g:customCell>
+                    <g:Label ui:field="qtpItemUom" />
+                  </g:customCell>
+                  <g:customCell>
+                    <g:Label ui:field="qtpItemUomRate" />
+                  </g:customCell>
+                </g:row>
+              </g:Grid>
+            </g:HorizontalPanel>
+            <m:LabelNumberBox ui:field="qtpItemUnitPrice" text="Rate" />
+            <m:LabelNumberBox ui:field="qtpItemQuantity" text="Amount" />
+            <g:HTMLPanel addStyleNames="{style.starContainer}">
+              <span style="position:absolute; top:28%; left:6%;" class="icon-set icon-star"> </span>
+              <g:Button ui:field="qtpOK" text="Confirm" />
+            </g:HTMLPanel>
+          </g:VerticalPanel>
+        </g:HTMLPanel>
+        <g:HTMLPanel ui:field="transactionPanel" addStyleNames="{style.centered}">
+          <g:DecoratorPanel>
+            <c:CellTable ui:field="lineItemTable" />
+          </g:DecoratorPanel>
+          <g:HorizontalPanel spacing="10" width="100%" addStyleNames="{style.noBg}">
+            <m:MyButton ui:field="txAdd" text="Add" resource="{res.iTxAdd}" addStyleNames="{style.txButtons}" />
+            <m:MyButton ui:field="txSav" text="OK" resource="{res.iTxSav}" addStyleNames="{style.txButtons}" />
+            <m:MyButton ui:field="txDel" text="Cancel" resource="{res.iTxDel}" addStyleNames="{style.txButtons}" />
+          </g:HorizontalPanel>
+        </g:HTMLPanel>
+      </g:HTMLPanel>
+    </div>
+  </g:HTMLPanel>
+</ui:UiBinder>

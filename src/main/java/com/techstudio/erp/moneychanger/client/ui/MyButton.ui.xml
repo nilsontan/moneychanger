@@ -13,7 +13,7 @@
     }
   </ui:style>
 
-  <g:SimplePanel ui:field="pane" styleName="{res.pos.button}">
+  <g:SimplePanel ui:field="pane" styleName="gwt-Button">
     <g:Grid width="100%" styleName="{style.btnStyle}">
       <g:row>
         <g:customCell>

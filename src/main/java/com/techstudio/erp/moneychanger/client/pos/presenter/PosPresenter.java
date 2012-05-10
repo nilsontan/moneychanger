@@ -25,6 +25,7 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.pos.view.PosUiHandlers;
 import com.techstudio.erp.moneychanger.client.ui.LineItemDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.ListItem;
 import com.techstudio.erp.moneychanger.client.ui.MenuItemDataProvider;
 import com.techstudio.erp.moneychanger.client.ui.SpotRateDataProvider;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
@@ -57,7 +58,7 @@ public class PosPresenter
   public interface MyView extends View, HasUiHandlers<PosUiHandlers> {
     HasData<SpotRateProxy> getSpotRateTable();
 
-    HasData<List<ItemProxy>> getItemTable();
+//    HasData<List<ItemProxy>> getItemTable();
 
     HasData<LineItemProxy> getLineItemTable();
 
@@ -77,6 +78,8 @@ public class PosPresenter
 
     void setStep(String step);
 
+    void addItemMenu(ItemProxy item);
+
     void setItemImage(String imageUrl);
 
     void setItemCode(String itemCode);
@@ -86,8 +89,6 @@ public class PosPresenter
     void setItemUomRate(String itemRate);
 
     void setItemUOM(String itemUOM);
-
-    void setTxType(String itemTx);
 
     void setItemUnitPrice(String unitPrice);
 
@@ -102,6 +103,7 @@ public class PosPresenter
 
   private Step step;
   private LineItemProxy pendingItem;
+  private List<ItemProxy> menuItems;
   private List<LineItemProxy> lineItems;
   private List<LineItemProxy> pendingList;
   private int nextLine;
@@ -129,9 +131,20 @@ public class PosPresenter
     this.spotRateDataProvider = spotRateDataProvider;
     this.spotRateDataProvider.addDataDisplay(getView().getSpotRateTable());
     this.menuItemDataProvider = menuItemDataProvider;
-    this.menuItemDataProvider.addDataDisplay(getView().getItemTable());
+//    this.menuItemDataProvider.addDataDisplay(getView().getItemTable());
     this.lineItemDataProvider = lineItemDataProvider;
     this.lineItemDataProvider.addDataDisplay(getView().getLineItemTable());
+
+    this.itemRequestProvider.get()
+        .fetchAll()
+        .fire(new Receiver<List<ItemProxy>>() {
+          @Override
+          public void onSuccess(List<ItemProxy> responses) {
+            for (ItemProxy itemProxy : responses) {
+              getView().addItemMenu(itemProxy);
+            }
+          }
+        });
   }
 
   @Override
@@ -380,7 +393,6 @@ public class PosPresenter
       getView().setItemUomRate(item.getUomRate().toString());
       getView().setItemUOM(item.getUom().getName());
       getView().setItemImage(item.getImageUrl());
-      getView().setTxType(pendingItem.getTransactionType().print());
       getView().setItemUnitPrice(pendingItem.getUnitPrice().toString());
       getView().setItemQuantity(pendingItem.getQuantity().toString());
     } else {

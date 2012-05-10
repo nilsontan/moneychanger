@@ -23,15 +23,15 @@ import java.util.List;
  */
 public class MenuItemDataProvider extends AsyncDataProvider<List<ItemProxy>> {
 
-  private final Provider<ItemRequest> lineItemRequestProvider;
+  private final Provider<ItemRequest> itemRequestProvider;
 
   @Inject
-  public MenuItemDataProvider(Provider<ItemRequest> lineItemRequestProvider) {
-    this.lineItemRequestProvider = lineItemRequestProvider;
+  public MenuItemDataProvider(Provider<ItemRequest> itemRequestProvider) {
+    this.itemRequestProvider = itemRequestProvider;
   }
 
   public void updateTableData() {
-    lineItemRequestProvider.get()
+    itemRequestProvider.get()
         .fetchAll()
         .fire(new Receiver<List<ItemProxy>>() {
           @Override

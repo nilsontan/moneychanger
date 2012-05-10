@@ -15,10 +15,8 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.ContentSlot;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.annotations.ProxyEvent;
-import com.gwtplatform.mvp.client.proxy.LockInteractionEvent;
-import com.gwtplatform.mvp.client.proxy.Proxy;
-import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
-import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
+import com.gwtplatform.mvp.client.annotations.ProxyStandard;
+import com.gwtplatform.mvp.client.proxy.*;
 
 /**
  * This is the top-level presenter of the hierarchy. Other presenters reveal
@@ -35,7 +33,7 @@ public class MainPosPresenter extends
   /**
    * {@link MainPosPresenter}'s proxy.
    */
-  @ProxyCodeSplit
+  @ProxyStandard
   public interface MyProxy extends Proxy<MainPosPresenter> {
   }
 
@@ -50,8 +48,6 @@ public class MainPosPresenter extends
    * Use this in leaf presenters, inside their {@link #revealInParent} method.
    */
   @ContentSlot
-  public static final Type<RevealContentHandler<?>> TYPE_SetTopContent = new Type<RevealContentHandler<?>>();
-  @ContentSlot
   public static final Type<RevealContentHandler<?>> TYPE_SetMainContent = new Type<RevealContentHandler<?>>();
 
   @Inject
@@ -61,7 +57,7 @@ public class MainPosPresenter extends
 
   @Override
   protected void revealInParent() {
-    RevealRootLayoutContentEvent.fire(this, this);
+    RevealRootContentEvent.fire(this, this);
   }
 
   /**

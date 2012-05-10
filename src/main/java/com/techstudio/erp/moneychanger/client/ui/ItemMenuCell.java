@@ -36,7 +36,7 @@ public class ItemMenuCell extends AbstractCell<ItemProxy> {
 
   private static final Resources RESOURCES = GWT.create(Resources.class);
 
-  private static final String BUTTON_STYLE = RESOURCES.pos().button() + " " + RESOURCES.pos().menuItemBtn();
+  private static final String BUTTON_STYLE = "";
 
   /**
    * Construct a new ItemMenuCell.
@@ -74,7 +74,7 @@ public class ItemMenuCell extends AbstractCell<ItemProxy> {
 
     SafeUri itemImgUrl = item.getImageUrl().isEmpty() ?
         RESOURCES.iNoImageAvailable().getSafeUri() :
-        UriUtils.fromTrustedString(item.getImageUrl() + "=s72");
+        UriUtils.fromTrustedString(item.getImageUrl());
     SafeStyles imgStyle = SafeStylesUtils.fromTrustedString("display:block;margin:0 auto;");
     SafeHtml itemCode = SafeHtmlUtils.fromString(item.getCode());
 

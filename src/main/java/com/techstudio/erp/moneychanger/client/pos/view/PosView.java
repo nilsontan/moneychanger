@@ -10,8 +10,10 @@ package com.techstudio.erp.moneychanger.client.pos.view;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -68,7 +70,7 @@ public class PosView
    */
 
   @UiField
-  VerticalPanel mainPanel;
+  HTMLPanel mainPanel;
 
   @UiField
   Label currentStep;
@@ -90,21 +92,18 @@ public class PosView
    * Item Panel (itp)
    */
 
-  @UiField(provided = true)
-  CellTable<List<ItemProxy>> itemTable = new CellTable<List<ItemProxy>>();
-
-//  @UiField
-//  SimplePager itemPager = new SimplePager();
+  @UiField
+  HTMLPanel itemPanel;
 
   @UiField
-  FlowPanel itemPanel;
+  OrderedList itemMenu;
 
   /**
    * Quantity Panel (qtp)
    */
 
   @UiField
-  DecoratorPanel qtyPanel;
+  HTMLPanel qtyPanel;
 
   @UiField
   Image qtpItemImage;
@@ -122,13 +121,10 @@ public class PosView
   Label qtpItemUom;
 
   @UiField
-  Label qtpTxType;
+  LabelNumberBox qtpItemUnitPrice;
 
-  @UiField(provided = true)
-  NumberBox qtpItemUnitPrice;
-
-  @UiField(provided = true)
-  NumberBox qtpItemQuantity;
+  @UiField
+  LabelNumberBox qtpItemQuantity;
 
   @UiField
   Button qtpOK;
@@ -138,7 +134,7 @@ public class PosView
    */
 
   @UiField
-  VerticalPanel transactionPanel;
+  HTMLPanel transactionPanel;
 
   @UiField
   CellTable<LineItemProxy> lineItemTable = new CellTable<LineItemProxy>();
@@ -148,20 +144,15 @@ public class PosView
                  final Resources res,
                  final MyButton addBtn,
                  final MyButton savBtn,
-                 final MyButton delBtn,
-                 final NumberBox numBoxUnitPrice,
-                 final NumberBox numBoxQuantity) {
+                 final MyButton delBtn) {
     this.res = res;
     this.txAdd = addBtn;
     this.txSav = savBtn;
     this.txDel = delBtn;
-    this.qtpItemUnitPrice = numBoxUnitPrice;
-    this.qtpItemQuantity = numBoxQuantity;
-    this.itemTable = new CellTable<List<ItemProxy>>(4, res.tableResources());
     widget = binder.createAndBindUi(this);
     setupSpotRateTable();
-    setupItemTable();
     setupLineItemTable();
+    qtpItemQuantity.setAutoFocus();
   }
 
   @Override
@@ -205,11 +196,6 @@ public class PosView
   }
 
   @Override
-  public HasData<List<ItemProxy>> getItemTable() {
-    return itemTable;
-  }
-
-  @Override
   public HasData<LineItemProxy> getLineItemTable() {
     return lineItemTable;
   }
@@ -228,9 +214,6 @@ public class PosView
   @Override
   public void showAmtPanel(boolean visible) {
     qtyPanel.setVisible(visible);
-    if (visible) {
-      qtpItemQuantity.focus();
-    }
   }
 
   @Override
@@ -256,6 +239,21 @@ public class PosView
   @Override
   public void setStep(String step) {
     currentStep.setText(step);
+  }
+
+  @Override
+  public void addItemMenu(final ItemProxy item) {
+    ListItem listItem = new ListItem();
+    final ItemMenuButton itemMenuButton = new ItemMenuButton(item);
+    itemMenuButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        getUiHandlers().itemSelected(item.getCode());
+        itemMenuButton.saddStyleName("disabled");
+      }
+    });
+    listItem.add(itemMenuButton);
+    itemMenu.add(listItem);
   }
 
   @Override
@@ -285,11 +283,6 @@ public class PosView
   @Override
   public void setItemUOM(String itemUom) {
     qtpItemUom.setText(itemUom);
-  }
-
-  @Override
-  public void setTxType(String txType) {
-    this.qtpTxType.setText(txType);
   }
 
   @Override
@@ -328,72 +321,6 @@ public class PosView
     spotRateTable.addColumn(spotRateAskColumn, "Ask");
 
     spotRatePager.setDisplay(spotRateTable);
-  }
-
-  private void setupItemTable() {
-    FieldUpdater<List<ItemProxy>, ItemProxy> itemMenuFieldUpdater = new FieldUpdater<List<ItemProxy>, ItemProxy>() {
-      @Override
-      public void update(int index, List<ItemProxy> object, ItemProxy value) {
-        getUiHandlers().itemSelected(value.getCode());
-      }
-    };
-
-    Column<List<ItemProxy>, ItemProxy> item1stColumn =
-        new Column<List<ItemProxy>, ItemProxy>(new ItemMenuCell()) {
-          @Override
-          public ItemProxy getValue(List<ItemProxy> list) {
-            return list.get(0);
-          }
-        };
-    item1stColumn.setFieldUpdater(itemMenuFieldUpdater);
-    itemTable.addColumn(item1stColumn);
-
-    Column<List<ItemProxy>, ItemProxy> item2ndColumn =
-        new Column<List<ItemProxy>, ItemProxy>(new ItemMenuCell()) {
-          @Override
-          public ItemProxy getValue(List<ItemProxy> list) {
-            return list.get(1);
-          }
-        };
-    item2ndColumn.setFieldUpdater(itemMenuFieldUpdater);
-    itemTable.addColumn(item2ndColumn);
-
-    Column<List<ItemProxy>, ItemProxy> item3rdColumn =
-        new Column<List<ItemProxy>, ItemProxy>(new ItemMenuCell()) {
-          @Override
-          public ItemProxy getValue(List<ItemProxy> list) {
-            return list.get(2);
-          }
-        };
-    item3rdColumn.setFieldUpdater(itemMenuFieldUpdater);
-    itemTable.addColumn(item3rdColumn);
-
-    Column<List<ItemProxy>, ItemProxy> item4thColumn =
-        new Column<List<ItemProxy>, ItemProxy>(new ItemMenuCell()) {
-          @Override
-          public ItemProxy getValue(List<ItemProxy> list) {
-            return list.get(3);
-          }
-        };
-    item4thColumn.setFieldUpdater(itemMenuFieldUpdater);
-    itemTable.addColumn(item4thColumn);
-
-    Column<List<ItemProxy>, ItemProxy> item5thColumn =
-        new Column<List<ItemProxy>, ItemProxy>(new ItemMenuCell()) {
-          @Override
-          public ItemProxy getValue(List<ItemProxy> list) {
-            return list.get(4);
-          }
-        };
-    item5thColumn.setFieldUpdater(itemMenuFieldUpdater);
-    itemTable.addColumn(item5thColumn);
-
-    itemTable.setWidth("100%", true);
-    itemTable.setColumnWidth(item1stColumn, 20.0, Style.Unit.PCT);
-    itemTable.setColumnWidth(item2ndColumn, 20.0, Style.Unit.PCT);
-    itemTable.setColumnWidth(item3rdColumn, 20.0, Style.Unit.PCT);
-    itemTable.setColumnWidth(item4thColumn, 20.0, Style.Unit.PCT);
-    itemTable.setColumnWidth(item5thColumn, 20.0, Style.Unit.PCT);
   }
 
   private void setupLineItemTable() {

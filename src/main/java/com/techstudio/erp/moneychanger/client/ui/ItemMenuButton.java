@@ -7,6 +7,7 @@
 
 package com.techstudio.erp.moneychanger.client.ui;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -15,7 +16,8 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
-import com.google.inject.Inject;
+import com.techstudio.erp.moneychanger.client.resources.Resources;
+import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 
 /**
  * @author Nilson
@@ -31,8 +33,12 @@ public class ItemMenuButton extends Composite
   public interface Binder extends UiBinder<Widget, ItemMenuButton> {
   }
 
+  private static Binder binder = GWT.create(Binder.class);
+
+  private final Resources resources = GWT.create(Resources.class);
+
   @UiField
-  SimplePanel pane;
+  HTMLPanel pane;
 
   @UiField
   Label label;
@@ -40,9 +46,19 @@ public class ItemMenuButton extends Composite
   @UiField
   Image image;
 
-  @Inject
-  public ItemMenuButton(final Binder binder) {
+
+  public ItemMenuButton() {
     initWidget(binder.createAndBindUi(this));
+  }
+
+  public ItemMenuButton(ItemProxy itemProxy) {
+    this();
+    if (itemProxy.getImageUrl().isEmpty()) {
+      setResource(resources.iNoImageAvailable());
+    } else {
+      setImageUrl(itemProxy.getImageUrl());
+    }
+    setText(itemProxy.getCode());
   }
 
   public void setResource(ImageResource imageResource) {
