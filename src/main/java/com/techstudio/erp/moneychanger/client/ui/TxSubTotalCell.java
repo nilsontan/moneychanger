@@ -37,7 +37,7 @@ public class TxSubTotalCell extends AbstractCell<LineItemProxy> {
   }
 
   private String getHtmlLink(LineItemProxy value) {
-    String color = value.getTransactionType().equals(TransactionType.SALE) ? "green" : "brown";
+    String color = "green";
     return Joiner.on("").join(PART1, color, PART2, value.getSubTotal(), PART3);
   }
 }

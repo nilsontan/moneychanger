@@ -23,9 +23,11 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
+import com.techstudio.erp.moneychanger.client.gin.DefaultCurrency;
+import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForItemQty;
+import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForRate;
 import com.techstudio.erp.moneychanger.client.pos.view.PosUiHandlers;
 import com.techstudio.erp.moneychanger.client.ui.LineItemDataProvider;
-import com.techstudio.erp.moneychanger.client.ui.ListItem;
 import com.techstudio.erp.moneychanger.client.ui.MenuItemDataProvider;
 import com.techstudio.erp.moneychanger.client.ui.SpotRateDataProvider;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
@@ -58,8 +60,6 @@ public class PosPresenter
   public interface MyView extends View, HasUiHandlers<PosUiHandlers> {
     HasData<SpotRateProxy> getSpotRateTable();
 
-//    HasData<List<ItemProxy>> getItemTable();
-
     HasData<LineItemProxy> getLineItemTable();
 
     void showTxPanel(boolean visible);
@@ -76,23 +76,61 @@ public class PosPresenter
 
     void showTxSav(boolean visible);
 
+    void resetSelections();
+
     void setStep(String step);
 
     void addItemMenu(ItemProxy item);
+    
+    void setDetailsTitle(String title);
 
-    void setItemImage(String imageUrl);
+    void setItemImageL(String imageUrl);
 
-    void setItemCode(String itemCode);
+    void setItemImageR(String imageUrl);
 
-    void setItemName(String itemName);
+    void setItemBuyCode(String itemCode);
 
-    void setItemUomRate(String itemRate);
+    void setItemSellCode(String itemCode);
 
-    void setItemUOM(String itemUOM);
+    void setItemBuyUomRate(String itemRate);
 
-    void setItemUnitPrice(String unitPrice);
+    void setItemSellUomRate(String itemRate);
 
-    void setItemQuantity(String amount);
+    void setItemBuyUom(String itemUOM);
+
+    void setItemSellUom(String itemUOM);
+
+    void setR1(String unitPrice);
+
+    void setR2(String unitPrice);
+
+    void setR3(String unitPrice);
+    void setR4(String unitPrice);
+    void setR5(String unitPrice);
+    void setR6(String unitPrice);
+
+    void setItemBuyQuantity(String amount);
+
+    void setItemSellQuantity(String amount);
+
+    void setR1Text(String r1);
+
+    void setR2Text(String r2);
+
+    void setR3Text(String r3);
+
+    void setR4Text(String r4);
+
+    void setR5Text(String r5);
+
+    void setR6Text(String r6);
+
+    void showRate1(boolean visible);
+    void showRate2(boolean visible);
+    void showRate3(boolean visible);
+    void showRate4(boolean visible);
+    void showRate5(boolean visible);
+    void showRate6(boolean visible);
   }
 
   private final Provider<ItemRequest> itemRequestProvider;
@@ -102,15 +140,29 @@ public class PosPresenter
   private final LineItemDataProvider lineItemDataProvider;
 
   private Step step;
-  private LineItemProxy pendingItem;
   private List<ItemProxy> menuItems;
   private List<LineItemProxy> lineItems;
-  private List<LineItemProxy> pendingList;
+  private LineItemProxy pendingLineItem;
   private int nextLine;
 
   private String buyItemCode;
 
-  private BigDecimal itemRate;
+  @Inject
+  @DefaultCurrency
+  private String dftCurrCode;
+
+  @Inject
+  @DefaultScaleForRate
+  private int rateScale;
+
+  @Inject
+  @DefaultScaleForItemQty
+  private int qtyScale;
+
+  private BigDecimal buyRate;
+  private BigDecimal sellRate;
+  private BigDecimal intRate;
+  private BigDecimal dealRate;
   private BigDecimal itemQuantity;
 
   private Screen screen;
@@ -170,7 +222,7 @@ public class PosPresenter
   @Override
   public void addToTransaction() {
     Log.debug("Adding to tx ...");
-    advanceToStep(Step.BUY);
+    shiftToStep(Step.BUY);
   }
 
   @Override
@@ -190,49 +242,61 @@ public class PosPresenter
     Log.debug("Transacting with default currency ...");
     switch (step) {
       case BUY:
-        advanceToStep(Step.SELL);
+        shiftToStep(Step.SELL);
         break;
       case SELL:
-        advanceToStep(Step.DETAILS);
+        shiftToStep(Step.DETAILS);
         break;
     }
   }
 
   @Override
-  public void itemSelected(final String itemCode) {
-    if (itemCode.equals(buyItemCode))
-      return;
-    else
-      buyItemCode = itemCode;
-
-    Log.debug("Selected item: " + itemCode);
-    if (itemCode.equals("SGD")) {
-      skipStep();
-      return;
+  public int itemSelected(final String itemCode) {
+    if (itemCode.equals(buyItemCode)) {
+      buyItemCode = "";
+      shiftToStep(Step.BUY);
+      return 0;
     }
 
+    Log.debug("Selected item: " + itemCode);
     switch (step) {
       case BUY:
+        buyItemCode = itemCode;
+        shiftToStep(Step.SELL);
+        break;
       case SELL:
         itemRequestProvider.get()
-            .fetchByProperty("code", itemCode)
+            .fetchByProperty("code", buyItemCode)
             .with(ItemProxy.UOM)
             .fire(new Receiver<List<ItemProxy>>() {
               @Override
-              public void onSuccess(List<ItemProxy> response) {
-                assert response.size() > 0 : "No item found for the following code " + itemCode;
-                setItemAndMove(response.get(0));
+              public void onSuccess(final List<ItemProxy> buyItem) {
+                assert buyItem.size() > 0 : "No item found for the following code " + buyItemCode;
+                itemRequestProvider.get()
+                    .fetchByProperty("code", itemCode)
+                    .with(ItemProxy.UOM)
+                    .fire(new Receiver<List<ItemProxy>>() {
+                      @Override
+                      public void onSuccess(List<ItemProxy> sellItem) {
+                        assert sellItem.size() > 0 : "No item found for the following code " + itemCode;
+                        buyItemCode = "";
+                        pendingLineItem = createLineItem(buyItem.get(0), sellItem.get(0));
+                        recalculateRates();
+                        shiftToStep(Step.DETAILS);
+                      }
+                    });
               }
             });
         break;
       default:
         Log.error("An item is being selected at the incorrect step.");
     }
+    return 1;
   }
 
   @Override
   public void modifyItem(LineItemProxy lineItem) {
-    pendingList.add(lineItem);
+    /*pendingList.add(lineItem);
     int line = lineItem.getLine();
 
     for (LineItemProxy lineItemProxy : lineItems) {
@@ -248,66 +312,149 @@ public class PosPresenter
       }
     }
 
-    advanceToStep(Step.DETAILS);
+    shiftToStep(Step.DETAILS);*/
   }
 
   @Override
-  public void confirmItemRate(String itemRate) {
-    this.itemRate = returnAmount(itemRate);
+  public void changeItemBuyQuantity(String itemQuantity) {
+    pendingLineItem.setBuyQuantity(returnAmount(itemQuantity).setScale(qtyScale));
+    recalculateSellQuantity();
+    updateItemDetailsRateView();
   }
 
   @Override
-  public void confirmItemQuantity(String itemQuantity) {
-    this.itemQuantity = returnAmount(itemQuantity);
+  public void changeItemSellQuantity(String itemQuantity) {
+    pendingLineItem.setSellQuantity(returnAmount(itemQuantity).setScale(qtyScale));
+    recalculateBuyQuantity();
+    updateItemDetailsRateView();
+  }
+
+  @Override
+  public void changeIntRate(String itemRate) {
+    BigDecimal newIntRate = returnAmount(itemRate);
+    if (newIntRate.compareTo(BigDecimal.ZERO) > 0) {
+      pendingLineItem.setSellUnitPrice(
+          pendingLineItem.getBuyUnitPrice().divide(newIntRate, rateScale, RoundingMode.HALF_UP));
+      recalculateRates();
+      recalculateSellQuantity();
+    }
+    updateItemDetailsRateView();
+  }
+
+  @Override
+  public void changeInvIntRate(String itemRate) {
+    BigDecimal newInvIntRate = inverse(returnAmount(itemRate));
+    if (newInvIntRate.compareTo(BigDecimal.ZERO) > 0) {
+      pendingLineItem.setSellUnitPrice(
+          pendingLineItem.getBuyUnitPrice().divide(newInvIntRate, rateScale, RoundingMode.HALF_UP));
+      recalculateRates();
+      recalculateSellQuantity();
+    }
+    updateItemDetailsRateView();
+  }
+
+  @Override
+  public void changeBuyRate(String itemRate) {
+    BigDecimal newBuyRate = returnAmount(itemRate).setScale(rateScale);
+    if (newBuyRate.compareTo(BigDecimal.ZERO) > 0) {
+      pendingLineItem.setBuyUnitPrice(newBuyRate);
+      recalculateRates();
+      recalculateSellQuantity();
+    }
+    updateItemDetailsRateView();
+  }
+
+  @Override
+  public void changeInvBuyRate(String itemRate) {
+    BigDecimal newBuyRate = inverse(returnAmount(itemRate));
+    if (newBuyRate.compareTo(BigDecimal.ZERO) > 0) {
+      pendingLineItem.setBuyUnitPrice(newBuyRate);
+      recalculateRates();
+      recalculateSellQuantity();
+    }
+    updateItemDetailsRateView();
+  }
+
+  @Override
+  public void changeSellRate(String itemRate) {
+    BigDecimal newSellRate = returnAmount(itemRate).setScale(rateScale);
+    if (newSellRate.compareTo(BigDecimal.ZERO) > 0) {
+      pendingLineItem.setSellUnitPrice(newSellRate);
+      recalculateRates();
+      switch (pendingLineItem.getTransactionType()) {
+        case SELL :
+          recalculateBuyQuantity();
+          break;
+        default:
+          recalculateSellQuantity();
+      }
+    }
+    updateItemDetailsRateView();
+  }
+
+  @Override
+  public void changeInvSellRate(String itemRate) {
+    BigDecimal newSellRate = inverse(returnAmount(itemRate));
+    if (newSellRate.compareTo(BigDecimal.ZERO) > 0) {
+      pendingLineItem.setSellUnitPrice(newSellRate);
+      recalculateRates();
+      switch (pendingLineItem.getTransactionType()) {
+        case SELL :
+          recalculateBuyQuantity();
+          break;
+        default:
+          recalculateSellQuantity();
+      }
+    }
+    updateItemDetailsRateView();
   }
 
   @Override
   public void confirmChanges() {
-    pendingItem.setUnitPrice(itemRate);
-    pendingItem.setQuantity(itemQuantity);
-    BigDecimal itemUomRate = new BigDecimal(pendingItem.getItem().getUomRate());
-    BigDecimal subTotal = pendingItem.getUnitPrice()
-        .multiply(pendingItem.getQuantity(), MathContext.UNLIMITED)
+    /*pendingItem.setBuyUnitPrice(itemBuyRate);
+    pendingItem.setBuyQuantity(itemQuantity);
+    BigDecimal itemUomRate = new BigDecimal(pendingItem.getItemBuy().getUomRate());
+    BigDecimal subTotal = pendingItem.getBuyUnitPrice()
+        .multiply(pendingItem.getBuyQuantity(), MathContext.UNLIMITED)
         .divide(itemUomRate);
     pendingItem.setSubTotal(subTotal);
 
     if (!pendingList.isEmpty()) {
       pendingItem = pendingList.remove(0);
-      itemUomRate = new BigDecimal(pendingItem.getItem().getUomRate());
+      itemUomRate = new BigDecimal(pendingItem.getItemBuy().getUomRate());
       BigDecimal sellQuantity = subTotal
           .multiply(itemUomRate, MathContext.UNLIMITED)
-          .divide(pendingItem.getUnitPrice(), 4, RoundingMode.HALF_UP);
-      pendingItem.setQuantity(sellQuantity);
+          .divide(pendingItem.getBuyUnitPrice(), 4, RoundingMode.HALF_UP);
+      pendingItem.setBuyQuantity(sellQuantity);
       pendingItem.setSubTotal(subTotal);
     }
 
-    advanceToStep(Step.CONFIRM);
+    shiftToStep(Step.CONFIRM);*/
   }
 
   private void reset() {
-    pendingItem = null;
     lineItems = Lists.newArrayList();
-    pendingList = Lists.newArrayList();
+    pendingLineItem = null;
     nextLine = 1;
     buyItemCode = "";
     screen = Screen.TRX;
-    advanceToStep(Step.BUY);
+    shiftToStep(Step.BUY);
     flipViews();
   }
 
-  private void advanceToStep(Step nextStep) {
+  private void shiftToStep(Step nextStep) {
     switch (nextStep) {
       case BUY:
         step = Step.BUY;
         buyItemCode = "";
+        getView().resetSelections();
         break;
       case SELL:
         step = Step.SELL;
         break;
       case DETAILS:
         step = Step.DETAILS;
-        assert !pendingList.isEmpty() : "Entered into Step.DETAILS with an empty pending list";
-        pendingItem = pendingList.remove(0);
+        assert pendingLineItem != null : "Entered into Step.DETAILS with an empty pending line item";
         break;
       case CONFIRM:
         step = Step.CONFIRM;
@@ -324,36 +471,29 @@ public class PosPresenter
     return new BigDecimal(filterOutNonDigitsAndDot);
   }
 
-  private void setItemAndMove(ItemProxy itemProxy) {
-    switch (step) {
-      case BUY:
-        LineItemProxy proxy = createLineItem(itemProxy, TransactionType.PURCHASE);
-        pendingList.add(proxy);
-        lineItems.add(proxy);
-        advanceToStep(Step.SELL);
-        break;
-      case SELL:
-        proxy = createLineItem(itemProxy, TransactionType.SALE);
-        pendingList.add(proxy);
-        lineItems.add(proxy);
-        advanceToStep(Step.DETAILS);
-        break;
-      default:
-    }
-  }
-
-  private LineItemProxy createLineItem(ItemProxy itemProxy, TransactionType transactionType) {
-    boolean isSelling = transactionType.equals(TransactionType.SALE);
-
+  private LineItemProxy createLineItem(ItemProxy itemToBuy, ItemProxy itemToSell) {
     LineItemRequest request = lineItemRequestProvider.get();
     LineItemProxy proxy = request.create(LineItemProxy.class);
-    proxy.setTransactionType(transactionType);
-    proxy.setItem(itemProxy);
-    SpotRateProxy spotRateProxy = spotRateDataProvider.getSpotRateForCode(itemProxy.getCode());
-    proxy.setUnitPrice(isSelling ? spotRateProxy.getBidRate() : spotRateProxy.getAskRate());
-    proxy.setQuantity(BigDecimal.ONE);
-    proxy.setLine(nextLine);
-    if (isSelling) nextLine++;
+
+    if (itemToBuy.getCode().equals(dftCurrCode)) {
+      proxy.setTransactionType(TransactionType.SELL);
+    } else if (itemToSell.getCode().equals(dftCurrCode)) {
+      proxy.setTransactionType(TransactionType.BUY);
+    } else {
+      proxy.setTransactionType(TransactionType.BUYSELL);
+    }
+
+    proxy.setItemBuy(itemToBuy);
+    SpotRateProxy itemToBuySpotRate = spotRateDataProvider.getSpotRateForCode(itemToBuy.getCode());
+    proxy.setBuyUnitPrice(itemToBuySpotRate.getBidRate());
+    proxy.setBuyQuantity(BigDecimal.ZERO);
+
+    proxy.setItemSell(itemToSell);
+    SpotRateProxy itemToSellSpotRate = spotRateDataProvider.getSpotRateForCode(itemToSell.getCode());
+    proxy.setSellUnitPrice(itemToSellSpotRate.getAskRate());
+    proxy.setSellQuantity(BigDecimal.ZERO);
+
+    proxy.setLine(nextLine++);
 
     return proxy;
   }
@@ -386,18 +526,115 @@ public class PosPresenter
     getView().showTxSav(!(step.amtEntering || step.itemSelecting));
     getView().setStep(step.inst);
 
-    if (pendingItem != null && step.equals(Step.DETAILS)) {
-      ItemProxy item = pendingItem.getItem();
-      getView().setItemCode(item.getCode());
-      getView().setItemName(item.getName());
-      getView().setItemUomRate(item.getUomRate().toString());
-      getView().setItemUOM(item.getUom().getName());
-      getView().setItemImage(item.getImageUrl());
-      getView().setItemUnitPrice(pendingItem.getUnitPrice().toString());
-      getView().setItemQuantity(pendingItem.getQuantity().toString());
-    } else {
-      getView().setItemImage("");
+    if (pendingLineItem != null && step.equals(Step.DETAILS))
+      updateItemDetailsView();
+  }
+
+  private void updateItemDetailsView() {
+    ItemProxy itemToBuy = pendingLineItem.getItemBuy();
+    ItemProxy itemToSell = pendingLineItem.getItemSell();
+    
+    getView().setItemBuyCode(itemToBuy.getCode());
+    getView().setItemBuyUomRate(itemToBuy.getUomRate().toString());
+    getView().setItemBuyUom(itemToBuy.getUom().getName());
+    getView().setItemImageL(itemToBuy.getImageUrl());
+
+    getView().setItemSellCode(itemToSell.getCode());
+    getView().setItemSellUom(itemToSell.getUom().getName());
+    getView().setItemSellUomRate(itemToSell.getUomRate().toString());
+    getView().setItemImageR(itemToSell.getImageUrl());
+
+    getView().setDetailsTitle("Buy " + itemToBuy.getCode() + "/Sell " + itemToSell.getCode());
+
+    getView().setR1Text(itemToBuy.getCode() + "/" + itemToSell.getCode());
+    getView().setR2Text(itemToSell.getCode() + "/" + itemToBuy.getCode());
+    getView().setR3Text(itemToBuy.getCode() + "/" + dftCurrCode);
+    getView().setR4Text(dftCurrCode + "/" + itemToBuy.getCode());
+    getView().setR5Text(itemToSell.getCode() + "/" + dftCurrCode);
+    getView().setR6Text(dftCurrCode + "/" + itemToSell.getCode());
+
+    updateItemDetailsRateView();
+  }
+
+  private void updateItemDetailsRateView() {
+    getView().setR3(buyRate.toString());
+    getView().setR4(inverse(buyRate).toString());
+    getView().setR5(sellRate.toString());
+    getView().setR6(inverse(sellRate).toString());
+
+    getView().setR1(intRate.toString());
+    getView().setR2(inverse(intRate).toString());
+
+    getView().showRate1(true);
+    getView().showRate2(true);
+    getView().showRate3(true);
+    getView().showRate4(true);
+    getView().showRate5(true);
+    getView().showRate6(true);
+
+    switch (pendingLineItem.getTransactionType()) {
+      case BUY:
+        getView().showRate1(false);
+        getView().showRate2(false);
+        getView().showRate3(true);
+        getView().showRate4(true);
+        getView().showRate5(false);
+        getView().showRate6(false);
+        break;
+      case SELL:
+        getView().showRate1(false);
+        getView().showRate2(false);
+        getView().showRate3(false);
+        getView().showRate4(false);
+        getView().showRate5(true);
+        getView().showRate6(true);
+        break;
+      case BUYSELL:
+        getView().showRate1(true);
+        getView().showRate2(true);
+        getView().showRate3(true);
+        getView().showRate4(true);
+        getView().showRate5(true);
+        getView().showRate6(true);
+        break;
+      default:
     }
+
+    getView().setItemBuyQuantity(pendingLineItem.getBuyQuantity().toString());
+    getView().setItemSellQuantity(pendingLineItem.getSellQuantity().toString());
+  }
+
+  private void recalculateRates() {
+    buyRate = pendingLineItem.getBuyUnitPrice().setScale(rateScale);
+    sellRate = pendingLineItem.getSellUnitPrice().setScale(rateScale);
+    intRate = buyRate.divide(sellRate, rateScale, RoundingMode.HALF_UP);
+    switch (pendingLineItem.getTransactionType()) {
+      case BUY:
+        dealRate = buyRate;
+        break;
+      case SELL:
+        dealRate = inverse(sellRate);
+        break;
+      case BUYSELL:
+        dealRate = intRate;
+        break;
+      default:
+    }
+  }
+
+  private void recalculateBuyQuantity() {
+    pendingLineItem.setBuyQuantity(pendingLineItem.getSellQuantity().divide(dealRate, qtyScale, RoundingMode.HALF_UP));
+  }
+
+  private void recalculateSellQuantity() {
+    BigDecimal sellQuantity = dealRate.multiply(
+        pendingLineItem.getBuyQuantity(), MathContext.UNLIMITED)
+        .setScale(qtyScale, RoundingMode.HALF_UP);
+    pendingLineItem.setSellQuantity(sellQuantity);
+  }
+
+  private BigDecimal inverse(BigDecimal number) {
+    return BigDecimal.ONE.divide(number, rateScale, RoundingMode.HALF_UP);
   }
 
   /**

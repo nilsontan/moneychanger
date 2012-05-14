@@ -24,13 +24,25 @@ public interface PosUiHandlers extends UiHandlers {
 
   void skipStep();
 
-  void itemSelected(String itemCode);
+  int itemSelected(String itemCode);
 
   void modifyItem(LineItemProxy lineItem);
 
-  void confirmItemRate(String itemRate);
+  void changeItemBuyQuantity(String itemQuantity);
 
-  void confirmItemQuantity(String itemQuantity);
+  void changeItemSellQuantity(String itemQuantity);
+
+  void changeIntRate(String itemRate);
+
+  void changeInvIntRate(String itemRate);
+
+  void changeBuyRate(String itemRate);
+
+  void changeInvBuyRate(String itemRate);
+
+  void changeSellRate(String itemRate);
+
+  void changeInvSellRate(String itemRate);
 
   void confirmChanges();
 }

@@ -51,8 +51,11 @@ public class MoneychangerModule extends AbstractPresenterModule {
 
     // Constants
     bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.POS_PAGE);
+    bindConstant().annotatedWith(DefaultCurrency.class).to("SGD");
     bindConstant().annotatedWith(DefaultScaleForCosting.class).to(4);
     bindConstant().annotatedWith(DefaultScaleForMoney.class).to(2);
+    bindConstant().annotatedWith(DefaultScaleForItemQty.class).to(2);
+    bindConstant().annotatedWith(DefaultScaleForRate.class).to(8);
 
     // Presenters
     bindPresenter(MainPagePresenter.class, MainPagePresenter.MyView.class,

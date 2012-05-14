@@ -25,17 +25,29 @@ public interface LineItemProxy extends EntityProxy {
 
   void setTransactionType(TransactionType transactionType);
 
-  ItemProxy getItem();
+  ItemProxy getItemBuy();
 
-  void setItem(ItemProxy item);
+  void setItemBuy(ItemProxy item);
 
-  BigDecimal getUnitPrice();
+  ItemProxy getItemSell();
 
-  void setUnitPrice(BigDecimal unitPrice);
+  void setItemSell(ItemProxy item);
 
-  BigDecimal getQuantity();
+  BigDecimal getBuyUnitPrice();
 
-  void setQuantity(BigDecimal quantity);
+  void setBuyUnitPrice(BigDecimal unitPrice);
+
+  BigDecimal getSellUnitPrice();
+
+  void setSellUnitPrice(BigDecimal unitPrice);
+
+  BigDecimal getBuyQuantity();
+
+  void setBuyQuantity(BigDecimal quantity);
+
+  BigDecimal getSellQuantity();
+
+  void setSellQuantity(BigDecimal quantity);
 
   BigDecimal getSubTotal();
 

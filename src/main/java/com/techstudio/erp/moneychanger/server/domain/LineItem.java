@@ -8,9 +8,11 @@
 package com.techstudio.erp.moneychanger.server.domain;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.inject.Inject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Unindexed;
+import com.techstudio.erp.moneychanger.client.gin.DefaultCurrency;
 import com.techstudio.erp.moneychanger.server.service.ItemDao;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
 import org.joda.money.CurrencyUnit;
@@ -26,18 +28,32 @@ public class LineItem extends DatastoreObject {
 
   public static final LineItem EMPTY = new LineItem();
 
-  private TransactionType transactionType;
+  @Inject
+  @DefaultCurrency
+  String currency;
+
+  CurrencyUnit currencyUnit = CurrencyUnit.of(java.util.Currency.getInstance(currency));
+
+  TransactionType transactionType;
 
   @Unindexed
-  Money unitPrice = Money.parse("SGD 1.00");
+  Money buyUnitPrice = Money.parse(currency + " 1.00");
 
   @Unindexed
-  BigDecimal quantity = BigDecimal.ONE;
+  Money sellUnitPrice = Money.parse(currency + " 1.00");
 
   @Unindexed
-  Money subTotal = Money.parse("SGD 1.00");
+  BigDecimal buyQuantity = BigDecimal.ONE;
 
-  private Key<Item> item;
+  @Unindexed
+  BigDecimal sellQuantity = BigDecimal.ONE;
+
+  @Unindexed
+  Money subTotal = Money.parse("1.00");
+
+  private Key<Item> itemBuy;
+  
+  private Key<Item> itemSell;
 
   Money money;
 
@@ -63,38 +79,72 @@ public class LineItem extends DatastoreObject {
     this.transactionType = transactionType;
   }
 
-  public Item getItem() {
-    if (item == null) {
+  public Item getItemBuy() {
+    if (itemBuy == null) {
       return Item.EMPTY;
     }
     try {
-      return new ItemDao().get(item);
+      return new ItemDao().get(itemBuy);
     } catch (EntityNotFoundException e) {
       throw new RuntimeException(e);
     }
   }
 
-  public void setItem(Item item) {
-    if (item.equals(Item.EMPTY)) {
+  public void setItemBuy(Item itemBuy) {
+    if (itemBuy.equals(Item.EMPTY)) {
       return;
     }
-    this.item = new ItemDao().key(item);
+    this.itemBuy = new ItemDao().key(itemBuy);
+  }
+  
+  public Item getItemSell() {
+    if (itemSell == null) {
+      return Item.EMPTY;
+    }
+    try {
+      return new ItemDao().get(itemSell);
+    } catch (EntityNotFoundException e) {
+      throw new RuntimeException(e);
+    }
   }
 
-  public BigDecimal getUnitPrice() {
-    return unitPrice.getAmount();
+  public void setItemSell(Item itemSell) {
+    if (itemSell.equals(Item.EMPTY)) {
+      return;
+    }
+    this.itemSell = new ItemDao().key(itemSell);
   }
 
-  public void setUnitPrice(BigDecimal unitPrice) {
-    this.unitPrice = Money.of(CurrencyUnit.of(java.util.Currency.getInstance("SGD")), unitPrice);
+  public BigDecimal getBuyUnitPrice() {
+    return buyUnitPrice.getAmount();
   }
 
-  public BigDecimal getQuantity() {
-    return quantity;
+  public void setBuyUnitPrice(BigDecimal unitPrice) {
+    this.buyUnitPrice = Money.of(currencyUnit, unitPrice);
   }
 
-  public void setQuantity(BigDecimal quantity) {
-    this.quantity = quantity;
+  public BigDecimal getSellUnitPrice() {
+    return sellUnitPrice.getAmount();
+  }
+
+  public void setSellUnitPrice(BigDecimal unitPrice) {
+    this.buyUnitPrice = Money.of(currencyUnit, unitPrice);
+  }
+
+  public BigDecimal getBuyQuantity() {
+    return buyQuantity;
+  }
+
+  public void setBuyQuantity(BigDecimal buyQuantity) {
+    this.buyQuantity = buyQuantity;
+  }
+
+  public BigDecimal getSellQuantity() {
+    return sellQuantity;
+  }
+
+  public void setSellQuantity(BigDecimal sellQuantity) {
+    this.sellQuantity = sellQuantity;
   }
 
   public BigDecimal getSubTotal() {
@@ -102,7 +152,7 @@ public class LineItem extends DatastoreObject {
   }
 
   public void setSubTotal(BigDecimal subTotal) {
-    this.subTotal = Money.of(CurrencyUnit.of(java.util.Currency.getInstance("SGD")), subTotal);
+    this.subTotal = Money.of(currencyUnit, subTotal);
   }
 
   public Integer getLine() {

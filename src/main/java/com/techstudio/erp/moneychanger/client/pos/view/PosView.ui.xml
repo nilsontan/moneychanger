@@ -7,7 +7,7 @@
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
   <ui:style>
     .stepPosition {
-      padding-top: 0.7em;
+      padding-top: 0.8em;
     }
 
     .noBg {
@@ -48,35 +48,55 @@
           <m:OrderedList ui:field="itemMenu" width="100%" />
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="qtyPanel" addStyleNames="{style.centered}">
-          <g:VerticalPanel>
-            <g:HorizontalPanel width="100%" spacing="5">
-              <g:Image ui:field="qtpItemImage" />
-              <g:Grid>
-                <g:row>
-                  <g:customCell>
-                    <g:Label ui:field="qtpItemCode" />
-                  </g:customCell>
-                  <g:customCell>
-                    <g:Label ui:field="qtpItemName" />
-                  </g:customCell>
-                </g:row>
-                <g:row>
-                  <g:customCell>
-                    <g:Label ui:field="qtpItemUom" />
-                  </g:customCell>
-                  <g:customCell>
-                    <g:Label ui:field="qtpItemUomRate" />
-                  </g:customCell>
-                </g:row>
-              </g:Grid>
-            </g:HorizontalPanel>
-            <m:LabelNumberBox ui:field="qtpItemUnitPrice" text="Rate" />
-            <m:LabelNumberBox ui:field="qtpItemQuantity" text="Amount" />
-            <g:HTMLPanel addStyleNames="{style.starContainer}">
-              <span style="position:absolute; top:28%; left:6%;" class="icon-set icon-star"> </span>
-              <g:Button ui:field="qtpOK" text="Confirm" />
+          <!--<g:Label ui:field="qtpTitle" addStyleNames="details-title" />-->
+          <div class="item-details">
+            <div class="item-details-l">
+              <div class="di-container soft-border soft-bg">
+                <div class="di-l-container">
+                  <g:Image ui:field="qtpItemImageL" />
+                </div>
+                <div class="di-r-container">
+                  <g:Image ui:field="qtpItemImageR" />
+                </div>
+              </div>
+            </div>
+            <g:HTMLPanel addStyleNames="item-details-r">
+              <!--<g:Label ui:field="qtpItemBuy" addStyleNames="item-details-header" />-->
+              <!--<g:Label ui:field="qtpItemSell" addStyleNames="item-details-header" />-->
+              <m:LabelNumberBox ui:field="qtpBuyQty" addStyleNames="details-lb-g" />
+              <m:LabelNumberBox ui:field="qtpSellQty" addStyleNames="details-lb-b" />
             </g:HTMLPanel>
-          </g:VerticalPanel>
+            <!--<g:Grid>
+              <g:row>
+                <g:customCell>
+                  <g:Label ui:field="qtpItemCode" />
+                </g:customCell>
+                <g:customCell>
+                  <g:Label ui:field="qtpItemName" />
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <g:Label ui:field="qtpItemUom" />
+                </g:customCell>
+                <g:customCell>
+                  <g:Label ui:field="qtpItemUomRate" />
+                </g:customCell>
+              </g:row>
+            </g:Grid>-->
+          </div>
+          <div class="field-container">
+            <m:LabelNumberBox ui:field="qtpRate1" addStyleNames="rate" />
+            <m:LabelNumberBox ui:field="qtpRate2" addStyleNames="rate" />
+            <m:LabelNumberBox ui:field="qtpRate3" addStyleNames="rate" />
+            <m:LabelNumberBox ui:field="qtpRate4" addStyleNames="rate" />
+            <m:LabelNumberBox ui:field="qtpRate5" addStyleNames="rate" />
+            <m:LabelNumberBox ui:field="qtpRate6" addStyleNames="rate" />
+          </div>
+          <g:HTMLPanel addStyleNames="{style.starContainer}">
+            <span style="position:absolute; top:0.65em; left:1.1em;" class="icon-set icon-star"></span>
+            <g:Button ui:field="qtpOK" text="Confirm" />
+          </g:HTMLPanel>
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="transactionPanel" addStyleNames="{style.centered}">
           <g:DecoratorPanel>
