@@ -11,15 +11,12 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.NoSelectionModel;
-import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter.MyView;
@@ -29,8 +26,6 @@ import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.SpotRateProxy;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -47,19 +42,6 @@ public class PosView
 
   @UiField(provided = true)
   final Resources res;
-
-  /**
-   * Top Menu Panel
-   */
-
-  @UiField(provided = true)
-  MyButton txAdd;
-
-  @UiField(provided = true)
-  MyButton txDel;
-
-  @UiField(provided = true)
-  MyButton txSav;
 
   /**
    * Main Panel
@@ -97,9 +79,6 @@ public class PosView
   /**
    * Quantity Panel (qtp)
    */
-/*
-  @UiField
-  Label qtpTitle;*/
 
   @UiField
   HTMLPanel qtyPanel;
@@ -109,24 +88,6 @@ public class PosView
 
   @UiField
   Image qtpItemImageR;
-
-  /*@UiField
-  Label qtpItemCode;
-
-  @UiField
-  Label qtpItemName;
-
-  @UiField
-  Label qtpItemUomRate;
-
-  @UiField
-  Label qtpItemUom;
-
-  @UiField
-  Label qtpItemBuy;
-
-  @UiField
-  Label qtpItemSell;*/
 
   @UiField
   LabelNumberBox qtpBuyQty;
@@ -155,6 +116,15 @@ public class PosView
   @UiField
   Button qtpOK;
 
+  @UiField
+  Button txAdd;
+
+  @UiField
+  Button txDel;
+
+  @UiField
+  Button txSav;
+
   /**
    * Transaction Panel (txp)
    */
@@ -163,22 +133,13 @@ public class PosView
   HTMLPanel transactionPanel;
 
   @UiField
-  CellTable<LineItemProxy> lineItemTable = new CellTable<LineItemProxy>();
+  OrderedList lineItemTable;
 
   @Inject
-  public PosView(final Binder binder,
-                 final Resources res,
-                 final MyButton addBtn,
-                 final MyButton savBtn,
-                 final MyButton delBtn) {
+  public PosView(final Binder binder, final Resources res) {
     this.res = res;
-    this.txAdd = addBtn;
-    this.txSav = savBtn;
-    this.txDel = delBtn;
     widget = binder.createAndBindUi(this);
     setupSpotRateTable();
-    setupLineItemTable();
-    qtpBuyQty.setAutoFocus();
   }
 
   @Override
@@ -256,11 +217,6 @@ public class PosView
   }
 
   @Override
-  public HasData<LineItemProxy> getLineItemTable() {
-    return lineItemTable;
-  }
-
-  @Override
   public void showTxPanel(boolean visible) {
     mainPanel.setVisible(visible);
     spotRateDisplay.setVisible(!visible);
@@ -274,6 +230,7 @@ public class PosView
   @Override
   public void showAmtPanel(boolean visible) {
     qtyPanel.setVisible(visible);
+    qtpBuyQty.setFocus(true);
   }
 
   @Override
@@ -479,6 +436,57 @@ public class PosView
     qtpRate6.setVisible(visible);
   }
 
+  @Override
+  public void updateLineItems(List<LineItemProxy> lineItems) {
+    lineItemTable.clear();
+    int count = 0;
+    int last = lineItems.size() - 1;
+    for (LineItemProxy lineItem : lineItems) {
+      final ListItem listItem = new ListItem();
+      final MyLineItem myLineItem = new MyLineItem(lineItem);
+
+      if (count == 0) {
+        myLineItem.addStyleName("first");
+      }
+      if (count == last) {
+        myLineItem.addStyleName("last");
+      }
+
+      final int index = count;
+
+      myLineItem.getLineItemRemove().addClickHandler(new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+          getUiHandlers().removeLineItemIndex(index);
+        }
+      });
+
+      myLineItem.getLineItemEdit().addClickHandler(new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+          getUiHandlers().modifyItem(index);
+        }
+      });
+
+      count++;
+
+      switch (lineItem.getTransactionType()) {
+        case BUY:
+          myLineItem.addStyleName("bar-green");
+          break;
+        case SELL:
+          myLineItem.addStyleName("bar-blue");
+          break;
+        case BUYSELL:
+          myLineItem.addStyleName("bar-orange");
+          break;
+      }
+
+      listItem.add(myLineItem);
+      lineItemTable.add(listItem);
+    }
+  }
+
   private void setupSpotRateTable() {
     Column<SpotRateProxy, String> spotRateNameColumn = new Column<SpotRateProxy, String>(new TextCell()) {
       @Override
@@ -506,86 +514,4 @@ public class PosView
 
     spotRatePager.setDisplay(spotRateTable);
   }
-
-  private void setupLineItemTable() {
-    Column<LineItemProxy, String> lineItemImageColumn = new Column<LineItemProxy, String>(new MyImageCell()) {
-      @Override
-      public String getValue(LineItemProxy lineItemProxy) {
-        String imgUrl = lineItemProxy.getItemBuy().getImageUrl();
-        if (imgUrl.isEmpty()) {
-          return imgUrl;
-        }
-        return imgUrl + "=s32";
-      }
-    };
-    lineItemTable.addColumn(lineItemImageColumn, "");
-
-    Column<LineItemProxy, String> lineItemNameColumn = new Column<LineItemProxy, String>(new TextCell()) {
-      @Override
-      public String getValue(LineItemProxy lineItemProxy) {
-        return lineItemProxy.getItemBuy().getCode();
-      }
-    };
-    lineItemTable.addColumn(lineItemNameColumn, "Item");
-
-    Column<LineItemProxy, String> lineItemQuantityColumn = new Column<LineItemProxy, String>(new TextCell()) {
-      @Override
-      public String getValue(LineItemProxy lineItemProxy) {
-        return lineItemProxy.getBuyQuantity().toPlainString();
-      }
-    };
-    lineItemTable.addColumn(lineItemQuantityColumn, "Quantity");
-
-    Column<LineItemProxy, String> lineItemPriceColumn = new Column<LineItemProxy, String>(new TextCell()) {
-      @Override
-      public String getValue(LineItemProxy lineItemProxy) {
-        return lineItemProxy.getBuyUnitPrice().toPlainString();
-      }
-    };
-    lineItemTable.addColumn(lineItemPriceColumn, "Price");
-
-    Column<LineItemProxy, LineItemProxy> lineItemSubTotalColumn =
-        new Column<LineItemProxy, LineItemProxy>(new TxSubTotalCell()) {
-          @Override
-          public LineItemProxy getValue(LineItemProxy lineItemProxy) {
-            return lineItemProxy;
-          }
-        };
-    Header<String> totalFooter = new Header<String>(new TextCell()) {
-      @Override
-      public String getValue() {
-        List<LineItemProxy> lineItems = lineItemTable.getVisibleItems();
-        if (lineItems.isEmpty()) {
-          return "0.00";
-        } else {
-          BigDecimal totalPrice = BigDecimal.ZERO;
-          for (LineItemProxy lineItem : lineItems) {
-            /*if (lineItem.getTransactionType().equals(TransactionType.SALE)) {
-              totalPrice = totalPrice.add(lineItem.getSubTotal());
-            } else {
-              totalPrice = totalPrice.subtract(lineItem.getSubTotal());
-            }*/
-          }
-          totalPrice = totalPrice.setScale(2, RoundingMode.HALF_UP);
-          return totalPrice.toString();
-        }
-      }
-    };
-    lineItemTable.addColumn(lineItemSubTotalColumn,
-        new SafeHtmlHeader(SafeHtmlUtils.fromString("SubTotal")), totalFooter);
-
-
-    final NoSelectionModel<LineItemProxy> selectionModel = new NoSelectionModel<LineItemProxy>();
-    lineItemTable.setSelectionModel(selectionModel);
-    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-      @Override
-      public void onSelectionChange(SelectionChangeEvent event) {
-        LineItemProxy selected = selectionModel.getLastSelectedObject();
-        if (selected != null) {
-          getUiHandlers().modifyItem(selected);
-        }
-      }
-    });
-  }
-
 }

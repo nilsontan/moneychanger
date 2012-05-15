@@ -32,6 +32,7 @@ import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
 import com.techstudio.erp.moneychanger.shared.service.ItemRequest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -89,7 +90,7 @@ public class ItemPresenter
   private CategoryProxy category;
   private CurrencyProxy currency;
   private UomProxy uom;
-  private Integer uomRate;
+  private BigDecimal uomRate;
   private String imageUrl;
 
   @Inject
@@ -164,7 +165,7 @@ public class ItemPresenter
       category = categoryDataProvider.getDefaultCategory();
       currency = currencyDataProvider.getDefaultCurrency();
       uom = uomDataProvider.getDefaultUom();
-      uomRate = 1;
+      uomRate = BigDecimal.ONE;
       imageUrl = "";
       updateView();
     }
@@ -324,11 +325,11 @@ public class ItemPresenter
         && category != null
         && currency != null
         && uom != null
-        && uomRate > 0;
+        && (uomRate.compareTo(BigDecimal.ZERO) > 0);
   }
 
-  private Integer returnUomRate(String uomRate) {
+  private BigDecimal returnUomRate(String uomRate) {
     String filterOutNonDigits = CharMatcher.DIGIT.retainFrom(uomRate).trim();
-    return Integer.valueOf(filterOutNonDigits);
+    return new BigDecimal(filterOutNonDigits);
   }
 }

@@ -7,19 +7,15 @@
 
 package com.techstudio.erp.moneychanger.client.ui;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.LabelElement;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventListener;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.ButtonBase;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HasName;
@@ -236,10 +232,6 @@ public class LabelNumberBox extends ButtonBase
    */
   public void setValue(String value) {
     setValue(value, false);
-  }
-
-  public void setAutoFocus() {
-    inputElem.setAttribute("autofocus", "true"); // true is not necessary
   }
 
   /**

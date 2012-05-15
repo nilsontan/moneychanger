@@ -11,6 +11,8 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 import com.techstudio.erp.moneychanger.server.domain.Item;
 import com.techstudio.erp.moneychanger.server.locator.ObjectifyLocator;
 
+import java.math.BigDecimal;
+
 /**
  * @author Nilson
  */
@@ -32,9 +34,9 @@ public interface ItemProxy extends MyExEntityProxy {
 
   void setUom(UomProxy uomProxy);
 
-  Integer getUomRate();
+  BigDecimal getUomRate();
 
-  void setUomRate(Integer uomRate);
+  void setUomRate(BigDecimal uomRate);
 
   String getImageUrl();
 

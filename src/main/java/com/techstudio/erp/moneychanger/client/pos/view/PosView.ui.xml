@@ -10,25 +10,8 @@
       padding-top: 0.8em;
     }
 
-    .noBg {
-      background: none;
-    }
-
     .centered {
       margin: 0 auto;
-    }
-
-    .txButtons {
-      width: 7.5em;
-      margin: 0 auto;
-      padding: 2px;
-      -webkit-border-radius: 8px;
-      -moz-border-radius: 8px;
-      border-radius: 8px;
-    }
-
-    .starContainer {
-      position: relative;
     }
   </ui:style>
 
@@ -48,7 +31,6 @@
           <m:OrderedList ui:field="itemMenu" width="100%" />
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="qtyPanel" addStyleNames="{style.centered}">
-          <!--<g:Label ui:field="qtpTitle" addStyleNames="details-title" />-->
           <div class="item-details">
             <div class="item-details-l">
               <div class="di-container soft-border soft-bg">
@@ -61,29 +43,9 @@
               </div>
             </div>
             <g:HTMLPanel addStyleNames="item-details-r">
-              <!--<g:Label ui:field="qtpItemBuy" addStyleNames="item-details-header" />-->
-              <!--<g:Label ui:field="qtpItemSell" addStyleNames="item-details-header" />-->
               <m:LabelNumberBox ui:field="qtpBuyQty" addStyleNames="details-lb-g" />
               <m:LabelNumberBox ui:field="qtpSellQty" addStyleNames="details-lb-b" />
             </g:HTMLPanel>
-            <!--<g:Grid>
-              <g:row>
-                <g:customCell>
-                  <g:Label ui:field="qtpItemCode" />
-                </g:customCell>
-                <g:customCell>
-                  <g:Label ui:field="qtpItemName" />
-                </g:customCell>
-              </g:row>
-              <g:row>
-                <g:customCell>
-                  <g:Label ui:field="qtpItemUom" />
-                </g:customCell>
-                <g:customCell>
-                  <g:Label ui:field="qtpItemUomRate" />
-                </g:customCell>
-              </g:row>
-            </g:Grid>-->
           </div>
           <div class="field-container">
             <m:LabelNumberBox ui:field="qtpRate1" addStyleNames="rate" />
@@ -93,20 +55,25 @@
             <m:LabelNumberBox ui:field="qtpRate5" addStyleNames="rate" />
             <m:LabelNumberBox ui:field="qtpRate6" addStyleNames="rate" />
           </div>
-          <g:HTMLPanel addStyleNames="{style.starContainer}">
-            <span style="position:absolute; top:0.65em; left:1.1em;" class="icon-set icon-star"></span>
+          <g:HTMLPanel addStyleNames="icon-container">
+            <span class="icon-set icon-set-left icon-star"> </span>
             <g:Button ui:field="qtpOK" text="Confirm" />
           </g:HTMLPanel>
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="transactionPanel" addStyleNames="{style.centered}">
-          <g:DecoratorPanel>
-            <c:CellTable ui:field="lineItemTable" />
-          </g:DecoratorPanel>
-          <g:HorizontalPanel spacing="10" width="100%" addStyleNames="{style.noBg}">
-            <m:MyButton ui:field="txAdd" text="Add" resource="{res.iTxAdd}" addStyleNames="{style.txButtons}" />
-            <m:MyButton ui:field="txSav" text="OK" resource="{res.iTxSav}" addStyleNames="{style.txButtons}" />
-            <m:MyButton ui:field="txDel" text="Cancel" resource="{res.iTxDel}" addStyleNames="{style.txButtons}" />
-          </g:HorizontalPanel>
+          <m:OrderedList ui:field="lineItemTable" addStyleNames="{style.centered}, round-table" width="99%" />
+          <g:HTMLPanel addStyleNames="icon-container">
+            <span class="icon-set icon-set-left icon-add"> </span>
+            <g:Button ui:field="txAdd" text="Add another item" />
+          </g:HTMLPanel>
+          <g:HTMLPanel addStyleNames="icon-container">
+            <span class="icon-set icon-set-left icon-tick"> </span>
+            <g:Button ui:field="txSav" text="Save this transaction" />
+          </g:HTMLPanel>
+          <g:HTMLPanel addStyleNames="icon-container">
+            <span class="icon-set icon-set-left icon-cross"> </span>
+            <g:Button ui:field="txDel" text="Delete this transaction" addStyleNames="bar-red" />
+          </g:HTMLPanel>
         </g:HTMLPanel>
       </g:HTMLPanel>
     </div>

@@ -260,9 +260,51 @@ input::-webkit-inner-spin-button {
   background-image: linear-gradient(white, #F1F1F1);
 }
 
+.round-table {
+}
+
+.round-table .first {
+  -moz-border-radius-topleft: 0.5em;
+  -moz-border-radius-topright: 0.5em;
+  -webkit-border-top-left-radius: 0.5em;
+  -webkit-border-top-right-radius: 0.5em;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+  border-bottom-width: 0;
+}
+
+.round-table .last {
+  -moz-border-radius-bottomleft: 0.5em;
+  -moz-border-radius-bottomright: 0.5em;
+  -webkit-border-bottom-left-radius: 0.5em;
+  -webkit-border-bottom-right-radius: 0.5em;
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+  border-top-width: 0;
+}
+
+.last.first {
+  border-width: 1px;
+}
+
+
 /*-  ICONS
 ----------------------------------------------------------------------*/
-.icon-container-a {
+.icon-container {
+  position: relative;
+  margin: 0.5em;
+}
+
+.icon-container .icon-set {
+  position:absolute;
+  top:0.65em;
+}
+
+.icon-set-left {
+  left:1.1em;
+}
+
+.icon-container-a, .icon-container-b {
   border: 1px solid #CCC;
   background: #EEE;
   -moz-border-radius: 1em;
@@ -270,8 +312,16 @@ input::-webkit-inner-spin-button {
   -o-border-radius: 1em;
   -ms-border-radius: 1em;
   border-radius: 1em;
+}
+
+.icon-container-a {
   width: 24px;
   height: 24px;
+}
+
+.icon-container-b {
+  width: 18px;
+  height: 18px;
 }
 
 .icon-set {
@@ -285,8 +335,52 @@ input::-webkit-inner-spin-button {
   border-radius: 9px;
 }
 
-.icon-home {
-  background-position: -576px 50%;
+.icon-add {
+  background-position: 0px 50%;
+}
+
+.icon-minus {
+  background-position: -36px 50%;
+}
+
+.icon-cross {
+  background-position: -72px 50%;
+}
+
+.icon-right {
+  background-position: -108px 50%;
+}
+
+.icon-left {
+  background-position: -144px 50%;
+}
+
+.icon-top {
+  background-position: -180px 50%;
+}
+
+.icon-down {
+  background-position: -216px 50%;
+}
+
+.icon-tick {
+  background-position: -252px 50%;
+}
+
+.icon-flower {
+  background-position: -288px 50%;
+}
+
+.icon-refresh {
+  background-position: -324px 50%;
+}
+
+.icon-twist-right {
+  background-position: -360px 50%;
+}
+
+.icon-twist-left {
+  background-position: -396px 50%;
 }
 
 .icon-grid {
@@ -295,6 +389,22 @@ input::-webkit-inner-spin-button {
 
 .icon-star {
   background-position: -468px 50%;
+}
+
+.icon-A {
+  background-position: -504px 50%;
+}
+
+.icon-info {
+  background-position: -540px 50%;
+}
+
+.icon-home {
+  background-position: -576px 50%;
+}
+
+.icon-magnify {
+  background-position: -612px 50%;
 }
 
 /*-  STRUCTURE
@@ -314,12 +424,26 @@ input::-webkit-inner-spin-button {
   background-image: linear-gradient(#F0F0F0, #DDD);
 }
 
-.bar-b {
+.bar-black {
+  border: 1px solid #333;
+  background: #111;
+  color: white;
+  font-weight: bold;
+  text-shadow: 0 -1px 1px black;
+  background-image: -webkit-gradient(linear,left top,left bottom,from( #3C3C3C),to(#111));
+  background-image: -webkit-linear-gradient(#3C3C3C, #111);
+  background-image: -moz-linear-gradient(#3C3C3C, #111);
+  background-image: -ms-linear-gradient(#3C3C3C, #111);
+  background-image: -o-linear-gradient(#3C3C3C, #111);
+  background-image: linear-gradient(#3C3C3C, #111);
+}
+
+.bar-blue {
   border: 1px solid #456F9A;
   background: #5E87B0;
   color: #FFF;
   font-weight: bold;
-  text-shadow: 0 1px 1px #3E6790;
+  text-shadow: 0 1px 1px #194672;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#5E87B0), to(#456F9A));
   background-image: -webkit-linear-gradient(#5E87B0, #456F9A);
   background-image: -moz-linear-gradient(#5E87B0, #456F9A);
@@ -328,7 +452,7 @@ input::-webkit-inner-spin-button {
   background-image: linear-gradient(#5E87B0, #456F9A);
 }
 
-.bar-g {
+.bar-green {
   border: 1px solid #56A00E;
   background: #74B042;
   color: #FFF;
@@ -340,6 +464,58 @@ input::-webkit-inner-spin-button {
   background-image: -ms-linear-gradient(#74B042, #56A00E);
   background-image: -o-linear-gradient(#74B042, #56A00E);
   background-image: linear-gradient(#74B042, #56A00E);
+}
+
+.bar-orange {
+  border: 1px solid #F7931E;
+  background: #F7931E;
+  color: #FFF;
+  font-weight: bold;
+  text-shadow: 0 1px 1px #444;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#FFA121), to(#DE841B));
+  background-image: -webkit-linear-gradient(#FFA121, #DE841B);
+  background-image: -moz-linear-gradient(#FFA121, #DE841B);
+  background-image: -ms-linear-gradient(#FFA121, #DE841B);
+  background-image: -o-linear-gradient(#FFA121, #DE841B);
+  background-image: linear-gradient(#FFA121, #DE841B);
+}
+
+.bar-red {
+  border: 1px solid #A50D12;
+  background: #A50D12;
+  color: #FFF;
+  font-weight: bold;
+  text-shadow: 0 1px 1px #444;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#B50E13), to(#940B10));
+  background-image: -webkit-linear-gradient(#B50E13, #940B10);
+  background-image: -moz-linear-gradient(#B50E13, #940B10);
+  background-image: -ms-linear-gradient(#B50E13, #940B10);
+  background-image: -o-linear-gradient(#B50E13, #940B10);
+  background-image: linear-gradient(#B50E13, #940B10);
+}
+
+.bar-red.gwt-Button:hover, .bar-red.gwt-Button:focus {
+  background: #BD0E14;
+  border: 1px solid #BD0E14;
+  text-shadow: 0 1px 0 #444;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#CF0F16), to(#AA0C12));
+  background-image: -webkit-linear-gradient(#CF0F16, #AA0C12);
+  background-image: -moz-linear-gradient(#CF0F16, #AA0C12);
+  background-image: -ms-linear-gradient(#CF0F16, #AA0C12);
+  background-image: -o-linear-gradient(#CF0F16, #AA0C12);
+  background-image: linear-gradient(#CF0F16, #AA0C12);
+}
+
+.bar-red.gwt-Button:active {
+  background: #BD0E14;
+  border: 1px solid #BD0E14;
+  text-shadow: 0 1px 0 #444;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#AA0C12), to(#CF0F16));
+  background-image: -webkit-linear-gradient(#AA0C12, #CF0F16);
+  background-image: -moz-linear-gradient(#AA0C12, #CF0F16);
+  background-image: -ms-linear-gradient(#AA0C12, #CF0F16);
+  background-image: -o-linear-gradient(#AA0C12, #CF0F16);
+  background-image: linear-gradient(#AA0C12, #CF0F16);
 }
 
 .content {
@@ -385,6 +561,7 @@ input::-webkit-inner-spin-button {
   box-sizing: border-box;
   padding: 0.2em;
 }
+
 
 .itemListing li:hover, .itemListing li:focus {
 
@@ -558,4 +735,132 @@ div.di-r-container {
 
 .rate {
 
+}
+
+.lineItem-container {
+  font-size: 1em;
+  color: #333;
+  -webkit-appearance: none;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid #AAA;
+  border-width: 1px;
+  text-shadow: 0 1px 0 white;
+  padding-left: 1em;
+
+  color: #4B4A4A;
+  font-weight: bold;
+  margin: 0 auto;
+}
+
+.lineItem-icon {
+  position:absolute;
+  top:1.1em;
+  cursor:pointer;
+}
+
+.lineItem-icon-l {
+  left: 1.8em;
+}
+
+.lineItem-icon-r {
+  right: 0.8em;
+}
+
+.lineItem-box {
+  width: 100%;
+  overflow: hidden;
+}
+
+.lineItem-box div {
+  float: left;
+}
+
+.lineItem-lbl {
+  width: 30%;
+}
+
+.lineItem-qty {
+  width: 70%;
+}
+
+.lineItem-item {
+  padding:0.3em 3em;
+  overflow:hidden;
+  background: #F9F9F9;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#E0E0E0));
+  background-image: -webkit-linear-gradient(#F9F9F9, #E0E0E0);
+  background-image: -moz-linear-gradient(#F9F9F9, #E0E0E0);
+  background-image: -ms-linear-gradient(#F9F9F9, #E0E0E0);
+  background-image: -o-linear-gradient(#F9F9F9, #E0E0E0);
+  background-image: linear-gradient(#F9F9F9, #E0E0E0);
+}
+
+.first .lineItem-item {
+  -moz-border-radius-topright: 0.5em;
+  -webkit-border-top-right-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+}
+
+.last .lineItem-item {
+  -moz-border-radius-bottomright: 0.5em;
+  -webkit-border-bottom-right-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+}
+
+.green-text {
+  color: #74B042;
+  text-shadow: 0 1px 1px grey;
+}
+
+.blue-text {
+  color: #5E87B0;
+  text-shadow: 0 1px 1px grey;
+}
+
+/*-  MEDIA QUERIES
+----------------------------------------------------------------------*/
+@media screen and (min-width: 20em) {
+  .itemListing li {
+    width: 25%;
+    padding: 0.3em;
+  }
+}
+
+@media screen and (min-width: 26em) {
+  .item-details-l {
+    width: 20%;
+  }
+
+  .item-details-r {
+    width: 80%;
+  }
+
+  .field {
+    width: 49.5%;
+    margin-right: 0.1em;
+  }
+
+  .field label {
+    width: 40%;
+  }
+
+  .field input {
+    width: 60%;
+  }
+}
+
+@media screen and (min-width: 32em) {
+  .itemListing li {
+    width: 20%;
+  }
+}
+
+@media screen and (min-width: 40.5em) {
+  .itemListing li {
+    width: 16.666666667%
+  }
 }

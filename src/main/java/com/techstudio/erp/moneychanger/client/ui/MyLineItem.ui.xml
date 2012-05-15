@@ -1,0 +1,29 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+  <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+  <ui:style>
+    .container {
+      position: relative;
+    }
+  </ui:style>
+
+  <g:HTMLPanel ui:field="pane" addStyleNames="{style.container} lineItem-container">
+    <g:Anchor ui:field="lineItemRemove" addStyleNames="lineItem-icon lineItem-icon-l icon-container-b bar-red">
+      <span style="position:absolute;" class="icon-set icon-minus"> </span>
+    </g:Anchor>
+    <div class="lineItem-item">
+      <div class="lineItem-box">
+        <g:Label ui:field="itemBuy" addStyleNames="lineItem-lbl green-text" />
+        <g:Label ui:field="itemBuyQty" addStyleNames="lineItem-qty" />
+      </div>
+      <div class="lineItem-box">
+        <g:Label ui:field="itemSell" addStyleNames="lineItem-lbl blue-text" />
+        <g:Label ui:field="itemSellQty" addStyleNames="lineItem-qty" />
+      </div>
+    </div>
+    <g:Anchor ui:field="lineItemEdit" addStyleNames="lineItem-icon lineItem-icon-r icon-container-b">
+      <span style="position:absolute;" class="icon-set icon-right"> </span>
+    </g:Anchor>
+  </g:HTMLPanel>
+</ui:UiBinder> 

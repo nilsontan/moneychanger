@@ -16,6 +16,8 @@ import com.techstudio.erp.moneychanger.server.service.CategoryDao;
 import com.techstudio.erp.moneychanger.server.service.CurrencyDao;
 import com.techstudio.erp.moneychanger.server.service.UomDao;
 
+import java.math.BigDecimal;
+
 /**
  * A 'product' or item
  */
@@ -31,7 +33,7 @@ public class Item extends MyExDatastoreObject {
 
   private Key<Uom> uom;
 
-  private Integer uomRate;
+  private BigDecimal uomRate;
 
   @Unindexed
   private String imageUrl = "";
@@ -93,11 +95,11 @@ public class Item extends MyExDatastoreObject {
     this.uom = new UomDao().key(uom);
   }
 
-  public Integer getUomRate() {
+  public BigDecimal getUomRate() {
     return uomRate;
   }
 
-  public void setUomRate(Integer uomRate) {
+  public void setUomRate(BigDecimal uomRate) {
     this.uomRate = uomRate;
   }
 

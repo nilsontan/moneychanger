@@ -26,8 +26,6 @@ public interface PosUiHandlers extends UiHandlers {
 
   int itemSelected(String itemCode);
 
-  void modifyItem(LineItemProxy lineItem);
-
   void changeItemBuyQuantity(String itemQuantity);
 
   void changeItemSellQuantity(String itemQuantity);
@@ -45,4 +43,8 @@ public interface PosUiHandlers extends UiHandlers {
   void changeInvSellRate(String itemRate);
 
   void confirmChanges();
+
+  void removeLineItemIndex(int index);
+
+  void modifyItem(int index);
 }

@@ -202,7 +202,7 @@ public class DataReset
       myItem.setCategory(categoryMap.get(item.get(3)));
       myItem.setCurrency(currencyMap.get("SGD"));
       myItem.setUom(uomMap.get(item.get(4)));
-      myItem.setUomRate(Integer.parseInt(item.get(5)));
+      myItem.setUomRate(new BigDecimal(item.get(5)));
       String imgKey = item.get(0).toLowerCase() + ".png";
       String imgBlobKeyString = itemImagesMap.get(imgKey);
       myItem.setImageUrl(imgBlobKeyString);

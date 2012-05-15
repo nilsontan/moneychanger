@@ -27,8 +27,6 @@ import com.techstudio.erp.moneychanger.client.gin.DefaultCurrency;
 import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForItemQty;
 import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForRate;
 import com.techstudio.erp.moneychanger.client.pos.view.PosUiHandlers;
-import com.techstudio.erp.moneychanger.client.ui.LineItemDataProvider;
-import com.techstudio.erp.moneychanger.client.ui.MenuItemDataProvider;
 import com.techstudio.erp.moneychanger.client.ui.SpotRateDataProvider;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
@@ -60,8 +58,6 @@ public class PosPresenter
   public interface MyView extends View, HasUiHandlers<PosUiHandlers> {
     HasData<SpotRateProxy> getSpotRateTable();
 
-    HasData<LineItemProxy> getLineItemTable();
-
     void showTxPanel(boolean visible);
 
     void showItemPanel(boolean visible);
@@ -81,7 +77,7 @@ public class PosPresenter
     void setStep(String step);
 
     void addItemMenu(ItemProxy item);
-    
+
     void setDetailsTitle(String title);
 
     void setItemImageL(String imageUrl);
@@ -105,8 +101,11 @@ public class PosPresenter
     void setR2(String unitPrice);
 
     void setR3(String unitPrice);
+
     void setR4(String unitPrice);
+
     void setR5(String unitPrice);
+
     void setR6(String unitPrice);
 
     void setItemBuyQuantity(String amount);
@@ -126,21 +125,25 @@ public class PosPresenter
     void setR6Text(String r6);
 
     void showRate1(boolean visible);
+
     void showRate2(boolean visible);
+
     void showRate3(boolean visible);
+
     void showRate4(boolean visible);
+
     void showRate5(boolean visible);
+
     void showRate6(boolean visible);
+
+    void updateLineItems(List<LineItemProxy> lineItems);
   }
 
   private final Provider<ItemRequest> itemRequestProvider;
   private final Provider<LineItemRequest> lineItemRequestProvider;
   private final SpotRateDataProvider spotRateDataProvider;
-  private final MenuItemDataProvider menuItemDataProvider;
-  private final LineItemDataProvider lineItemDataProvider;
 
   private Step step;
-  private List<ItemProxy> menuItems;
   private List<LineItemProxy> lineItems;
   private LineItemProxy pendingLineItem;
   private int nextLine;
@@ -163,7 +166,6 @@ public class PosPresenter
   private BigDecimal sellRate;
   private BigDecimal intRate;
   private BigDecimal dealRate;
-  private BigDecimal itemQuantity;
 
   private Screen screen;
 
@@ -172,8 +174,6 @@ public class PosPresenter
                       final MyView view,
                       final MyProxy proxy,
                       final SpotRateDataProvider spotRateDataProvider,
-                      final MenuItemDataProvider menuItemDataProvider,
-                      final LineItemDataProvider lineItemDataProvider,
                       final Provider<ItemRequest> itemRequestProvider,
                       final Provider<LineItemRequest> lineItemRequestProvider) {
     super(eventBus, view, proxy);
@@ -182,10 +182,6 @@ public class PosPresenter
     this.lineItemRequestProvider = lineItemRequestProvider;
     this.spotRateDataProvider = spotRateDataProvider;
     this.spotRateDataProvider.addDataDisplay(getView().getSpotRateTable());
-    this.menuItemDataProvider = menuItemDataProvider;
-//    this.menuItemDataProvider.addDataDisplay(getView().getItemTable());
-    this.lineItemDataProvider = lineItemDataProvider;
-    this.lineItemDataProvider.addDataDisplay(getView().getLineItemTable());
 
     this.itemRequestProvider.get()
         .fetchAll()
@@ -281,6 +277,7 @@ public class PosPresenter
                         assert sellItem.size() > 0 : "No item found for the following code " + itemCode;
                         buyItemCode = "";
                         pendingLineItem = createLineItem(buyItem.get(0), sellItem.get(0));
+                        lineItems.add(pendingLineItem);
                         recalculateRates();
                         shiftToStep(Step.DETAILS);
                       }
@@ -292,27 +289,6 @@ public class PosPresenter
         Log.error("An item is being selected at the incorrect step.");
     }
     return 1;
-  }
-
-  @Override
-  public void modifyItem(LineItemProxy lineItem) {
-    /*pendingList.add(lineItem);
-    int line = lineItem.getLine();
-
-    for (LineItemProxy lineItemProxy : lineItems) {
-      int curLine = lineItemProxy.getLine();
-      if (curLine < line) {
-      } else if (curLine == line) {
-        if (!lineItemProxy.equals(lineItem)) {
-          pendingList.add(lineItemProxy);
-          break;
-        }
-      } else {
-        break;
-      }
-    }
-
-    shiftToStep(Step.DETAILS);*/
   }
 
   @Override
@@ -382,7 +358,7 @@ public class PosPresenter
       pendingLineItem.setSellUnitPrice(newSellRate);
       recalculateRates();
       switch (pendingLineItem.getTransactionType()) {
-        case SELL :
+        case SELL:
           recalculateBuyQuantity();
           break;
         default:
@@ -399,7 +375,7 @@ public class PosPresenter
       pendingLineItem.setSellUnitPrice(newSellRate);
       recalculateRates();
       switch (pendingLineItem.getTransactionType()) {
-        case SELL :
+        case SELL:
           recalculateBuyQuantity();
           break;
         default:
@@ -411,25 +387,27 @@ public class PosPresenter
 
   @Override
   public void confirmChanges() {
-    /*pendingItem.setBuyUnitPrice(itemBuyRate);
-    pendingItem.setBuyQuantity(itemQuantity);
-    BigDecimal itemUomRate = new BigDecimal(pendingItem.getItemBuy().getUomRate());
-    BigDecimal subTotal = pendingItem.getBuyUnitPrice()
-        .multiply(pendingItem.getBuyQuantity(), MathContext.UNLIMITED)
-        .divide(itemUomRate);
-    pendingItem.setSubTotal(subTotal);
-
-    if (!pendingList.isEmpty()) {
-      pendingItem = pendingList.remove(0);
-      itemUomRate = new BigDecimal(pendingItem.getItemBuy().getUomRate());
-      BigDecimal sellQuantity = subTotal
-          .multiply(itemUomRate, MathContext.UNLIMITED)
-          .divide(pendingItem.getBuyUnitPrice(), 4, RoundingMode.HALF_UP);
-      pendingItem.setBuyQuantity(sellQuantity);
-      pendingItem.setSubTotal(subTotal);
+    if (pendingLineItem.getBuyQuantity().compareTo(BigDecimal.ZERO) == 0) {
+      return;
     }
+    shiftToStep(Step.CONFIRM);
+  }
 
-    shiftToStep(Step.CONFIRM);*/
+  @Override
+  public void removeLineItemIndex(int index) {
+    lineItems.remove(index);
+    if (lineItems.isEmpty()) {
+      shiftToStep(Step.BUY);
+    } else {
+      getView().updateLineItems(lineItems);
+    }
+  }
+
+  @Override
+  public void modifyItem(int index) {
+    pendingLineItem = lineItems.get(index);
+
+    shiftToStep(Step.DETAILS);
   }
 
   private void reset() {
@@ -447,6 +425,7 @@ public class PosPresenter
       case BUY:
         step = Step.BUY;
         buyItemCode = "";
+        pendingLineItem = null;
         getView().resetSelections();
         break;
       case SELL:
@@ -458,7 +437,8 @@ public class PosPresenter
         break;
       case CONFIRM:
         step = Step.CONFIRM;
-        lineItemDataProvider.updateTableData(lineItems);
+        pendingLineItem = null;
+        getView().updateLineItems(lineItems);
         break;
       default:
         Log.error("Step not configured: " + step);
@@ -486,12 +466,12 @@ public class PosPresenter
     proxy.setItemBuy(itemToBuy);
     SpotRateProxy itemToBuySpotRate = spotRateDataProvider.getSpotRateForCode(itemToBuy.getCode());
     proxy.setBuyUnitPrice(itemToBuySpotRate.getBidRate());
-    proxy.setBuyQuantity(BigDecimal.ZERO);
+    proxy.setBuyQuantity(null);
 
     proxy.setItemSell(itemToSell);
     SpotRateProxy itemToSellSpotRate = spotRateDataProvider.getSpotRateForCode(itemToSell.getCode());
     proxy.setSellUnitPrice(itemToSellSpotRate.getAskRate());
-    proxy.setSellQuantity(BigDecimal.ZERO);
+    proxy.setSellQuantity(null);
 
     proxy.setLine(nextLine++);
 
@@ -533,7 +513,7 @@ public class PosPresenter
   private void updateItemDetailsView() {
     ItemProxy itemToBuy = pendingLineItem.getItemBuy();
     ItemProxy itemToSell = pendingLineItem.getItemSell();
-    
+
     getView().setItemBuyCode(itemToBuy.getCode());
     getView().setItemBuyUomRate(itemToBuy.getUomRate().toString());
     getView().setItemBuyUom(itemToBuy.getUom().getName());
@@ -600,8 +580,11 @@ public class PosPresenter
       default:
     }
 
-    getView().setItemBuyQuantity(pendingLineItem.getBuyQuantity().toString());
-    getView().setItemSellQuantity(pendingLineItem.getSellQuantity().toString());
+    String buyQty = pendingLineItem.getBuyQuantity() == null ? "" : pendingLineItem.getBuyQuantity().toString();
+    String sellQty = pendingLineItem.getSellQuantity() == null ? "" : pendingLineItem.getSellQuantity().toString();
+
+    getView().setItemBuyQuantity(buyQty);
+    getView().setItemSellQuantity(sellQty);
   }
 
   private void recalculateRates() {
@@ -623,14 +606,18 @@ public class PosPresenter
   }
 
   private void recalculateBuyQuantity() {
-    pendingLineItem.setBuyQuantity(pendingLineItem.getSellQuantity().divide(dealRate, qtyScale, RoundingMode.HALF_UP));
+    if (pendingLineItem.getSellQuantity() != null) {
+      pendingLineItem.setBuyQuantity(pendingLineItem.getSellQuantity().divide(dealRate, qtyScale, RoundingMode.HALF_UP));
+    }
   }
 
   private void recalculateSellQuantity() {
-    BigDecimal sellQuantity = dealRate.multiply(
-        pendingLineItem.getBuyQuantity(), MathContext.UNLIMITED)
-        .setScale(qtyScale, RoundingMode.HALF_UP);
-    pendingLineItem.setSellQuantity(sellQuantity);
+    if (pendingLineItem.getBuyQuantity() != null) {
+      BigDecimal sellQuantity = dealRate.multiply(
+          pendingLineItem.getBuyQuantity(), MathContext.UNLIMITED)
+          .setScale(qtyScale, RoundingMode.HALF_UP);
+      pendingLineItem.setSellQuantity(sellQuantity);
+    }
   }
 
   private BigDecimal inverse(BigDecimal number) {
