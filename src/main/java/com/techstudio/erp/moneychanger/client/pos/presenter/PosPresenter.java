@@ -501,6 +501,7 @@ public class PosPresenter
     getView().showItemPanel(step.itemSelecting);
     getView().showAmtPanel(step.amtEntering);
     getView().showRatePanel(!(step.amtEntering || step.itemSelecting));
+
     getView().showTxAdd(!(step.amtEntering || step.itemSelecting));
     getView().showTxDel(!lineItems.isEmpty());
     getView().showTxSav(!(step.amtEntering || step.itemSelecting));

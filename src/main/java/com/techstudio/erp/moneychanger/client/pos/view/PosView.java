@@ -14,7 +14,9 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.*;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
@@ -224,18 +226,35 @@ public class PosView
 
   @Override
   public void showItemPanel(boolean visible) {
-    itemPanel.setVisible(visible);
+//    itemPanel.setVisible(visible);
+    if (visible) {
+//      mainPanel.removeStyleName("show2");
+//      mainPanel.removeStyleName("show3");
+      mainPanel.setStyleName("slideshow show1");
+    }
   }
 
   @Override
   public void showAmtPanel(boolean visible) {
-    qtyPanel.setVisible(visible);
-    qtpBuyQty.setFocus(true);
+//    qtyPanel.setVisible(visible);
+    if (visible) {
+//      mainPanel.removeStyleName("show1");
+//      mainPanel.removeStyleName("show3");
+//      mainPanel.addStyleName("show2");
+      mainPanel.setStyleName("slideshow show2");
+      qtpBuyQty.setFocus(true);
+    }
   }
 
   @Override
   public void showRatePanel(boolean visible) {
-    transactionPanel.setVisible(visible);
+//    transactionPanel.setVisible(visible);
+    if (visible) {
+//      mainPanel.removeStyleName("show1");
+//      mainPanel.removeStyleName("show2");
+//      mainPanel.addStyleName("show3");
+      mainPanel.setStyleName("slideshow show3");
+    }
   }
 
   @Override

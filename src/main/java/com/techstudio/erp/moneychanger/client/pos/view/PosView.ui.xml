@@ -19,18 +19,18 @@
     <div style="border-width:1px 0; height:3em;" class="bar">
       <g:Label ui:field="currentStep" addStyleNames="{res.pos.step}, {style.stepPosition}" />
     </div>
-    <div class="content bodyBg">
+    <div id="content" class="content bodyBg">
       <g:FlowPanel ui:field="spotRateDisplay" width="100%">
         <g:VerticalPanel width="100%" spacing="20">
           <c:CellTable ui:field="spotRateTable" addStyleNames="{style.centered}" />
           <c:SimplePager ui:field="spotRatePager" location="CENTER" addStyleNames="{style.centered}" />
         </g:VerticalPanel>
       </g:FlowPanel>
-      <g:HTMLPanel ui:field="mainPanel" width="100%">
-        <g:HTMLPanel ui:field="itemPanel" addStyleNames="itemListing">
+      <g:HTMLPanel ui:field="mainPanel" width="300%" addStyleNames="slideshow">
+        <g:HTMLPanel ui:field="itemPanel" addStyleNames="itemListing menu1">
           <m:OrderedList ui:field="itemMenu" width="100%" />
         </g:HTMLPanel>
-        <g:HTMLPanel ui:field="qtyPanel" addStyleNames="{style.centered}">
+        <g:HTMLPanel ui:field="qtyPanel" addStyleNames="{style.centered}, menu2">
           <div class="item-details">
             <div class="item-details-l">
               <div class="di-container soft-border soft-bg">
@@ -56,22 +56,22 @@
             <m:LabelNumberBox ui:field="qtpRate6" addStyleNames="rate" />
           </div>
           <g:HTMLPanel addStyleNames="icon-container">
-            <span class="icon-set icon-set-left icon-star"> </span>
+            <span class="icon-set icon-set-left icon-star"></span>
             <g:Button ui:field="qtpOK" text="Confirm" />
           </g:HTMLPanel>
         </g:HTMLPanel>
-        <g:HTMLPanel ui:field="transactionPanel" addStyleNames="{style.centered}">
+        <g:HTMLPanel ui:field="transactionPanel" addStyleNames="{style.centered}, menu3">
           <m:OrderedList ui:field="lineItemTable" addStyleNames="{style.centered}, round-table" width="99%" />
           <g:HTMLPanel addStyleNames="icon-container">
-            <span class="icon-set icon-set-left icon-add"> </span>
+            <span class="icon-set icon-set-left icon-add"></span>
             <g:Button ui:field="txAdd" text="Add another item" />
           </g:HTMLPanel>
           <g:HTMLPanel addStyleNames="icon-container">
-            <span class="icon-set icon-set-left icon-tick"> </span>
+            <span class="icon-set icon-set-left icon-tick"></span>
             <g:Button ui:field="txSav" text="Save this transaction" />
           </g:HTMLPanel>
           <g:HTMLPanel addStyleNames="icon-container">
-            <span class="icon-set icon-set-left icon-cross"> </span>
+            <span class="icon-set icon-set-left icon-cross"></span>
             <g:Button ui:field="txDel" text="Delete this transaction" addStyleNames="bar-red" />
           </g:HTMLPanel>
         </g:HTMLPanel>
