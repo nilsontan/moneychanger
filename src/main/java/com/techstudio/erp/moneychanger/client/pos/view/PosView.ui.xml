@@ -16,64 +16,67 @@
   </ui:style>
 
   <g:HTMLPanel>
+    <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home"></span>
+    </g:Anchor>
+    <g:Anchor ui:field="ancMenu" addStyleNames="homeBar-icon homeBar-icon-r icon-container-a">
+      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-grid"></span>
+    </g:Anchor>
     <div style="border-width:1px 0; height:3em;" class="bar">
       <g:Label ui:field="currentStep" addStyleNames="{res.pos.step}, {style.stepPosition}" />
     </div>
+    <g:HTMLPanel ui:field="wow">
+      <span> </span>
+    </g:HTMLPanel>
     <div id="content" class="content bodyBg">
-      <g:FlowPanel ui:field="spotRateDisplay" width="100%">
+      <!--<g:FlowPanel ui:field="spotRateDisplay" width="100%">
         <g:VerticalPanel width="100%" spacing="20">
           <c:CellTable ui:field="spotRateTable" addStyleNames="{style.centered}" />
           <c:SimplePager ui:field="spotRatePager" location="CENTER" addStyleNames="{style.centered}" />
         </g:VerticalPanel>
-      </g:FlowPanel>
-      <g:HTMLPanel ui:field="mainPanel" width="300%" addStyleNames="slideshow">
+      </g:FlowPanel>-->
+      <g:HTMLPanel ui:field="mainPanel" addStyleNames="slideshow">
         <g:HTMLPanel ui:field="itemPanel" addStyleNames="itemListing menu1">
           <m:OrderedList ui:field="itemMenu" width="100%" />
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="qtyPanel" addStyleNames="{style.centered}, menu2">
-          <div class="item-details">
-            <div class="item-details-l">
-              <div class="di-container soft-border soft-bg">
-                <div class="di-l-container">
-                  <g:Image ui:field="qtpItemImageL" />
-                </div>
-                <div class="di-r-container">
-                  <g:Image ui:field="qtpItemImageR" />
-                </div>
-              </div>
+          <div style="padding:0.2em;">
+            <div class="item-details">
+              <g:HTMLPanel addStyleNames="item-details-r">
+                <m:LabelNumberBox ui:field="qtpBuyQty" addStyleNames="details-lb-g" />
+                <m:LabelNumberBox ui:field="qtpSellQty" addStyleNames="details-lb-b" />
+              </g:HTMLPanel>
             </div>
-            <g:HTMLPanel addStyleNames="item-details-r">
-              <m:LabelNumberBox ui:field="qtpBuyQty" addStyleNames="details-lb-g" />
-              <m:LabelNumberBox ui:field="qtpSellQty" addStyleNames="details-lb-b" />
+            <div class="field-container">
+              <m:LabelNumberBox ui:field="qtpRate1" addStyleNames="rate" />
+              <m:LabelNumberBox ui:field="qtpRate2" addStyleNames="rate" />
+              <m:LabelNumberBox ui:field="qtpRate3" addStyleNames="rate" />
+              <m:LabelNumberBox ui:field="qtpRate4" addStyleNames="rate" />
+              <m:LabelNumberBox ui:field="qtpRate5" addStyleNames="rate" />
+              <m:LabelNumberBox ui:field="qtpRate6" addStyleNames="rate" />
+            </div>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-star"></span>
+              <g:Button ui:field="qtpOK" text="Confirm" />
             </g:HTMLPanel>
           </div>
-          <div class="field-container">
-            <m:LabelNumberBox ui:field="qtpRate1" addStyleNames="rate" />
-            <m:LabelNumberBox ui:field="qtpRate2" addStyleNames="rate" />
-            <m:LabelNumberBox ui:field="qtpRate3" addStyleNames="rate" />
-            <m:LabelNumberBox ui:field="qtpRate4" addStyleNames="rate" />
-            <m:LabelNumberBox ui:field="qtpRate5" addStyleNames="rate" />
-            <m:LabelNumberBox ui:field="qtpRate6" addStyleNames="rate" />
-          </div>
-          <g:HTMLPanel addStyleNames="icon-container">
-            <span class="icon-set icon-set-left icon-star"></span>
-            <g:Button ui:field="qtpOK" text="Confirm" />
-          </g:HTMLPanel>
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="transactionPanel" addStyleNames="{style.centered}, menu3">
-          <m:OrderedList ui:field="lineItemTable" addStyleNames="{style.centered}, round-table" width="99%" />
-          <g:HTMLPanel addStyleNames="icon-container">
-            <span class="icon-set icon-set-left icon-add"></span>
-            <g:Button ui:field="txAdd" text="Add another item" />
-          </g:HTMLPanel>
-          <g:HTMLPanel addStyleNames="icon-container">
-            <span class="icon-set icon-set-left icon-tick"></span>
-            <g:Button ui:field="txSav" text="Save this transaction" />
-          </g:HTMLPanel>
-          <g:HTMLPanel addStyleNames="icon-container">
-            <span class="icon-set icon-set-left icon-cross"></span>
-            <g:Button ui:field="txDel" text="Delete this transaction" addStyleNames="bar-red" />
-          </g:HTMLPanel>
+          <div style="padding:0.2em;">
+            <m:OrderedList ui:field="lineItemTable" addStyleNames="{style.centered}, round-table" width="99%" />
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-add"></span>
+              <g:Button ui:field="txAdd" text="Add another item" />
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-tick"></span>
+              <g:Button ui:field="txSav" text="Save this transaction" />
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-cross"></span>
+              <g:Button ui:field="txDel" text="Delete this transaction" addStyleNames="bar-red" />
+            </g:HTMLPanel>
+          </div>
         </g:HTMLPanel>
       </g:HTMLPanel>
     </div>

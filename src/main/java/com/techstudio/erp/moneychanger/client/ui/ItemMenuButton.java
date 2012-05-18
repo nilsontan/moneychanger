@@ -55,7 +55,7 @@ public class ItemMenuButton extends Composite
   public ItemMenuButton(ItemProxy itemProxy) {
     this();
     if (itemProxy.getImageUrl().isEmpty()) {
-      setResource(resources.iNoImageAvailable());
+      setImageUrl("moneychanger/images/nia.png");
     } else {
       setImageUrl(itemProxy.getImageUrl());
     }

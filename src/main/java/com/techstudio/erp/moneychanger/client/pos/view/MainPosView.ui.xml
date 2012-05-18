@@ -15,12 +15,6 @@
     <g:DecoratorPanel ui:field="loadingMessage" addStyleNames="{res.pos.centered}, {style.centerOfScreen}">
       <g:Image resource="{res.iLoadingIcon}" />
     </g:DecoratorPanel>
-    <a style="position:absolute; top:0.8em; left:0.8em; cursor:pointer;" class="icon-container-a">
-      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home"></span>
-    </a>
-    <a style="position:absolute; top:0.8em; right:0.8em; cursor:pointer;" class="icon-container-a">
-      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-grid"></span>
-    </a>
     <g:HTMLPanel ui:field="mainContentContainer" />
   </g:HTMLPanel>
 </ui:UiBinder>

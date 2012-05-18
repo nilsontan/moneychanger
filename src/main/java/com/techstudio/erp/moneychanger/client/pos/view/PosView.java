@@ -7,18 +7,13 @@
 
 package com.techstudio.erp.moneychanger.client.pos.view;
 
-import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter.MyView;
@@ -26,7 +21,6 @@ import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.client.ui.*;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
-import com.techstudio.erp.moneychanger.shared.proxy.SpotRateProxy;
 
 import java.util.List;
 
@@ -53,20 +47,16 @@ public class PosView
   HTMLPanel mainPanel;
 
   @UiField
+  Anchor ancHome;
+
+  @UiField
+  Anchor ancMenu;
+
+  @UiField
   Label currentStep;
 
-  /**
-   * Spot Rate
-   */
-
   @UiField
-  FlowPanel spotRateDisplay;
-
-  @UiField
-  CellTable<SpotRateProxy> spotRateTable = new CellTable<SpotRateProxy>();
-
-  @UiField
-  SimplePager spotRatePager = new SimplePager();
+  HTMLPanel wow;
 
   /**
    * Item Panel (itp)
@@ -84,12 +74,6 @@ public class PosView
 
   @UiField
   HTMLPanel qtyPanel;
-
-  @UiField
-  Image qtpItemImageL;
-
-  @UiField
-  Image qtpItemImageR;
 
   @UiField
   LabelNumberBox qtpBuyQty;
@@ -141,12 +125,40 @@ public class PosView
   public PosView(final Binder binder, final Resources res) {
     this.res = res;
     widget = binder.createAndBindUi(this);
-    setupSpotRateTable();
   }
 
   @Override
   public Widget asWidget() {
     return widget;
+  }
+
+  int i = 0;
+
+  @UiHandler("ancHome")
+  public void onClickHome(ClickEvent event) {
+    if (i == 0) {
+      mainPanel.setStyleName("slideshow show2");
+      i = 1;
+    } else if (i == 1) {
+      mainPanel.setStyleName("slideshow show3");
+      i = 2;
+    } else {
+      mainPanel.setStyleName("slideshow show1");
+      i = 0;
+    }
+  }
+
+  int x = 0;
+
+  @UiHandler("ancMenu")
+  public void onClickMenu(ClickEvent event) {
+    if (x == 0) {
+      wow.addStyleName("progress-bar");
+      x = 1;
+    } else {
+      wow.removeStyleName("progress-bar");
+      x = 0;
+    }
   }
 
   @SuppressWarnings("unused")
@@ -214,17 +226,6 @@ public class PosView
   }
 
   @Override
-  public HasData<SpotRateProxy> getSpotRateTable() {
-    return spotRateTable;
-  }
-
-  @Override
-  public void showTxPanel(boolean visible) {
-    mainPanel.setVisible(visible);
-    spotRateDisplay.setVisible(!visible);
-  }
-
-  @Override
   public void showItemPanel(boolean visible) {
 //    itemPanel.setVisible(visible);
     if (visible) {
@@ -242,7 +243,7 @@ public class PosView
 //      mainPanel.removeStyleName("show3");
 //      mainPanel.addStyleName("show2");
       mainPanel.setStyleName("slideshow show2");
-      qtpBuyQty.setFocus(true);
+//      qtpBuyQty.setFocus(true);
     }
   }
 
@@ -255,21 +256,6 @@ public class PosView
 //      mainPanel.addStyleName("show3");
       mainPanel.setStyleName("slideshow show3");
     }
-  }
-
-  @Override
-  public void showTxAdd(boolean visible) {
-    txAdd.setVisible(visible);
-  }
-
-  @Override
-  public void showTxDel(boolean visible) {
-    txDel.setVisible(visible);
-  }
-
-  @Override
-  public void showTxSav(boolean visible) {
-    txSav.setVisible(visible);
   }
 
   public void resetSelections() {
@@ -305,24 +291,6 @@ public class PosView
   @Override
   public void setDetailsTitle(String title) {
     currentStep.setText(title);
-  }
-
-  @Override
-  public void setItemImageL(String imageUrl) {
-    if (imageUrl.isEmpty()) {
-      qtpItemImageL.setResource(res.iNoImageAvailable());
-    } else {
-      qtpItemImageL.setUrl(imageUrl);
-    }
-  }
-
-  @Override
-  public void setItemImageR(String imageUrl) {
-    if (imageUrl.isEmpty()) {
-      qtpItemImageR.setResource(res.iNoImageAvailable());
-    } else {
-      qtpItemImageR.setUrl(imageUrl);
-    }
   }
 
   @Override
@@ -504,33 +472,5 @@ public class PosView
       listItem.add(myLineItem);
       lineItemTable.add(listItem);
     }
-  }
-
-  private void setupSpotRateTable() {
-    Column<SpotRateProxy, String> spotRateNameColumn = new Column<SpotRateProxy, String>(new TextCell()) {
-      @Override
-      public String getValue(SpotRateProxy spotRateProxy) {
-        return spotRateProxy.getName();
-      }
-    };
-    spotRateTable.addColumn(spotRateNameColumn, "Item");
-
-    Column<SpotRateProxy, String> spotRateBidColumn = new Column<SpotRateProxy, String>(new TextCell()) {
-      @Override
-      public String getValue(SpotRateProxy spotRateProxy) {
-        return spotRateProxy.getBidRate().toPlainString();
-      }
-    };
-    spotRateTable.addColumn(spotRateBidColumn, "Bid");
-
-    Column<SpotRateProxy, String> spotRateAskColumn = new Column<SpotRateProxy, String>(new TextCell()) {
-      @Override
-      public String getValue(SpotRateProxy spotRateProxy) {
-        return spotRateProxy.getAskRate().toPlainString();
-      }
-    };
-    spotRateTable.addColumn(spotRateAskColumn, "Ask");
-
-    spotRatePager.setDisplay(spotRateTable);
   }
 }

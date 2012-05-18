@@ -56,21 +56,11 @@ public class PosPresenter
   }
 
   public interface MyView extends View, HasUiHandlers<PosUiHandlers> {
-    HasData<SpotRateProxy> getSpotRateTable();
-
-    void showTxPanel(boolean visible);
-
     void showItemPanel(boolean visible);
 
     void showAmtPanel(boolean visible);
 
     void showRatePanel(boolean visible);
-
-    void showTxAdd(boolean visible);
-
-    void showTxDel(boolean visible);
-
-    void showTxSav(boolean visible);
 
     void resetSelections();
 
@@ -79,10 +69,6 @@ public class PosPresenter
     void addItemMenu(ItemProxy item);
 
     void setDetailsTitle(String title);
-
-    void setItemImageL(String imageUrl);
-
-    void setItemImageR(String imageUrl);
 
     void setItemBuyCode(String itemCode);
 
@@ -181,7 +167,7 @@ public class PosPresenter
     this.itemRequestProvider = itemRequestProvider;
     this.lineItemRequestProvider = lineItemRequestProvider;
     this.spotRateDataProvider = spotRateDataProvider;
-    this.spotRateDataProvider.addDataDisplay(getView().getSpotRateTable());
+    this.spotRateDataProvider.updateListData();
 
     this.itemRequestProvider.get()
         .fetchAll()
@@ -293,6 +279,9 @@ public class PosPresenter
 
   @Override
   public void changeItemBuyQuantity(String itemQuantity) {
+    if (itemQuantity == null || itemQuantity.trim().isEmpty()) {
+      return;
+    }
     pendingLineItem.setBuyQuantity(returnAmount(itemQuantity).setScale(qtyScale));
     recalculateSellQuantity();
     updateItemDetailsRateView();
@@ -300,6 +289,9 @@ public class PosPresenter
 
   @Override
   public void changeItemSellQuantity(String itemQuantity) {
+    if (itemQuantity == null || itemQuantity.trim().isEmpty()) {
+      return;
+    }
     pendingLineItem.setSellQuantity(returnAmount(itemQuantity).setScale(qtyScale));
     recalculateBuyQuantity();
     updateItemDetailsRateView();
@@ -490,21 +482,21 @@ public class PosPresenter
         screen = Screen.RATES;
         break;
     }
-    getView().showTxPanel(showTxView);
-    getView().showTxAdd(showTxView && (!(step.amtEntering || step.itemSelecting)));
+    /*getView().showTxAdd(showTxView && (!(step.amtEntering || step.itemSelecting)));
     getView().showTxDel(showTxView && !lineItems.isEmpty());
-    getView().showTxSav(showTxView && (!(step.amtEntering || step.itemSelecting)));
+    getView().showTxSav(showTxView && (!(step.amtEntering || step.itemSelecting)));*/
   }
 
   private void updateView() {
     // 3 panels to hide/show : 1.TxPanel contains -> 2.ItemPanel 3.RatePanel
-    getView().showItemPanel(step.itemSelecting);
-    getView().showAmtPanel(step.amtEntering);
-    getView().showRatePanel(!(step.amtEntering || step.itemSelecting));
+    if (step.itemSelecting) {
+      getView().showItemPanel(step.itemSelecting);
+    } else if (step.amtEntering) {
+      getView().showAmtPanel(step.amtEntering);
+    } else {
+      getView().showRatePanel(!(step.amtEntering || step.itemSelecting));
+    }
 
-    getView().showTxAdd(!(step.amtEntering || step.itemSelecting));
-    getView().showTxDel(!lineItems.isEmpty());
-    getView().showTxSav(!(step.amtEntering || step.itemSelecting));
     getView().setStep(step.inst);
 
     if (pendingLineItem != null && step.equals(Step.DETAILS))
@@ -518,12 +510,10 @@ public class PosPresenter
     getView().setItemBuyCode(itemToBuy.getCode());
     getView().setItemBuyUomRate(itemToBuy.getUomRate().toString());
     getView().setItemBuyUom(itemToBuy.getUom().getName());
-    getView().setItemImageL(itemToBuy.getImageUrl());
 
     getView().setItemSellCode(itemToSell.getCode());
     getView().setItemSellUom(itemToSell.getUom().getName());
     getView().setItemSellUomRate(itemToSell.getUomRate().toString());
-    getView().setItemImageR(itemToSell.getImageUrl());
 
     getView().setDetailsTitle("Buy " + itemToBuy.getCode() + "/Sell " + itemToSell.getCode());
 

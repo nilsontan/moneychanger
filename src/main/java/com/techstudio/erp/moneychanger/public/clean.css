@@ -518,19 +518,6 @@ input::-webkit-inner-spin-button {
   background-image: linear-gradient(#AA0C12, #CF0F16);
 }
 
-.content {
-  border-width: 0;
-  padding: 0.2em;
-  background: #F9F9F9;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#E0E0E0));
-  background-image: -webkit-linear-gradient(#F9F9F9, #E0E0E0);
-  background-image: -moz-linear-gradient(#F9F9F9, #E0E0E0);
-  background-image: -ms-linear-gradient(#F9F9F9, #E0E0E0);
-  background-image: -o-linear-gradient(#F9F9F9, #E0E0E0);
-  background-image: linear-gradient(#F9F9F9, #E0E0E0);
-  overflow: hidden;
-}
-
 .bodyBg {
   color: #333;
   text-shadow: 0 1px 0 white;
@@ -543,6 +530,39 @@ input::-webkit-inner-spin-button {
   -ms-border-radius: 1em;
   border-radius: 1em;
   border: 1px solid #CCC;
+}
+
+/* Home Bar */
+
+.homeBar-icon {
+  position: absolute;
+  top: 0.8em;
+}
+
+.homeBar-icon-l {
+  left: 0.8em;
+}
+
+.homeBar-icon-r {
+  right: 0.8em;
+}
+
+#content {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.content {
+  border-width: 0;
+  background: #F9F9F9;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#E0E0E0));
+  background-image: -webkit-linear-gradient(#F9F9F9, #E0E0E0);
+  background-image: -moz-linear-gradient(#F9F9F9, #E0E0E0);
+  background-image: -ms-linear-gradient(#F9F9F9, #E0E0E0);
+  background-image: -o-linear-gradient(#F9F9F9, #E0E0E0);
+  background-image: linear-gradient(#F9F9F9, #E0E0E0);
+  overflow: hidden;
 }
 
 /* Items */
@@ -569,7 +589,7 @@ input::-webkit-inner-spin-button {
 .itemListing li img {
   display: block;
   margin: 0 auto;
-  width: 100%;
+  width: 90%;
 }
 
 .activated {
@@ -613,18 +633,16 @@ input::-webkit-inner-spin-button {
   display: table;
   display: -webkit-box;
   overflow: hidden;
-  padding: 0.2em 0;
 }
 
 .item-details-l {
   width: 30%;
   max-width: 6em;
-  margin-right: 0.2em;
 }
 
 .item-details-r {
   width: 70%;
-  padding: 0.5em 0.2em 0;
+  padding: 0.5em 0.4em 0;
 }
 
 .item-details-r .field {
@@ -732,8 +750,12 @@ div.di-r-container {
   height: 2.5em;
 }
 
-.rate {
+.rate label {
+  width: 40%;
+}
 
+.rate input {
+  width: 60%;
 }
 
 .lineItem-container {
@@ -823,61 +845,185 @@ div.di-r-container {
 /*-  ANIMATION
 ----------------------------------------------------------------------*/
 
-#content {
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
 .slideshow {
   width: 300%;
   position: relative;
   left: 0px;
-  -webkit-transition: all 1.0s ease-in-out;
-  -moz-transition: all 1.0s ease-in-out;
-  -o-transition: all 1.0s ease-in-out;
-  -ms-transition: all 1.0s ease-in-out;
-  transition: all 1.0s ease-in-out;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.slideshow.show1 {
+
+}
+
+.slideshow.show2 {
+  height: 30em;
+}
+
+.slideshow.show3 {
+  height: 30em;
 }
 
 .slideshow .menu1,
 .slideshow .menu2,
 .slideshow .menu3 {
+  position: relative;
+  top: 0;
+  overflow: hidden;
+  width: 33.33333333%;
+  -webkit-transition: all 1s ease-out;
+  -moz-transition: all 1s ease-out;
+  -o-transition: all 1s ease-out;
+  -ms-transition: all 1s ease-out;
+  transition: all 1s ease-out;
   float: left;
-  width: 33.333333333333%;
 }
 
-.slideshow.show1 {
-  left: 0;
+.slideshow.show1 .menu1 {
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
 }
 
-.slideshow.show2 {
-  left: -100%;
+.slideshow.show2 .menu2 {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
 }
 
-.slideshow.show3 {
-  left: -200%;
+.slideshow.show3 .menu3{
+  -webkit-transform: translate(-200%, 0);
+  -moz-transform: translate(-200%, 0);
+  -o-transform: translate(-200%, 0);
+  transform: translate(-200%, 0);
 }
 
-@-moz-keyframes slid {
-  0%    {left: 0;}
-  33%   {left: -100%;}
-  66%   {left: -200%;}
-  100%  {left: 0;}
+.slideshow.show1 .menu2, .slideshow.show3 .menu2 {
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
 }
 
-@-webkit-keyframes slid {
-  0%    {left: 0;}
-  33%   {left: -100%;}
-  66%   {left: -200%;}
-  100%  {left: 0;}
+.slideshow.show2 .menu1, .slideshow.show3 .menu1 {
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  transform: translate(0, 100%);
 }
 
-@keyframes slid {
-  0%    {left: 0;}
-  33%   {left: -100%;}
-  66%   {left: -200%;}
-  100%  {left: 0;}
+.slideshow.show1 .menu3, .slideshow.show2 .menu3 {
+  -webkit-transform: translate(-300%, 0);
+  -moz-transform: translate(-300%, 0);
+  -o-transform: translate(-300%, 0);
+  transform: translate(-300%, 0);
+}
+
+@-moz-keyframes slide-out {
+  0%    {left: 0%;}
+  16%    {left: 0%; z-index: 0;}
+  66%   {left: -100%; z-index: 0;}
+  100%   {left: 100%;}
+}
+
+@-webkit-keyframes slide-out {
+  0%    {left: 0%;}
+  16%    {left: 0%; z-index: 0;}
+  66%   {left: -100%; z-index: 0;}
+  100%   {left: 100%;}
+}
+
+@keyframes slide-out {
+  0%    {left: 0%;}
+  16%    {left: 0%; z-index: 0;}
+  66%   {left: -100%; z-index: 0;}
+  100%   {left: 100%;}
+}
+
+@-moz-keyframes slide-in {
+  0%    {left: 100%;}
+  16%   {left: 100%;}
+  66%   {left: 0%; z-index: 0;}
+  100%   {left: 0%;}
+}
+
+@-webkit-keyframes slide-out {
+  0%    {left: 100%;}
+  16%   {left: 100%;}
+  66%   {left: 0%; z-index: 0;}
+  100%   {left: 0%;}
+}
+
+@keyframes slide-out {
+  0%    {left: 100%;}
+  16%   {left: 100%;}
+  66%   {left: 0%; z-index: 0;}
+  100%   {left: 0%;}
+}
+
+.progress-bar {
+  position: relative;
+  top: -5px;
+  width: 100%;
+  height: 5px;
+  background: #000;
+  -moz-animation: fullexpand 25s ease-out;
+  -webkit-animation: fullexpand 25s ease-out;
+  animation: fullexpand 25s ease-out;
+}
+
+@keyframes fullexpand {
+  /* In these keyframes, the progress-bar is stationary */
+   0%, 20%, 40%, 60%, 80%, 100% { width: 0%; opacity: 0; }
+
+   /* In these keyframes, the progress-bar starts to come alive */
+   4%, 24%, 44%, 64%, 84% { width: 0%; opacity: 0.3; }
+
+   /* In these keyframes, the progress-bar moves forward for 3 seconds */
+   16%, 36%, 56%, 76%, 96% { width: 100%; opacity: 0.7; }
+
+   /* In these keyframes, the progress-bar has finished his path */
+   17%, 37%, 57%, 77%, 97% { width: 100%; opacity: 0.3; }
+
+   /* In these keyframes, the progress-bar will disappear and then resume the cycle */
+   18%, 38%, 58%, 78%, 98% { width: 100%; opacity: 0; }
+}
+
+@-moz-keyframes fullexpand {
+  /* In these keyframes, the progress-bar is stationary */
+   0%, 20%, 40%, 60%, 80%, 100% { width: 0%; opacity: 0; }
+
+   /* In these keyframes, the progress-bar starts to come alive */
+   4%, 24%, 44%, 64%, 84% { width: 0%; opacity: 0.3; }
+
+   /* In these keyframes, the progress-bar moves forward for 3 seconds */
+   16%, 36%, 56%, 76%, 96% { width: 100%; opacity: 0.7; }
+
+   /* In these keyframes, the progress-bar has finished his path */
+   17%, 37%, 57%, 77%, 97% { width: 100%; opacity: 0.3; }
+
+   /* In these keyframes, the progress-bar will disappear and then resume the cycle */
+   18%, 38%, 58%, 78%, 98% { width: 100%; opacity: 0; }
+}
+
+@-webkit-keyframes fullexpand {
+  /* In these keyframes, the progress-bar is stationary */
+   0%, 20%, 40%, 60%, 80%, 100% { width: 0%; opacity: 0; }
+
+   /* In these keyframes, the progress-bar starts to come alive */
+   4%, 24%, 44%, 64%, 84% { width: 0%; opacity: 0.3; }
+
+   /* In these keyframes, the progress-bar moves forward for 3 seconds */
+   16%, 36%, 56%, 76%, 96% { width: 100%; opacity: 0.7; }
+
+   /* In these keyframes, the progress-bar has finished his path */
+   17%, 37%, 57%, 77%, 97% { width: 100%; opacity: 0.3; }
+
+   /* In these keyframes, the progress-bar will disappear and then resume the cycle */
+   18%, 38%, 58%, 78%, 98% { width: 100%; opacity: 0; }
 }
 
 /*-  MEDIA QUERIES
@@ -886,6 +1032,14 @@ div.di-r-container {
   .itemListing li {
     width: 25%;
     padding: 0.3em;
+  }
+
+  .rate label {
+    width: 30%;
+  }
+
+  .rate input {
+    width: 70%;
   }
 }
 
@@ -899,8 +1053,7 @@ div.di-r-container {
   }
 
   .field {
-    width: 49.5%;
-    margin-right: 0.1em;
+    width: 50%;
   }
 
   .field label {
