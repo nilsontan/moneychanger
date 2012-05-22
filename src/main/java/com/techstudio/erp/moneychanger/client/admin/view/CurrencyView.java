@@ -23,7 +23,6 @@ import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.admin.presenter.CurrencyPresenter;
-import com.techstudio.erp.moneychanger.client.ui.CurrencyLinkCell;
 import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 
 /**
@@ -152,13 +151,13 @@ public class CurrencyView
     };
     currencyTable.addColumn(currencyFullNameColumn, "Full Name");
 
-    Column<CurrencyProxy, Long> linkColumn = new Column<CurrencyProxy, Long>(new CurrencyLinkCell()) {
-      @Override
-      public Long getValue(CurrencyProxy currencyProxy) {
-        return currencyProxy.getId();
-      }
-    };
-    currencyTable.addColumn(linkColumn);
+//    Column<CurrencyProxy, Long> linkColumn = new Column<CurrencyProxy, Long>(new CurrencyLinkCell()) {
+//      @Override
+//      public Long getValue(CurrencyProxy currencyProxy) {
+//        return currencyProxy.getId();
+//      }
+//    };
+//    currencyTable.addColumn(linkColumn);
 
     currencyTable.setPageSize(10);
 

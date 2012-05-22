@@ -12,7 +12,7 @@ import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.Service;
 import com.techstudio.erp.moneychanger.server.locator.DaoServiceLocator;
 import com.techstudio.erp.moneychanger.server.service.SpotRateDao;
-import com.techstudio.erp.moneychanger.shared.proxy.SpotRateProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.PricingProxy;
 
 import java.util.List;
 
@@ -20,18 +20,18 @@ import java.util.List;
  * @author Nilson
  */
 @Service(value = SpotRateDao.class, locator = DaoServiceLocator.class)
-public interface SpotRateRequest extends RequestContext {
-  Request<List<SpotRateProxy>> fetchAll();
+public interface PricingRequest extends RequestContext {
+  Request<List<PricingProxy>> fetchAll();
 
-  Request<SpotRateProxy> save(SpotRateProxy proxy);
+  Request<PricingProxy> save(PricingProxy proxy);
 
-  Request<SpotRateProxy> fetch(Long id);
+  Request<PricingProxy> fetch(Long id);
 
-  Request<Void> purge(SpotRateProxy proxy);
+  Request<Void> purge(PricingProxy proxy);
 
-  Request<List<SpotRateProxy>> fetchByProperty(String prop, String value);
+  Request<List<PricingProxy>> fetchByProperty(String prop, String value);
 
-  Request<List<SpotRateProxy>> fetchRange(Integer start, Integer length);
+  Request<List<PricingProxy>> fetchRange(Integer start, Integer length);
 
   Request<Integer> getCount();
 }

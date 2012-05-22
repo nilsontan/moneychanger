@@ -7,66 +7,69 @@
 
 package com.techstudio.erp.moneychanger.client.ui;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.LabelElement;
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.*;
-import com.google.gwt.user.client.ui.ButtonBase;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.HasName;
-import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.UIObject;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.uibinder.client.UiConstructor;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
+import com.google.gwt.user.client.ui.*;
+import com.google.inject.Inject;
+import com.techstudio.erp.moneychanger.client.gin.DefaultCurrency;
 
 /**
  * A simple HTML5 number box.
  *
  * @author Nilson
  */
-public class LabelNumberBox extends ButtonBase
+public class LabelInput extends ButtonBase
     implements HasName, HasValue<String>, HasChangeHandlers {
 
   InputElement inputElem;
   LabelElement labelElem;
   private boolean valueChangeHandlerInitialized;
 
-  private static Element createInputNumber() {
+  private static Element createInputNumber(String type) {
     InputElement ie = Document.get().createTextInputElement();
-    ie.setAttribute("type", "number");
+    ie.setAttribute("type", type);
     return ie.cast();
   }
 
   /**
    * Creates an input box with no label.
    */
-  public LabelNumberBox() {
-    this(createInputNumber());
+  public LabelInput() {
+    this(createInputNumber("number"));
     setStyleName("field");
   }
 
   /**
    * Creates an input box with the specified text label.
    *
-   * @param label the check box's label
+   * @param type the check box's label
    */
-  public LabelNumberBox(String label) {
-    this();
-    setText(label);
+  @UiConstructor
+  @Inject
+  public LabelInput(@DefaultCurrency String type) {
+    this(createInputNumber(type));
+    setStyleName("field");
   }
 
   /**
    * Creates an input box with the specified text label.
    *
-   * @param label the input box's label
+   * @param label  the input box's label
    * @param asHTML <code>true</code> to treat the specified label as html
    */
-  public LabelNumberBox(String label, boolean asHTML) {
+  public LabelInput(String label, boolean asHTML) {
     this();
     if (asHTML) {
       setHTML(label);
@@ -75,7 +78,7 @@ public class LabelNumberBox extends ButtonBase
     }
   }
 
-  protected LabelNumberBox(Element elem) {
+  protected LabelInput(Element elem) {
     super(DOM.createSpan());
     inputElem = InputElement.as(elem);
     labelElem = Document.get().createLabelElement();
@@ -101,7 +104,7 @@ public class LabelNumberBox extends ButtonBase
     if (!valueChangeHandlerInitialized) {
       addChangeHandler(new ChangeHandler() {
         public void onChange(ChangeEvent event) {
-          ValueChangeEvent.fire(LabelNumberBox.this, getValue());
+          ValueChangeEvent.fire(LabelInput.this, getValue());
         }
       });
       valueChangeHandlerInitialized = true;
@@ -113,7 +116,7 @@ public class LabelNumberBox extends ButtonBase
    * Returns the value property of the input element that backs this widget.
    * This is the value that will be associated with the InputLabel name and
    * submitted to the server if a {@link FormPanel} that holds it is submitted.
-   * <p>
+   * <p/>
    * This will probably return the same thing as {@link #getValue}, left here for magic reasons.
    */
   public String getFormValue() {
@@ -141,9 +144,10 @@ public class LabelNumberBox extends ButtonBase
 
   /**
    * Gets the text value of the input element.
-   * <p>
+   * <p/>
+   *
    * @return the value of the input box.
-   * Will not return null
+   *         Will not return null
    */
   public String getValue() {
     if (isAttached()) {
@@ -186,7 +190,7 @@ public class LabelNumberBox extends ButtonBase
    * Set the value property on the input element that backs this widget. This is
    * the value that will be associated with the InputLabel's name and submitted to
    * the server if a {@link FormPanel} that holds it is submitted.
-   * <p>
+   * <p/>
    * Don't confuse this with {@link #setValue}.
    *
    * @param value
@@ -211,7 +215,7 @@ public class LabelNumberBox extends ButtonBase
     // InputLabel) setElement method calls setTabIndex before inputElem is
     // initialized. See InputLabel's protected constructor for more information.
     if (inputElem != null) {
-      inputElem.setTabIndex(index);
+//      inputElem.setTabIndex(index);
     }
   }
 
@@ -222,7 +226,7 @@ public class LabelNumberBox extends ButtonBase
 
   /**
    * Sets the text in the input box.
-   * <p>
+   * <p/>
    * Note that this <em>does not</em> set the value property of the
    * input element wrapped by this widget. For access to that property, see
    * {@link #setFormValue(String)}
@@ -237,14 +241,14 @@ public class LabelNumberBox extends ButtonBase
   /**
    * Sets the text in the input box, firing {@link ValueChangeEvent} if
    * appropriate.
-   * <p>
+   * <p/>
    * Note that this <em>does not</em> set the value property of the
    * input element wrapped by this widget. For access to that property, see
    * {@link #setFormValue(String)}
    *
-   * @param value true the text to set; must not be null
+   * @param value      true the text to set; must not be null
    * @param fireEvents If true, and value has changed, fire a
-   *          {@link ValueChangeEvent}
+   *                   {@link ValueChangeEvent}
    * @throws IllegalArgumentException if value is null
    */
   public void setValue(String value, boolean fireEvents) {

@@ -25,7 +25,6 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.admin.presenter.ItemPresenter;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
-import com.techstudio.erp.moneychanger.client.ui.ItemLinkCell;
 import com.techstudio.erp.moneychanger.client.ui.ItemMenuImageUploader;
 import com.techstudio.erp.moneychanger.client.ui.SelectOneListBox;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
@@ -325,13 +324,13 @@ public class ItemView
     };
     itemTable.addColumn(itemUomRateColumn, "Uom Rate");
 
-    Column<ItemProxy, Long> linkColumn = new Column<ItemProxy, Long>(new ItemLinkCell()) {
-      @Override
-      public Long getValue(ItemProxy itemProxy) {
-        return itemProxy.getId();
-      }
-    };
-    itemTable.addColumn(linkColumn);
+//    Column<ItemProxy, Long> linkColumn = new Column<ItemProxy, Long>(new ItemLinkCell()) {
+//      @Override
+//      public Long getValue(ItemProxy itemProxy) {
+//        return itemProxy.getId();
+//      }
+//    };
+//    itemTable.addColumn(linkColumn);
 
     itemTable.setPageSize(10);
 

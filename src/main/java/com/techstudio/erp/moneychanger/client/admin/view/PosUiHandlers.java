@@ -5,10 +5,9 @@
  * Solution Pte Ltd ("Confidential Information").
  */
 
-package com.techstudio.erp.moneychanger.client.pos.view;
+package com.techstudio.erp.moneychanger.client.admin.view;
 
 import com.gwtplatform.mvp.client.UiHandlers;
-import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
 
 /**
  * @author Nilson

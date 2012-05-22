@@ -81,7 +81,7 @@ public class CategoryPresenter
 
   @Override
   protected void revealInParent() {
-    RevealContentEvent.fire(this, MainPagePresenter.TYPE_SetMainContent, this);
+    RevealContentEvent.fire(this, MainPosPresenter.TYPE_SetMainContent, this);
   }
 
   @Override

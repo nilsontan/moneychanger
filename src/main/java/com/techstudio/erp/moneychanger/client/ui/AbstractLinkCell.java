@@ -14,16 +14,19 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 /**
  * A custom cell that links to the specified URL.
  */
-public abstract class AbstractLinkCell extends AbstractCell<Long> {
+public abstract class AbstractLinkCell extends AbstractCell<String> {
 
-  static final String PART1 = "<a href=\"#";
-  static final String PART2 = ";id=";
-  static final String PART3 = "\">view</a>";
+  static final String PART1 = "<a class=\"gwt-Anchor menuListItem-icon menuListItem-icon-r icon-container-b\" href=\"#";
+  static final String PART2 = ";c=";
+  static final String PART3 = "\"><span class=\"icon-set icon-right\" style=\"position:absolute;\"></span></a>";
+//  <g:Anchor ui:field="next" addStyleNames="menuListItem-icon menuListItem-icon-r icon-container-b">
+//  <span style="position:absolute;" class="icon-set icon-right" />
+//  </g:Anchor>
 
   abstract String getPageName();
 
   @Override
-  public void render(Context context, Long id, SafeHtmlBuilder sb) {
+  public void render(Context context, String id, SafeHtmlBuilder sb) {
 
     // Always do a null check on the value. Cell widgets can pass null to cells
     // if the underlying data contains a null, or if the data arrives out of order.
@@ -35,8 +38,8 @@ public abstract class AbstractLinkCell extends AbstractCell<Long> {
     sb.appendHtmlConstant(getHtmlLink(id));
   }
 
-  private String getHtmlLink(Long id) {
-    return Joiner.on("").join(PART1, getPageName(), PART2, id.toString(), PART3);
+  private String getHtmlLink(String id) {
+    return Joiner.on("").join(PART1, getPageName(), PART2, id, PART3);
   }
 }
 

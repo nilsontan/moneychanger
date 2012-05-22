@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  * @author Nilson
  */
 @ProxyFor(value = SpotRate.class, locator = ObjectifyLocator.class)
-public interface SpotRateProxy extends MyEntityProxy {
+public interface PricingProxy extends MyEntityProxy {
   BigDecimal getAskRate();
 
   void setAskRate(BigDecimal askRate);

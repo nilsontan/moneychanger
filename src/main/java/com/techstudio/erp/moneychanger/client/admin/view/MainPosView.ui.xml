@@ -1,0 +1,29 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+  <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+  <ui:style>
+    .bottomOfScreen {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      clear: both;
+    }
+  </ui:style>
+
+  <g:HTMLPanel>
+    <g:HTMLPanel ui:field="loadingMessage" addStyleNames="{style.bottomOfScreen}">
+      <g:Label text="Please wait ..." />
+      <div class="progress-bar" />
+    </g:HTMLPanel>
+    <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home" />
+    </g:Anchor>
+    <g:Anchor ui:field="ancMenu" addStyleNames="homeBar-icon homeBar-icon-r icon-container-a">
+      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-grid" />
+    </g:Anchor>
+    <g:HTMLPanel ui:field="mainContentContainer" />
+  </g:HTMLPanel>
+</ui:UiBinder>

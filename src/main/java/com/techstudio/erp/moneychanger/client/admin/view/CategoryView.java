@@ -23,7 +23,6 @@ import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.admin.presenter.CategoryPresenter;
-import com.techstudio.erp.moneychanger.client.ui.CategoryLinkCell;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 
 /**
@@ -131,13 +130,13 @@ public class CategoryView
     };
     categoryTable.addColumn(categoryNameColumn, "Name");
 
-    Column<CategoryProxy, Long> linkColumn = new Column<CategoryProxy, Long>(new CategoryLinkCell()) {
-      @Override
-      public Long getValue(CategoryProxy categoryProxy) {
-        return categoryProxy.getId();
-      }
-    };
-    categoryTable.addColumn(linkColumn);
+//    Column<CategoryProxy, Long> linkColumn = new Column<CategoryProxy, Long>(new CategoryLinkCell()) {
+//      @Override
+//      public Long getValue(CategoryProxy categoryProxy) {
+//        return categoryProxy.getId();
+//      }
+//    };
+//    categoryTable.addColumn(linkColumn);
 
     categoryPager.setDisplay(categoryTable);
   }

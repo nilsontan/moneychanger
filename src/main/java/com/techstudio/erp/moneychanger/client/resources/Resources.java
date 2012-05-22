@@ -10,6 +10,7 @@ package com.techstudio.erp.moneychanger.client.resources;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.CellTable;
 
 /**
@@ -86,6 +87,18 @@ public interface Resources extends ClientBundle {
     String centered();
 
     String formTitle();
+  }
+
+  CellResources cellResources();
+
+  public interface CellResources extends CellList.Resources {
+    @Override
+    @Source("clean-cell.css")
+    CellStyle cellListStyle();
+  }
+
+  public interface CellStyle extends CellList.Style {
+
   }
 
   TableResources tableResources();

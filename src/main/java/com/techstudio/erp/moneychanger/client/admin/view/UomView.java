@@ -23,7 +23,6 @@ import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.admin.presenter.UomPresenter;
-import com.techstudio.erp.moneychanger.client.ui.UomLinkCell;
 import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
 
 /**
@@ -131,13 +130,13 @@ public class UomView
     };
     uomTable.addColumn(uomNameColumn, "Name");
 
-    Column<UomProxy, Long> linkColumn = new Column<UomProxy, Long>(new UomLinkCell()) {
-      @Override
-      public Long getValue(UomProxy uomProxy) {
-        return uomProxy.getId();
-      }
-    };
-    uomTable.addColumn(linkColumn);
+//    Column<UomProxy, Long> linkColumn = new Column<UomProxy, Long>(new UomLinkCell()) {
+//      @Override
+//      public Long getValue(UomProxy uomProxy) {
+//        return uomProxy.getId();
+//      }
+//    };
+//    uomTable.addColumn(linkColumn);
 
     uomTable.setPageSize(10);
 

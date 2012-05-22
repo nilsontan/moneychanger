@@ -1,0 +1,52 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:c="urn:import:com.google.gwt.user.cellview.client"
+             xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui">
+
+  <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+  <ui:style>
+    .padding {
+      padding: 0.2em;
+    }
+  </ui:style>
+
+  <g:HTMLPanel>
+    <div class="bar page-title">
+      <g:Label text="Pricing" addStyleNames="{res.pos.step}" />
+    </div>
+    <div class="content bodyBg">
+      <g:HTMLPanel ui:field="mainPanel" addStyleNames="slider">
+        <g:HTMLPanel ui:field="listingPanel" addStyleNames="centered slide1">
+          <!--<c:CellTable ui:field="priceListing" />
+          <c:SimplePager ui:field="priceListingPager" location="CENTER" />-->
+          <c:CellList ui:field="priceL" />
+          <m:ShowMorePagerPanel ui:field="pagerPanel" />
+          <m:RangeLabelPager ui:field="pager" />
+        </g:HTMLPanel>
+        <g:HTMLPanel addStyleNames="centered slide2">
+          <g:HTMLPanel addStyleNames="{style.padding}">
+            <div class="field-container">
+              <g:Label ui:field="prLabel" addStyleNames="form-title group-title" />
+              <m:LabelInput text="Bid" type="number" ui:field="prBid" addStyleNames="rate" />
+              <m:LabelInput text="Ask" type="number" ui:field="prAsk" addStyleNames="rate" />
+            </div>
+            <!--<g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-add" />
+              <g:Button ui:field="prAdd" text="Add" />
+            </g:HTMLPanel>-->
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-tick" />
+              <g:Button ui:field="prSav" text="Save" />
+            </g:HTMLPanel>
+            <!--<g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-cross" />
+              <g:Button ui:field="prDel" text="Delete" addStyleNames="bar-red" />
+            </g:HTMLPanel>-->
+          </g:HTMLPanel>
+        </g:HTMLPanel>
+      </g:HTMLPanel>
+    </div>
+  </g:HTMLPanel>
+
+</ui:UiBinder>

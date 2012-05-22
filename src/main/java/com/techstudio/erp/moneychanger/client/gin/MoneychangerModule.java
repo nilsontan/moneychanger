@@ -23,10 +23,6 @@ import com.techstudio.erp.moneychanger.client.MoneychangerPlaceManager;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.presenter.*;
 import com.techstudio.erp.moneychanger.client.admin.view.*;
-import com.techstudio.erp.moneychanger.client.pos.presenter.MainPosPresenter;
-import com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter;
-import com.techstudio.erp.moneychanger.client.pos.view.MainPosView;
-import com.techstudio.erp.moneychanger.client.pos.view.PosView;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.client.ui.ItemMenuImageFileUpload;
 import com.techstudio.erp.moneychanger.client.util.MoneychangerTestData;
@@ -50,12 +46,13 @@ public class MoneychangerModule extends AbstractPresenterModule {
     bind(TestData.class).to(MoneychangerTestData.class).in(Singleton.class);
 
     // Constants
-    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.POS_PAGE);
+    bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.MENU_PAGE);
     bindConstant().annotatedWith(DefaultCurrency.class).to("SGD");
     bindConstant().annotatedWith(DefaultScaleForCosting.class).to(4);
     bindConstant().annotatedWith(DefaultScaleForMoney.class).to(2);
     bindConstant().annotatedWith(DefaultScaleForItemQty.class).to(2);
     bindConstant().annotatedWith(DefaultScaleForRate.class).to(8);
+    bindConstant().annotatedWith(DefaultPageSize.class).to(10);
 
     // Presenters
     bindPresenter(MainPagePresenter.class, MainPagePresenter.MyView.class,
@@ -68,8 +65,8 @@ public class MoneychangerModule extends AbstractPresenterModule {
         CountryView.class, CountryPresenter.MyProxy.class);
     bindPresenter(CurrencyPresenter.class, CurrencyPresenter.MyView.class,
         CurrencyView.class, CurrencyPresenter.MyProxy.class);
-    bindPresenter(SpotRatePresenter.class, SpotRatePresenter.MyView.class,
-        SpotRateView.class, SpotRatePresenter.MyProxy.class);
+    bindPresenter(PricingPresenter.class, PricingPresenter.MyView.class,
+        PricingView.class, PricingPresenter.MyProxy.class);
     bindPresenter(UomPresenter.class, UomPresenter.MyView.class,
         UomView.class, UomPresenter.MyProxy.class);
     bindPresenter(TestPresenter.class, TestPresenter.MyView.class,
@@ -79,6 +76,8 @@ public class MoneychangerModule extends AbstractPresenterModule {
         MainPosView.class, MainPosPresenter.MyProxy.class);
     bindPresenter(PosPresenter.class, PosPresenter.MyView.class,
         PosView.class, PosPresenter.MyProxy.class);
+    bindPresenter(MenuPresenter.class, MenuPresenter.MyView.class,
+        MenuView.class, MenuPresenter.MyProxy.class);
   }
 
   @Provides
@@ -115,7 +114,7 @@ public class MoneychangerModule extends AbstractPresenterModule {
   }
 
   @Provides
-  SpotRateRequest provideExchangeRateService(MoneychangerRequestFactory requestFactory) {
+  PricingRequest provideExchangeRateService(MoneychangerRequestFactory requestFactory) {
     return requestFactory.spotRateRequest();
   }
 

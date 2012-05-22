@@ -22,6 +22,8 @@ package com.techstudio.erp.moneychanger.client;
  * @author Nilson
  */
 public class NameTokens {
+  public static final String MENU_PAGE = "!MENU";
+
   public static final String POS_PAGE = "!POS";
 
   public static final String ITEM_PAGE = "!ITEM";
@@ -32,11 +34,15 @@ public class NameTokens {
 
   public static final String CURRENCY_PAGE = "!CURRENCY";
 
-  public static final String EXCHANGE_RATE_PAGE = "!EXCHANGE_RATE";
+  public static final String PRICING_PAGE = "!PRICING";
 
   public static final String UOM_PAGE = "!UOM";
 
-  public static final String TEST_PAGE = "!TEST";
+  public static final String SETTINGS_PAGE = "!SETTINGS";
+
+  public static String getMenuPage() {
+    return MENU_PAGE;
+  }
 
   public static String getPosPage() {
     return POS_PAGE;
@@ -58,15 +64,15 @@ public class NameTokens {
     return CURRENCY_PAGE;
   }
 
-  public static String getExchangeRatePage() {
-    return EXCHANGE_RATE_PAGE;
+  public static String getPricingPage() {
+    return PRICING_PAGE;
   }
 
   public static String getUomPage() {
     return UOM_PAGE;
   }
 
-  public static String getTestPage() {
-    return TEST_PAGE;
+  public static String getSettingsPage() {
+    return SETTINGS_PAGE;
   }
 }

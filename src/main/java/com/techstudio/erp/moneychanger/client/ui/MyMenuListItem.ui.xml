@@ -1,0 +1,24 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+  <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+  <ui:style>
+    .container {
+      position: relative;
+    }
+  </ui:style>
+
+  <g:HTMLPanel ui:field="pane" addStyleNames="{style.container} menuListItem-container soft-bg">
+    <g:HTML ui:field="icon" addStyleNames="menuListItem-icon menuListItem-icon-l icon-container-b">
+      <span style="position:absolute;" class="icon-set icon-star" />
+    </g:HTML>
+    <div class="menuListItem-item">
+      <div class="menuListItem-box">
+        <g:Label ui:field="name" />
+      </div>
+    </div>
+    <g:Anchor ui:field="next" addStyleNames="menuListItem-icon menuListItem-icon-r icon-container-b">
+      <span style="position:absolute;" class="icon-set icon-right" />
+    </g:Anchor>
+  </g:HTMLPanel>
+</ui:UiBinder> 

@@ -8,21 +8,9 @@
 package com.techstudio.erp.moneychanger.client.admin.view;
 
 import com.gwtplatform.mvp.client.UiHandlers;
-import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 
 /**
  * @author Nilson
  */
-public interface SpotRateUiHandlers extends UiHandlers {
-  void setSpotRateCode(String code);
-
-  void setSpotRateName(String name);
-
-  void setSpotRateAskRate(String askRate);
-
-  void setSpotRateBidRate(String bidRate);
-
-  void createSpotRate();
-
-  void updateSpotRate();
+public interface MenuUiHandlers extends UiHandlers {
 }

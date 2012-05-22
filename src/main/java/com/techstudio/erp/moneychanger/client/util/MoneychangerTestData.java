@@ -55,7 +55,7 @@ public final class MoneychangerTestData implements TestData {
     @Override
     public void onSuccess(String result) {
       onSuccessfulReset();
-      System.out.println("RESET SUCCESSFUL");
+      Log.debug("RESET SUCCESSFUL");
     }
   };
 }

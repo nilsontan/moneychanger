@@ -5,7 +5,7 @@
  * Solution Pte Ltd ("Confidential Information").
  */
 
-package com.techstudio.erp.moneychanger.client.pos.view;
+package com.techstudio.erp.moneychanger.client.admin.view;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -13,10 +13,13 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-import com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter.MyView;
+import com.techstudio.erp.moneychanger.client.admin.presenter.PosPresenter.MyView;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.client.ui.*;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
@@ -44,19 +47,13 @@ public class PosView
    */
 
   @UiField
+  HTMLPanel loadingMessage;
+
+  @UiField
   HTMLPanel mainPanel;
 
   @UiField
-  Anchor ancHome;
-
-  @UiField
-  Anchor ancMenu;
-
-  @UiField
   Label currentStep;
-
-  @UiField
-  HTMLPanel wow;
 
   /**
    * Item Panel (itp)
@@ -76,28 +73,28 @@ public class PosView
   HTMLPanel qtyPanel;
 
   @UiField
-  LabelNumberBox qtpBuyQty;
+  LabelInput qtpBuyQty;
 
   @UiField
-  LabelNumberBox qtpSellQty;
+  LabelInput qtpSellQty;
 
   @UiField
-  LabelNumberBox qtpRate1;
+  LabelInput qtpRate1;
 
   @UiField
-  LabelNumberBox qtpRate2;
+  LabelInput qtpRate2;
 
   @UiField
-  LabelNumberBox qtpRate3;
+  LabelInput qtpRate3;
 
   @UiField
-  LabelNumberBox qtpRate4;
+  LabelInput qtpRate4;
 
   @UiField
-  LabelNumberBox qtpRate5;
+  LabelInput qtpRate5;
 
   @UiField
-  LabelNumberBox qtpRate6;
+  LabelInput qtpRate6;
 
   @UiField
   Button qtpOK;
@@ -130,35 +127,6 @@ public class PosView
   @Override
   public Widget asWidget() {
     return widget;
-  }
-
-  int i = 0;
-
-  @UiHandler("ancHome")
-  public void onClickHome(ClickEvent event) {
-    if (i == 0) {
-      mainPanel.setStyleName("slideshow show2");
-      i = 1;
-    } else if (i == 1) {
-      mainPanel.setStyleName("slideshow show3");
-      i = 2;
-    } else {
-      mainPanel.setStyleName("slideshow show1");
-      i = 0;
-    }
-  }
-
-  int x = 0;
-
-  @UiHandler("ancMenu")
-  public void onClickMenu(ClickEvent event) {
-    if (x == 0) {
-      wow.addStyleName("progress-bar");
-      x = 1;
-    } else {
-      wow.removeStyleName("progress-bar");
-      x = 0;
-    }
   }
 
   @SuppressWarnings("unused")
@@ -227,34 +195,25 @@ public class PosView
 
   @Override
   public void showItemPanel(boolean visible) {
-//    itemPanel.setVisible(visible);
     if (visible) {
-//      mainPanel.removeStyleName("show2");
-//      mainPanel.removeStyleName("show3");
       mainPanel.setStyleName("slideshow show1");
+      itemMenu.setVisible(true);
     }
   }
 
   @Override
   public void showAmtPanel(boolean visible) {
-//    qtyPanel.setVisible(visible);
     if (visible) {
-//      mainPanel.removeStyleName("show1");
-//      mainPanel.removeStyleName("show3");
-//      mainPanel.addStyleName("show2");
       mainPanel.setStyleName("slideshow show2");
-//      qtpBuyQty.setFocus(true);
+      itemMenu.setVisible(false);
     }
   }
 
   @Override
   public void showRatePanel(boolean visible) {
-//    transactionPanel.setVisible(visible);
     if (visible) {
-//      mainPanel.removeStyleName("show1");
-//      mainPanel.removeStyleName("show2");
-//      mainPanel.addStyleName("show3");
       mainPanel.setStyleName("slideshow show3");
+      itemMenu.setVisible(false);
     }
   }
 
@@ -301,26 +260,6 @@ public class PosView
   @Override
   public void setItemSellCode(String itemCode) {
     qtpSellQty.setText(itemCode);
-  }
-
-  @Override
-  public void setItemBuyUomRate(String itemUomRate) {
-//    qtpItemUomRate.setText(itemUomRate);
-  }
-
-  @Override
-  public void setItemSellUomRate(String itemRate) {
-    //To change body of implemented methods use File | Settings | File Templates.
-  }
-
-  @Override
-  public void setItemBuyUom(String itemUom) {
-//    qtpItemUom.setText(itemUom);
-  }
-
-  @Override
-  public void setItemSellUom(String itemUOM) {
-    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override
@@ -472,5 +411,12 @@ public class PosView
       listItem.add(myLineItem);
       lineItemTable.add(listItem);
     }
+  }
+
+  @Override
+  public void showLoading(boolean visible) {
+    loadingMessage.setVisible(visible);
+    currentStep.setVisible(!visible);
+    mainPanel.setVisible(!visible);
   }
 }

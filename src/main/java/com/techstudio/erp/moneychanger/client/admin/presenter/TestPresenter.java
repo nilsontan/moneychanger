@@ -32,7 +32,7 @@ public class TestPresenter
    * {@link com.techstudio.erp.moneychanger.client.admin.presenter.TestPresenter}'s proxy.
    */
   @ProxyCodeSplit
-  @NameToken(NameTokens.TEST_PAGE)
+  @NameToken(NameTokens.SETTINGS_PAGE)
   public interface MyProxy extends ProxyPlace<TestPresenter> {
   }
 

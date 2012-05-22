@@ -12,6 +12,9 @@
     <g:Anchor ui:field="lineItemRemove" addStyleNames="lineItem-icon lineItem-icon-l icon-container-b bar-red">
       <span style="position:absolute;" class="icon-set icon-minus"></span>
     </g:Anchor>
+    <g:HTML ui:field="icon" addStyleNames="menuListItem-icon menuListItem-icon-l icon-container-b">
+      <span style="position:absolute;" class="icon-set icon-star" />
+    </g:HTML>
     <div class="lineItem-item soft-bg">
       <div class="lineItem-box">
         <g:Label ui:field="itemBuy" addStyleNames="lineItem-lbl green-text" />

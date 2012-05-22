@@ -21,13 +21,13 @@
     <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getCountryPage}">
       Country
     </g:InlineHyperlink>
-    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getExchangeRatePage}">
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getPricingPage}">
       Exchange Rate
     </g:InlineHyperlink>
     <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getItemPage}">
       Item
     </g:InlineHyperlink>
-    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getTestPage}">
+    <g:InlineHyperlink addStyleNames="{res.admin.menuTitle}" targetHistoryToken="{nameTokens.getSettingsPage}">
       Settings
     </g:InlineHyperlink>
   </g:HTMLPanel>

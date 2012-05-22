@@ -5,12 +5,12 @@
  * Solution Pte Ltd ("Confidential Information").
  */
 
-package com.techstudio.erp.moneychanger.client.pos.presenter;
+package com.techstudio.erp.moneychanger.client.admin.presenter;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.Lists;
-import com.google.gwt.view.client.HasData;
+import com.google.gwt.user.client.Timer;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
@@ -23,15 +23,15 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
+import com.techstudio.erp.moneychanger.client.admin.view.PosUiHandlers;
 import com.techstudio.erp.moneychanger.client.gin.DefaultCurrency;
 import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForItemQty;
 import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForRate;
-import com.techstudio.erp.moneychanger.client.pos.view.PosUiHandlers;
-import com.techstudio.erp.moneychanger.client.ui.SpotRateDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.PricingDataProvider;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
-import com.techstudio.erp.moneychanger.shared.proxy.SpotRateProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.PricingProxy;
 import com.techstudio.erp.moneychanger.shared.service.ItemRequest;
 import com.techstudio.erp.moneychanger.shared.service.LineItemRequest;
 
@@ -48,7 +48,7 @@ public class PosPresenter
     implements PosUiHandlers {
 
   /**
-   * {@link com.techstudio.erp.moneychanger.client.pos.presenter.PosPresenter}'s proxy.
+   * {@link com.techstudio.erp.moneychanger.client.admin.presenter.PosPresenter}'s proxy.
    */
   @ProxyCodeSplit
   @NameToken(NameTokens.POS_PAGE)
@@ -73,14 +73,6 @@ public class PosPresenter
     void setItemBuyCode(String itemCode);
 
     void setItemSellCode(String itemCode);
-
-    void setItemBuyUomRate(String itemRate);
-
-    void setItemSellUomRate(String itemRate);
-
-    void setItemBuyUom(String itemUOM);
-
-    void setItemSellUom(String itemUOM);
 
     void setR1(String unitPrice);
 
@@ -123,11 +115,13 @@ public class PosPresenter
     void showRate6(boolean visible);
 
     void updateLineItems(List<LineItemProxy> lineItems);
+
+    void showLoading(boolean visible);
   }
 
   private final Provider<ItemRequest> itemRequestProvider;
   private final Provider<LineItemRequest> lineItemRequestProvider;
-  private final SpotRateDataProvider spotRateDataProvider;
+  private final PricingDataProvider pricingDataProvider;
 
   private Step step;
   private List<LineItemProxy> lineItems;
@@ -153,21 +147,20 @@ public class PosPresenter
   private BigDecimal intRate;
   private BigDecimal dealRate;
 
-  private Screen screen;
-
   @Inject
   public PosPresenter(final EventBus eventBus,
                       final MyView view,
                       final MyProxy proxy,
-                      final SpotRateDataProvider spotRateDataProvider,
+                      final PricingDataProvider pricingDataProvider,
                       final Provider<ItemRequest> itemRequestProvider,
                       final Provider<LineItemRequest> lineItemRequestProvider) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
+    getView().showLoading(true);
     this.itemRequestProvider = itemRequestProvider;
     this.lineItemRequestProvider = lineItemRequestProvider;
-    this.spotRateDataProvider = spotRateDataProvider;
-    this.spotRateDataProvider.updateListData();
+    this.pricingDataProvider = pricingDataProvider;
+    this.pricingDataProvider.updateData();
 
     this.itemRequestProvider.get()
         .fetchAll()
@@ -177,6 +170,15 @@ public class PosPresenter
             for (ItemProxy itemProxy : responses) {
               getView().addItemMenu(itemProxy);
             }
+
+            Timer timer = new Timer() {
+              @Override
+              public void run() {
+                getView().showLoading(false);
+              }
+            };
+
+            timer.schedule(5000);
           }
         });
   }
@@ -198,7 +200,6 @@ public class PosPresenter
   @Override
   public void switchView() {
     Log.debug("Switching views ...");
-    flipViews();
   }
 
   @Override
@@ -407,9 +408,7 @@ public class PosPresenter
     pendingLineItem = null;
     nextLine = 1;
     buyItemCode = "";
-    screen = Screen.TRX;
     shiftToStep(Step.BUY);
-    flipViews();
   }
 
   private void shiftToStep(Step nextStep) {
@@ -456,35 +455,18 @@ public class PosPresenter
     }
 
     proxy.setItemBuy(itemToBuy);
-    SpotRateProxy itemToBuySpotRate = spotRateDataProvider.getSpotRateForCode(itemToBuy.getCode());
-    proxy.setBuyUnitPrice(itemToBuySpotRate.getBidRate());
-    proxy.setBuyQuantity(null);
+    PricingProxy itemToBuyPricing = pricingDataProvider.getSpotRateForCode(itemToBuy.getCode());
+    proxy.setBuyUnitPrice(itemToBuyPricing.getBidRate());
+    proxy.setBuyQuantity(BigDecimal.ZERO);
 
     proxy.setItemSell(itemToSell);
-    SpotRateProxy itemToSellSpotRate = spotRateDataProvider.getSpotRateForCode(itemToSell.getCode());
-    proxy.setSellUnitPrice(itemToSellSpotRate.getAskRate());
-    proxy.setSellQuantity(null);
+    PricingProxy itemToSellPricing = pricingDataProvider.getSpotRateForCode(itemToSell.getCode());
+    proxy.setSellUnitPrice(itemToSellPricing.getAskRate());
+    proxy.setSellQuantity(BigDecimal.ZERO);
 
     proxy.setLine(nextLine++);
 
     return proxy;
-  }
-
-  private void flipViews() {
-    boolean showTxView = true;
-    switch (screen) {
-      case RATES:
-        showTxView = false;
-        screen = Screen.TRX;
-        break;
-      case TRX:
-        showTxView = true;
-        screen = Screen.RATES;
-        break;
-    }
-    /*getView().showTxAdd(showTxView && (!(step.amtEntering || step.itemSelecting)));
-    getView().showTxDel(showTxView && !lineItems.isEmpty());
-    getView().showTxSav(showTxView && (!(step.amtEntering || step.itemSelecting)));*/
   }
 
   private void updateView() {
@@ -508,12 +490,7 @@ public class PosPresenter
     ItemProxy itemToSell = pendingLineItem.getItemSell();
 
     getView().setItemBuyCode(itemToBuy.getCode());
-    getView().setItemBuyUomRate(itemToBuy.getUomRate().toString());
-    getView().setItemBuyUom(itemToBuy.getUom().getName());
-
     getView().setItemSellCode(itemToSell.getCode());
-    getView().setItemSellUom(itemToSell.getUom().getName());
-    getView().setItemSellUomRate(itemToSell.getUomRate().toString());
 
     getView().setDetailsTitle("Buy " + itemToBuy.getCode() + "/Sell " + itemToSell.getCode());
 
@@ -641,10 +618,5 @@ public class PosPresenter
     final boolean transacting;
     final boolean amtEntering;
     final boolean itemSelecting;
-  }
-
-  private enum Screen {
-    RATES,
-    TRX
   }
 }

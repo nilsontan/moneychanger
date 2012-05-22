@@ -23,7 +23,6 @@ import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.admin.presenter.CountryPresenter;
-import com.techstudio.erp.moneychanger.client.ui.CountryLinkCell;
 import com.techstudio.erp.moneychanger.shared.proxy.CountryProxy;
 
 /**
@@ -160,13 +159,13 @@ public class CountryView
     };
     countryTable.addColumn(countryCurrencyColumn, "Currency");
 
-    Column<CountryProxy, Long> linkColumn = new Column<CountryProxy, Long>(new CountryLinkCell()) {
-      @Override
-      public Long getValue(CountryProxy countryProxy) {
-        return countryProxy.getId();
-      }
-    };
-    countryTable.addColumn(linkColumn);
+//    Column<CountryProxy, Long> linkColumn = new Column<CountryProxy, Long>(new CountryLinkCell()) {
+//      @Override
+//      public Long getValue(CountryProxy countryProxy) {
+//        return countryProxy.getId();
+//      }
+//    };
+//    countryTable.addColumn(linkColumn);
 
     countryTable.setPageSize(10);
 
