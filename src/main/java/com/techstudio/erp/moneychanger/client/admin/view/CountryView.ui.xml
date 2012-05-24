@@ -1,64 +1,61 @@
-<!--
-  ~ Copyright (c) 2004-2012 TechStudio Solutions Pte Ltd. All Rights Reserved.
-  ~
-  ~ This software is the confidential and proprietary information of TechStudio
-  ~ Solution Pte Ltd ("Confidential Information").
-  -->
-
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:c="urn:import:com.google.gwt.user.cellview.client"
-    >
+             xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui">
 
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
 
-  <g:FlowPanel>
-    <g:Label text="Country List" addStyleNames="{res.admin.pageTitle}" />
-    <g:Label text="Create or Update countries quickly" addStyleNames="{res.admin.pageDescription}" />
-    <g:HorizontalPanel spacing="10">
-      <g:FlowPanel>
-        <c:CellTable ui:field="countryTable" />
-        <c:SimplePager ui:field="countryPager" location="CENTER" />
-      </g:FlowPanel>
-      <g:VerticalPanel>
-        <g:DecoratorPanel>
-          <g:FlowPanel>
-            <g:Label text="Country Info" addStyleNames="{res.admin.formTitle}" />
-            <g:Grid>
-              <g:row>
-                <g:customCell>
-                  <g:Label text="Code" addStyleNames="{res.admin.formParam}" />
-                </g:customCell>
-                <g:customCell>
-                  <g:TextBox ui:field="countryCode" />
-                </g:customCell>
-              </g:row>
-              <g:row>
-                <g:customCell>
-                  <g:Label text="Name" addStyleNames="{res.admin.formParam}" />
-                </g:customCell>
-                <g:customCell>
-                  <g:TextBox ui:field="countryName" />
-                </g:customCell>
-              </g:row>
-              <g:row>
-                <g:customCell>
-                  <g:Label text="Full Name" addStyleNames="{res.admin.formParam}" />
-                </g:customCell>
-                <g:customCell>
-                  <g:TextBox ui:field="countryFullName" />
-                </g:customCell>
-              </g:row>
-            </g:Grid>
-            <g:HorizontalPanel spacing="2">
-              <g:Button ui:field="countryUpdate" text="Update Country" />
-              <g:Button ui:field="countryCreate" text="Create Country" />
-            </g:HorizontalPanel>
-          </g:FlowPanel>
-        </g:DecoratorPanel>
-      </g:VerticalPanel>
-    </g:HorizontalPanel>
-  </g:FlowPanel>
+  <g:HTMLPanel>
+    <g:HTMLPanel ui:field="loadingMessage" addStyleNames="loadingDock">
+      <g:Image resource="{res.iLoadingIcon}" />
+      <g:Label text="Loading Countries ..." />
+      <div class="progress-bar" />
+    </g:HTMLPanel>
+    <g:HTMLPanel ui:field="ancBar">
+      <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home" />
+      </g:Anchor>
+      <g:Anchor ui:field="ancBack" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-left" />
+      </g:Anchor>
+      <g:Anchor ui:field="ancNext" addStyleNames="homeBar-icon homeBar-icon-r icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-bullet" />
+      </g:Anchor>
+    </g:HTMLPanel>
+    <div class="bar page-title">
+      <g:Label ui:field="currentStep" text="Country" addStyleNames="step" />
+    </div>
+    <div class="content bodyBg">
+      <g:HTMLPanel ui:field="mainPanel" addStyleNames="slider">
+        <g:HTMLPanel addStyleNames="centered slide1">
+          <c:CellList ui:field="list" />
+          <m:ShowMorePagerPanel ui:field="pagerPanel" />
+          <m:RangeLabelPager ui:field="pager" />
+        </g:HTMLPanel>
+        <g:HTMLPanel addStyleNames="centered slide2">
+          <g:HTMLPanel addStyleNames="padding-s">
+            <div class="field-container">
+              <m:LabelInput text="Code" type="text" ui:field="code" addStyleNames="rate" />
+              <m:LabelInput text="Name" type="text" ui:field="name" addStyleNames="rate" />
+              <m:LabelInput text="Full Name" type="text" ui:field="fullname" width="100%" addStyleNames="rate" />
+            </div>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-add" />
+              <g:Button ui:field="add" text="Add" />
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-tick" />
+              <g:Button ui:field="save" text="Save" />
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-cross" />
+              <g:Button ui:field="delete" text="Delete" addStyleNames="bar-red" />
+            </g:HTMLPanel>
+          </g:HTMLPanel>
+        </g:HTMLPanel>
+      </g:HTMLPanel>
+    </div>
+  </g:HTMLPanel>
 
 </ui:UiBinder>

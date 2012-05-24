@@ -24,7 +24,7 @@ import java.util.List;
 @Singleton
 public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
 
-  private static CategoryProxy DEFAULT_CATEGORY;
+  private static CategoryProxy DEFAULT;
 
   private final Provider<CategoryRequest> requestProvider;
 
@@ -36,12 +36,6 @@ public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
     updateData();
     findDefault();
   }
-
-  /*@Override
-  public void addDataDisplay(HasData<CategoryProxy> display) {
-    super.addDataDisplay(display);
-    load();
-  }*/
 
   @Override
   public void updateData() {
@@ -85,21 +79,21 @@ public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
 
   @Override
   public CategoryProxy getDefault() {
-    if (DEFAULT_CATEGORY == null) {
+    if (DEFAULT == null) {
       findDefault();
     }
-    return DEFAULT_CATEGORY;
+    return DEFAULT;
   }
 
   private void findDefault() {
-    if (DEFAULT_CATEGORY == null) {
+    if (DEFAULT == null) {
       requestProvider.get().fetchAll()
           .fire(new Receiver<List<CategoryProxy>>() {
             @Override
             public void onSuccess(List<CategoryProxy> responses) {
               if (responses.isEmpty()) {
               } else {
-                DEFAULT_CATEGORY = responses.get(0);
+                DEFAULT = responses.get(0);
               }
             }
           });

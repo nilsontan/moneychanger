@@ -17,9 +17,9 @@ public interface CategoryUiHandlers extends UiHandlers {
 
   void onNext();
 
-  void setCategoryCode(String code);
+  void setCode(String code);
 
-  void setCategoryName(String name);
+  void setName(String name);
 
   void edit(String code);
 

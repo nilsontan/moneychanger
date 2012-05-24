@@ -41,6 +41,9 @@ public class CategoryView
   private final Widget widget;
 
   @UiField
+  HTMLPanel ancBar;
+
+  @UiField
   Anchor ancHome;
 
   @UiField
@@ -113,12 +116,12 @@ public class CategoryView
 
   @UiHandler("code")
   public void onBidChange(ValueChangeEvent<String> event) {
-    getUiHandlers().setCategoryCode(event.getValue());
+    getUiHandlers().setCode(event.getValue());
   }
 
   @UiHandler("name")
   public void onAskChange(ValueChangeEvent<String> event) {
-    getUiHandlers().setCategoryName(event.getValue());
+    getUiHandlers().setName(event.getValue());
   }
 
   @SuppressWarnings("unused")
@@ -177,12 +180,12 @@ public class CategoryView
   }
 
   @Override
-  public void setCategoryCode(String code) {
+  public void setCode(String code) {
     this.code.setValue(code);
   }
 
   @Override
-  public void setCategoryName(String name) {
+  public void setName(String name) {
     this.name.setValue(name);
   }
 
@@ -191,6 +194,7 @@ public class CategoryView
     loadingMessage.setVisible(visible);
     currentStep.setVisible(!visible);
     mainPanel.setVisible(!visible);
+    ancBar.setVisible(!visible);
   }
 
   private void setUpListing() {

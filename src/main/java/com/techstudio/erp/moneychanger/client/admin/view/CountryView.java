@@ -7,22 +7,25 @@
 
 package com.techstudio.erp.moneychanger.client.admin.view;
 
-import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.NoSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.presenter.CountryPresenter;
+import com.techstudio.erp.moneychanger.client.ui.LabelInput;
+import com.techstudio.erp.moneychanger.client.ui.RangeLabelPager;
+import com.techstudio.erp.moneychanger.client.ui.ShowMorePagerPanel;
+import com.techstudio.erp.moneychanger.client.ui.cell.CountryCell;
 import com.techstudio.erp.moneychanger.shared.proxy.CountryProxy;
 
 /**
@@ -38,30 +41,57 @@ public class CountryView
   private final Widget widget;
 
   @UiField
-  TextBox countryCode;
+  HTMLPanel ancBar;
 
   @UiField
-  TextBox countryName;
+  Anchor ancHome;
 
   @UiField
-  TextBox countryFullName;
+  Anchor ancBack;
 
   @UiField
-  Button countryUpdate;
+  Anchor ancNext;
 
   @UiField
-  Button countryCreate;
+  HTMLPanel loadingMessage;
 
   @UiField
-  CellTable<CountryProxy> countryTable = new CellTable<CountryProxy>();
+  Label currentStep;
 
   @UiField
-  SimplePager countryPager = new SimplePager();
+  HTMLPanel mainPanel;
+
+  @UiField(provided = true)
+  CellList<CountryProxy> list = new CellList<CountryProxy>(new CountryCell());
+
+  @UiField
+  ShowMorePagerPanel pagerPanel = new ShowMorePagerPanel();
+
+  @UiField
+  RangeLabelPager pager = new RangeLabelPager();
+
+  @UiField
+  LabelInput code;
+
+  @UiField
+  LabelInput name;
+
+  @UiField
+  LabelInput fullname;
+
+  @UiField
+  Button add;
+
+  @UiField
+  Button save;
+
+  @UiField
+  Button delete;
 
   @Inject
   public CountryView(final Binder binder) {
     widget = binder.createAndBindUi(this);
-    setupCountryTable();
+    setUpListing();
   }
 
   @Override
@@ -69,107 +99,131 @@ public class CountryView
     return widget;
   }
 
-  @UiHandler("countryCode")
-  void onCountryCodeChange(ValueChangeEvent<String> event) {
-    getUiHandlers().setCountryCode(event.getValue());
-  }
-
-  @UiHandler("countryName")
-  void onCountryNameChange(ValueChangeEvent<String> event) {
-    getUiHandlers().setCountryName(event.getValue());
-  }
-
-  @UiHandler("countryFullName")
-  void onCountryFullNameChange(ValueChangeEvent<String> event) {
-    getUiHandlers().setCountryFullName(event.getValue());
+  @SuppressWarnings("unused")
+  @UiHandler("ancHome")
+  public void onClickHome(ClickEvent event) {
+    History.newItem(NameTokens.getMenuPage());
   }
 
   @SuppressWarnings("unused")
-  @UiHandler("countryCreate")
-  void onCreateCountry(ClickEvent event) {
-    getUiHandlers().createCountry();
+  @UiHandler("ancBack")
+  public void onClickBack(ClickEvent event) {
+    getUiHandlers().onBack();
   }
 
   @SuppressWarnings("unused")
-  @UiHandler("countryUpdate")
-  void onUpdateCountry(ClickEvent event) {
-    getUiHandlers().updateCountry();
+  @UiHandler("ancNext")
+  public void onClickNext(ClickEvent event) {
+    getUiHandlers().onNext();
+  }
+
+  @UiHandler("code")
+  public void onCodeChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setCode(event.getValue());
+  }
+
+  @UiHandler("name")
+  public void onNameChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setName(event.getValue());
+  }
+
+  @UiHandler("fullname")
+  public void onAskChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setFullName(event.getValue());
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("add")
+  public void onCreate(ClickEvent event) {
+    getUiHandlers().create();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("save")
+  public void onUpdate(ClickEvent event) {
+    getUiHandlers().update();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("delete")
+  public void onDelete(ClickEvent event) {
+    getUiHandlers().delete();
   }
 
   @Override
-  public HasData<CountryProxy> getTable() {
-    return countryTable;
+  public HasData<CountryProxy> getListing() {
+    return list;
   }
 
   @Override
-  public void enableCreateButton(boolean enabled) {
-    countryCreate.setEnabled(enabled);
+  public void showListPanel() {
+    mainPanel.setStyleName("slider show1");
+    list.setVisible(true);
+    ancHome.setVisible(true);
+    ancNext.setVisible(true);
+    ancBack.setVisible(false);
   }
 
   @Override
-  public void enableUpdateButton(boolean enabled) {
-    countryUpdate.setEnabled(enabled);
+  public void showDetailPanel() {
+    mainPanel.setStyleName("slider show2");
+    list.setVisible(false);
+    ancHome.setVisible(false);
+    ancNext.setVisible(false);
+    ancBack.setVisible(true);
   }
 
   @Override
-  public void setCountryCode(String code) {
-    countryCode.setValue(code);
+  public void showAddButtons() {
+    add.setVisible(true);
+    save.setVisible(false);
+    delete.setVisible(false);
   }
 
   @Override
-  public void setCountryName(String name) {
-    countryName.setValue(name);
+  public void showEditButtons() {
+    add.setVisible(false);
+    save.setVisible(true);
+    delete.setVisible(true);
   }
 
   @Override
-  public void setCountryFullName(String fullName) {
-    countryFullName.setValue(fullName);
+  public void setCode(String code) {
+    this.code.setValue(code);
   }
 
-  private void setupCountryTable() {
-    Column<CountryProxy, String> countryCodeColumn = new Column<CountryProxy, String>(new EditTextCell()) {
+  @Override
+  public void setName(String name) {
+    this.name.setValue(name);
+  }
+
+  @Override
+  public void setFullname(String fullname) {
+    this.fullname.setValue(fullname);
+  }
+
+  @Override
+  public void showLoading(boolean visible) {
+    loadingMessage.setVisible(visible);
+    currentStep.setVisible(!visible);
+    mainPanel.setVisible(!visible);
+    ancBar.setVisible(!visible);
+  }
+
+  private void setUpListing() {
+    final NoSelectionModel<CountryProxy> selectionModel = new NoSelectionModel<CountryProxy>();
+    list.setSelectionModel(selectionModel);
+    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
       @Override
-      public String getValue(CountryProxy countryProxy) {
-        return countryProxy.getCode();
+      public void onSelectionChange(SelectionChangeEvent event) {
+        CountryProxy selected = selectionModel.getLastSelectedObject();
+        if (selected != null) {
+          getUiHandlers().edit(selected.getCode());
+        }
       }
-    };
-    countryTable.addColumn(countryCodeColumn, "Code");
+    });
 
-    Column<CountryProxy, String> countryNameColumn = new Column<CountryProxy, String>(new EditTextCell()) {
-      @Override
-      public String getValue(CountryProxy countryProxy) {
-        return countryProxy.getName();
-      }
-    };
-    countryTable.addColumn(countryNameColumn, "Name");
-
-    Column<CountryProxy, String> countryFullNameColumn = new Column<CountryProxy, String>(new EditTextCell()) {
-      @Override
-      public String getValue(CountryProxy countryProxy) {
-        return countryProxy.getFullName();
-      }
-    };
-    countryTable.addColumn(countryFullNameColumn, "Full Name");
-
-    Column<CountryProxy, String> countryCurrencyColumn = new Column<CountryProxy, String>(new EditTextCell()) {
-      @Override
-      public String getValue(CountryProxy countryProxy) {
-        return countryProxy.getCurrency().getCode();
-      }
-    };
-    countryTable.addColumn(countryCurrencyColumn, "Currency");
-
-//    Column<CountryProxy, Long> linkColumn = new Column<CountryProxy, Long>(new CountryLinkCell()) {
-//      @Override
-//      public Long getValue(CountryProxy countryProxy) {
-//        return countryProxy.getId();
-//      }
-//    };
-//    countryTable.addColumn(linkColumn);
-
-    countryTable.setPageSize(10);
-
-    countryPager.setDisplay(countryTable);
+    pagerPanel.setDisplay(list);
+    pager.setDisplay(list);
   }
-
 }

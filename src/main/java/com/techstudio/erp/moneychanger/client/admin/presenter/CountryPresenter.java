@@ -7,9 +7,12 @@
 
 package com.techstudio.erp.moneychanger.client.admin.presenter;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.common.base.Strings;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
@@ -19,12 +22,13 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.CountryUiHandlers;
 import com.techstudio.erp.moneychanger.client.ui.dataprovider.CountryDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.FirstLoad;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.MyDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.CountryProxy;
 import com.techstudio.erp.moneychanger.shared.service.CountryRequest;
 
@@ -46,39 +50,61 @@ public class CountryPresenter
   }
 
   public interface MyView extends View, HasUiHandlers<CountryUiHandlers> {
-    HasData<CountryProxy> getTable();
+    HasData<CountryProxy> getListing();
 
-    void enableCreateButton(boolean isValid);
+    void showListPanel();
 
-    void enableUpdateButton(boolean isValid);
+    void showDetailPanel();
 
-    void setCountryCode(String code);
+    void showAddButtons();
 
-    void setCountryName(String name);
+    void showEditButtons();
 
-    void setCountryFullName(String fullName);
+    void setCode(String code);
+
+    void setName(String name);
+
+    void setFullname(String fullname);
+
+    void showLoading(boolean visible);
   }
 
-  private final Provider<CountryRequest> countryRequestProvider;
-  private final CountryDataProvider countryDataProvider;
+  private final Provider<CountryRequest> requestProvider;
+  private final MyDataProvider<CountryProxy> dataProvider;
 
-  private Long id;
   private String code;
   private String name;
   private String fullName;
+  private Step step;
 
   @Inject
   public CountryPresenter(final EventBus eventBus,
                           final MyView view,
                           final MyProxy proxy,
-                          final Provider<CountryRequest> countryRequestProvider,
-                          final CountryDataProvider countryDataProvider) {
+                          final Provider<CountryRequest> requestProvider,
+                          final CountryDataProvider dataProvider) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
-    this.countryRequestProvider = countryRequestProvider;
-    this.countryDataProvider = countryDataProvider;
-    this.countryDataProvider.addDataDisplay(getView().getTable());
+    this.requestProvider = requestProvider;
+    this.dataProvider = dataProvider;
+    this.dataProvider.addOnFirstLoadHandler(onFirstLoad);
+    getView().showLoading(true);
+    this.dataProvider.addDataDisplay(getView().getListing());
   }
+
+  FirstLoad.OnFirstLoad onFirstLoad = new FirstLoad.OnFirstLoad() {
+    @Override
+    public void onSuccess(FirstLoad firstLoad) {
+      Timer timer = new Timer() {
+        @Override
+        public void run() {
+          getView().showLoading(false);
+        }
+      };
+
+      timer.schedule(1000);
+    }
+  };
 
   @Override
   protected void revealInParent() {
@@ -88,66 +114,71 @@ public class CountryPresenter
   @Override
   protected void onReset() {
     super.onReset();
-
-    if (id != null) {
-      countryRequestProvider.get().fetch(id)
-          .fire(new Receiver<CountryProxy>() {
-            @Override
-            public void onSuccess(CountryProxy response) {
-              code = response.getCode();
-              name = response.getName();
-              fullName = response.getFullName();
-              updateView();
-            }
-          });
-    }
+    reset();
   }
 
   @Override
   protected void onReveal() {
-    super.onReveal();
+    reset();
+  }
 
-    code = "";
-    name = "";
-    fullName = "";
+  @Override
+  public void onBack() {
+    step = Step.LIST;
     updateView();
   }
 
   @Override
-  public void setCountryCode(String code) {
+  public void onNext() {
+    step = Step.ADD;
+    resetFields();
+    updateView();
+  }
+
+  @Override
+  public void setCode(String code) {
     this.code = code.trim().toUpperCase();
-    updateView();
+    getView().setCode(this.code);
   }
 
   @Override
-  public void setCountryName(String name) {
+  public void setName(String name) {
     this.name = name.trim();
-    updateView();
+    getView().setName(this.name);
   }
 
   @Override
-  public void setCountryFullName(String fullName) {
+  public void setFullName(String fullName) {
     this.fullName = fullName.trim();
+    getView().setFullname(this.fullName);
+  }
+
+  @Override
+  public void edit(String code) {
+    this.code = code;
+    step = Step.EDIT;
+    loadEntity();
     updateView();
   }
 
   @Override
-  public void createCountry() {
+  public void create() {
     if (!isFormValid()) {
       return;
     }
-    countryRequestProvider.get().fetchByProperty("code", code)
+    requestProvider.get().fetchByProperty("code", code)
         .fire(new Receiver<List<CountryProxy>>() {
           @Override
           public void onSuccess(List<CountryProxy> response) {
             if (response.isEmpty()) {
-              CountryRequest request = countryRequestProvider.get();
+              CountryRequest request = requestProvider.get();
               CountryProxy proxy = request.create(CountryProxy.class);
               fillData(proxy);
               request.save(proxy).fire(new Receiver<CountryProxy>() {
                 @Override
                 public void onSuccess(CountryProxy response) {
-                  countryDataProvider.updateAllData();
+                  dataProvider.updateData();
+                  step = Step.LIST;
                   updateView();
                 }
               });
@@ -159,26 +190,37 @@ public class CountryPresenter
   }
 
   @Override
-  public void updateCountry() {
+  public void update() {
     if (!isFormValid()) {
       return;
     }
-    countryRequestProvider.get().fetchByProperty("code", code)
+
+    requestProvider.get().fetchByProperty("code", code)
         .fire(new Receiver<List<CountryProxy>>() {
           @Override
           public void onSuccess(List<CountryProxy> response) {
             if (response.isEmpty()) {
-              Window.alert("A country with that code does not exist!");
+              Window.alert("The code \"" + code + "\" does not exist!");
+              step = Step.LIST;
+              updateView();
             } else {
-              CountryRequest request = countryRequestProvider.get();
+              CountryRequest request = requestProvider.get();
               CountryProxy proxy = response.get(0);
               proxy = request.edit(proxy);
               fillData(proxy);
               request.save(proxy).fire(new Receiver<CountryProxy>() {
                 @Override
                 public void onSuccess(CountryProxy response) {
-                  countryDataProvider.updateAllData();
-                  updateView();
+                  dataProvider.updateData();
+                  Timer timer = new Timer() {
+                    @Override
+                    public void run() {
+                      step = Step.LIST;
+                      updateView();
+                    }
+                  };
+
+                  timer.schedule(300);
                 }
               });
             }
@@ -187,12 +229,65 @@ public class CountryPresenter
   }
 
   @Override
-  public void prepareFromRequest(PlaceRequest placeRequest) {
-    String idString = placeRequest.getParameter("id", "");
-    try {
-      id = Long.parseLong(idString);
-    } catch (NumberFormatException e) {
-      id = null;
+  public void delete() {
+    if (!step.equals(Step.EDIT)) {
+      return;
+    }
+
+    requestProvider.get()
+        .fetchByProperty("code", code)
+        .fire(new Receiver<List<CountryProxy>>() {
+          @Override
+          public void onSuccess(List<CountryProxy> response) {
+            if (response.isEmpty()) {
+              Window.alert("The code \"" + code + "\" does not exist!");
+              step = Step.LIST;
+              updateView();
+            } else {
+              CountryProxy proxy = response.get(0);
+              requestProvider.get()
+                  .purge(proxy)
+                  .fire(new Receiver<Void>() {
+                    @Override
+                    public void onSuccess(Void response) {
+                      dataProvider.updateData();
+                      step = Step.LIST;
+                      updateView();
+                    }
+                  });
+            }
+          }
+        });
+  }
+
+  private void reset() {
+    resetFields();
+    step = Step.LIST;
+    RangeChangeEvent.fire(getView().getListing(), getView().getListing().getVisibleRange());
+    loadEntity();
+    updateView();
+  }
+
+  private void resetFields() {
+    code = "";
+    name = "";
+    fullName = "";
+  }
+
+  private void loadEntity() {
+    if (code != null && !code.isEmpty()) {
+      CountryProxy proxy = dataProvider.getByCode(code);
+      if (proxy == null) {
+        resetFields();
+        Log.error("Code not found: " + code);
+        onBack();
+      } else {
+        code = proxy.getCode();
+        name = proxy.getName();
+        fullName = proxy.getFullName();
+      }
+    } else {
+      resetFields();
     }
   }
 
@@ -203,17 +298,31 @@ public class CountryPresenter
   }
 
   private void updateView() {
-    getView().setCountryCode(code);
-    getView().setCountryName(name);
-    getView().setCountryFullName(fullName);
-    boolean isValid = isFormValid();
-    getView().enableCreateButton(isValid);
-    getView().enableUpdateButton(isValid);
+    getView().setCode(code);
+    getView().setName(name);
+    getView().setFullname(fullName);
+    switch (step) {
+      case LIST:
+        getView().showListPanel();
+        break;
+      case ADD:
+        getView().showDetailPanel();
+        getView().showAddButtons();
+        break;
+      case EDIT:
+        getView().showDetailPanel();
+        getView().showEditButtons();
+        break;
+    }
   }
 
   private boolean isFormValid() {
     return !Strings.isNullOrEmpty(code)
         && !Strings.isNullOrEmpty(name)
         && !Strings.isNullOrEmpty(fullName);
+  }
+
+  private enum Step {
+    LIST, ADD, EDIT
   }
 }

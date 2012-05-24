@@ -13,13 +13,21 @@ import com.gwtplatform.mvp.client.UiHandlers;
  * @author Nilson
  */
 public interface CountryUiHandlers extends UiHandlers {
-  void setCountryCode(String code);
+  void onBack();
 
-  void setCountryName(String name);
+  void onNext();
 
-  void setCountryFullName(String fullName);
+  void setCode(String code);
 
-  void createCountry();
+  void setName(String name);
 
-  void updateCountry();
+  void setFullName(String fullName);
+
+  void edit(String code);
+
+  void create();
+
+  void update();
+
+  void delete();
 }

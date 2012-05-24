@@ -60,9 +60,9 @@ public class CategoryPresenter
 
     void showEditButtons();
 
-    void setCategoryCode(String code);
+    void setCode(String code);
 
-    void setCategoryName(String name);
+    void setName(String name);
 
     void showLoading(boolean visible);
   }
@@ -120,15 +120,6 @@ public class CategoryPresenter
     reset();
   }
 
-  private void reset() {
-    code = "";
-    name = "";
-    step = Step.LIST;
-    RangeChangeEvent.fire(getView().getListing(), getView().getListing().getVisibleRange());
-    loadEntity();
-    updateView();
-  }
-
   @Override
   public void onBack() {
     step = Step.LIST;
@@ -138,21 +129,20 @@ public class CategoryPresenter
   @Override
   public void onNext() {
     step = Step.ADD;
-    code = "";
-    name = "";
+    resetFields();
     updateView();
   }
 
   @Override
-  public void setCategoryCode(String code) {
+  public void setCode(String code) {
     this.code = code.trim().toUpperCase();
-    getView().setCategoryCode(this.code);
+    getView().setCode(this.code);
   }
 
   @Override
-  public void setCategoryName(String name) {
+  public void setName(String name) {
     this.name = name.trim();
-    getView().setCategoryName(this.name);
+    getView().setName(this.name);
   }
 
   @Override
@@ -262,12 +252,24 @@ public class CategoryPresenter
         });
   }
 
+  private void reset() {
+    resetFields();
+    step = Step.LIST;
+    RangeChangeEvent.fire(getView().getListing(), getView().getListing().getVisibleRange());
+    loadEntity();
+    updateView();
+  }
+
+  private void resetFields() {
+    code = "";
+    name = "";
+  }
+
   private void loadEntity() {
     if (code != null && !code.isEmpty()) {
       CategoryProxy proxy = dataProvider.getByCode(code);
       if (proxy == null) {
-        code = "";
-        name = "";
+        resetFields();
         Log.error("Code not found: " + code);
         onBack();
       } else {
@@ -275,8 +277,7 @@ public class CategoryPresenter
         name = proxy.getName();
       }
     } else {
-      code = "";
-      name = "";
+      resetFields();
     }
   }
 
@@ -286,8 +287,8 @@ public class CategoryPresenter
   }
 
   private void updateView() {
-    getView().setCategoryCode(code);
-    getView().setCategoryName(name);
+    getView().setCode(code);
+    getView().setName(name);
     switch (step) {
       case LIST:
         getView().showListPanel();

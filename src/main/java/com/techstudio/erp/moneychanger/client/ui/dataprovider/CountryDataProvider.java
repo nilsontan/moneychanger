@@ -8,11 +8,10 @@
 package com.techstudio.erp.moneychanger.client.ui.dataprovider;
 
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.Range;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.requestfactory.shared.Receiver;
-import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
-import com.techstudio.erp.moneychanger.client.ui.MultiDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.CountryProxy;
 import com.techstudio.erp.moneychanger.shared.service.CountryRequest;
 
@@ -21,89 +20,91 @@ import java.util.List;
 /**
  * @author Nilson
  */
-public class CountryDataProvider extends MultiDataProvider<CountryProxy> {
+public class CountryDataProvider extends AbstractDataProvider<CountryProxy> {
 
-  private static CountryProxy DEFAULT_COUNTRY;
+  private static CountryProxy DEFAULT;
 
-  private final Provider<CountryRequest> countryRequestProvider;
+  private final Provider<CountryRequest> requestProvider;
+
+  private boolean firstLoad = true;
 
   @Inject
-  public CountryDataProvider(Provider<CountryRequest> countryRequestProvider) {
-    this.countryRequestProvider = countryRequestProvider;
+  public CountryDataProvider(Provider<CountryRequest> requestProvider) {
+    this.requestProvider = requestProvider;
+    updateData();
     findDefault();
   }
 
-  public void updateAllData() {
-    countryRequestProvider.get().fetchAll()
-        .with(CountryProxy.CURRENCY)
-        .fire(new Receiver<List<CountryProxy>>() {
-          @Override
-          public void onSuccess(List<CountryProxy> countryProxies) {
-            updateRowCount(countryProxies.size(), true);
-            updateRowData(0, countryProxies);
-            updateList(countryProxies);
-          }
-        });
-  }
-
-  public void updateTableData() {
-    countryRequestProvider.get().fetchAll()
-        .with(CountryProxy.CURRENCY)
-        .fire(new Receiver<List<CountryProxy>>() {
-          @Override
-          public void onSuccess(List<CountryProxy> countryProxies) {
-            updateRowCount(countryProxies.size(), true);
-            updateRowData(0, countryProxies);
-          }
-        });
-  }
-
-  public void updateListData() {
-    countryRequestProvider.get().fetchAll()
-        .with(CountryProxy.CURRENCY)
-        .fire(new Receiver<List<CountryProxy>>() {
-          @Override
-          public void onSuccess(List<CountryProxy> responses) {
-            updateList(responses);
-          }
-        });
-  }
-
   @Override
-  protected void onRangeChanged(HasData<CountryProxy> countryProxyHasData) {
-    updateTableData();
-  }
-
-  @Override
-  protected void onValueChanged(HasSelectedValue<CountryProxy> display) {
-    updateListData();
-  }
-
-  public CountryProxy getDefaultCountry() {
-    if (DEFAULT_COUNTRY == null) {
-      findDefault();
-    }
-    return DEFAULT_COUNTRY;
-  }
-
-  private void findDefault() {
-    countryRequestProvider.get().fetchAll()
+  public void updateData() {
+    requestProvider.get()
+        .fetchAll()
+        .with(CountryProxy.CURRENCY)
         .fire(new Receiver<List<CountryProxy>>() {
           @Override
-          public void onSuccess(List<CountryProxy> responses) {
-            if (responses.isEmpty()) {
-            } else {
-              for (CountryProxy proxy : responses) {
-                if (proxy.getCode().equals("SG")) {
-                  DEFAULT_COUNTRY = proxy;
-                  break;
-                }
-              }
-              if (DEFAULT_COUNTRY == null) {
-                DEFAULT_COUNTRY = responses.get(0);
-              }
+          public void onSuccess(List<CountryProxy> proxies) {
+            updateMap(proxies);
+            if (firstLoad) {
+              onSuccessfulLoad();
+              firstLoad = false;
+            }
+            for (HasData<CountryProxy> display : getDataDisplays()) {
+              onRangeChanged(display);
             }
           }
         });
+  }
+
+  @Override
+  protected void onRangeChanged(HasData<CountryProxy> display) {
+    final Range range = display.getVisibleRange();
+    requestProvider.get()
+        .fetchRange(range.getStart(), range.getLength())
+        .with(CountryProxy.CURRENCY)
+        .fire(new Receiver<List<CountryProxy>>() {
+          @Override
+          public void onSuccess(List<CountryProxy> proxies) {
+            updateRowData(range.getStart(), proxies);
+          }
+        });
+    requestProvider.get()
+        .getCount()
+        .fire(new Receiver<Integer>() {
+          @Override
+          public void onSuccess(Integer total) {
+            updateRowCount(total, true);
+          }
+        });
+  }
+
+  @Override
+  public CountryProxy getDefault() {
+    if (DEFAULT == null) {
+      findDefault();
+    }
+    return DEFAULT;
+  }
+
+  private void findDefault() {
+    if (DEFAULT == null) {
+      requestProvider.get().fetchAll()
+          .fire(new Receiver<List<CountryProxy>>() {
+            @Override
+            public void onSuccess(List<CountryProxy> responses) {
+              if (responses.isEmpty()) {
+              } else {
+                for (CountryProxy proxy : responses) {
+                  if (proxy.getCode().equals("SG")) {
+                    DEFAULT = proxy;
+                    break;
+                  }
+                }
+                if (DEFAULT == null) {
+                  DEFAULT = responses.get(0);
+                }
+              }
+            }
+          });
+    }
   }
 }
