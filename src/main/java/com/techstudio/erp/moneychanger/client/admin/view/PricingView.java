@@ -13,21 +13,19 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.presenter.PricingPresenter;
-import com.techstudio.erp.moneychanger.client.resources.Resources;
-import com.techstudio.erp.moneychanger.client.ui.ItemPriceCell;
 import com.techstudio.erp.moneychanger.client.ui.LabelInput;
 import com.techstudio.erp.moneychanger.client.ui.RangeLabelPager;
 import com.techstudio.erp.moneychanger.client.ui.ShowMorePagerPanel;
+import com.techstudio.erp.moneychanger.client.ui.cell.ItemPriceCell;
 import com.techstudio.erp.moneychanger.shared.proxy.PricingProxy;
 
 /**
@@ -42,17 +40,20 @@ public class PricingView
 
   private final Widget widget;
 
-  @UiField(provided = true)
-  final Resources res;
+  @UiField
+  Anchor ancHome;
+
+  @UiField
+  HTMLPanel loadingMessage;
+
+  @UiField
+  Label currentStep;
 
   @UiField
   HTMLPanel mainPanel;
 
-  @UiField
-  HTMLPanel listingPanel;
-
   @UiField(provided = true)
-  CellList<PricingProxy> priceL = new CellList<PricingProxy>(new ItemPriceCell());
+  CellList<PricingProxy> list = new CellList<PricingProxy>(new ItemPriceCell());
 
   @UiField
   ShowMorePagerPanel pagerPanel = new ShowMorePagerPanel();
@@ -61,26 +62,25 @@ public class PricingView
   RangeLabelPager pager = new RangeLabelPager();
 
   @UiField
-  Label prLabel;
+  Label label;
 
   @UiField
-  LabelInput prBid;
+  LabelInput bid;
 
   @UiField
-  LabelInput prAsk;
+  LabelInput ask;
 
 //  @UiField
 //  Button prAdd;
 
   @UiField
-  Button prSav;
+  Button save;
 
 //  @UiField
 //  Button prDel;
 
   @Inject
-  public PricingView(Binder binder, final Resources resources) {
-    this.res = resources;
+  public PricingView(Binder binder) {
     widget = binder.createAndBindUi(this);
     setUpListing();
   }
@@ -90,12 +90,18 @@ public class PricingView
     return widget;
   }
 
-  @UiHandler("prBid")
+  @SuppressWarnings("unused")
+  @UiHandler("ancHome")
+  public void onClickHome(ClickEvent event) {
+    History.newItem(NameTokens.getMenuPage());
+  }
+
+  @UiHandler("bid")
   public void onBidChange(ValueChangeEvent<String> event) {
     getUiHandlers().setPricingBidRate(event.getValue());
   }
 
-  @UiHandler("prAsk")
+  @UiHandler("ask")
   public void onAskChange(ValueChangeEvent<String> event) {
     getUiHandlers().setPricingAskRate(event.getValue());
   }
@@ -107,7 +113,7 @@ public class PricingView
 //  }
 
   @SuppressWarnings("unused")
-  @UiHandler("prSav")
+  @UiHandler("save")
   public void onUpdate(ClickEvent event) {
     getUiHandlers().update();
   }
@@ -119,40 +125,47 @@ public class PricingView
 //  }
 
   @Override
-  public void showListPanel() {
-    mainPanel.setStyleName("slider show1");
-    priceL.setVisible(true);
+  public HasData<PricingProxy> getListing() {
+    return list;
   }
 
   @Override
-  public HasData<PricingProxy> getListing() {
-    return priceL;
+  public void showListPanel() {
+    mainPanel.setStyleName("slider show1");
+    list.setVisible(true);
   }
 
   @Override
   public void showDetailPanel() {
     mainPanel.setStyleName("slider show2");
-    priceL.setVisible(false);
+    list.setVisible(false);
   }
 
   @Override
   public void setPriceTitle(String title) {
-    prLabel.setText(title);
+    label.setText(title);
   }
 
   @Override
   public void setPriceAsk(String askRate) {
-    prAsk.setValue(askRate);
+    ask.setValue(askRate);
   }
 
   @Override
   public void setPriceBid(String bidRate) {
-    prBid.setValue(bidRate);
+    bid.setValue(bidRate);
+  }
+
+  @Override
+  public void showLoading(boolean visible) {
+    loadingMessage.setVisible(visible);
+    currentStep.setVisible(!visible);
+    mainPanel.setVisible(!visible);
   }
 
   private void setUpListing() {
     final NoSelectionModel<PricingProxy> selectionModel = new NoSelectionModel<PricingProxy>();
-    priceL.setSelectionModel(selectionModel);
+    list.setSelectionModel(selectionModel);
     selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
       @Override
       public void onSelectionChange(SelectionChangeEvent event) {
@@ -163,7 +176,7 @@ public class PricingView
       }
     });
 
-    pagerPanel.setDisplay(priceL);
-    pager.setDisplay(priceL);
+    pagerPanel.setDisplay(list);
+    pager.setDisplay(list);
   }
 }

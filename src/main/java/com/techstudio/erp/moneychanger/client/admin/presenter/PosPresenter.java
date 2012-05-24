@@ -27,7 +27,7 @@ import com.techstudio.erp.moneychanger.client.admin.view.PosUiHandlers;
 import com.techstudio.erp.moneychanger.client.gin.DefaultCurrency;
 import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForItemQty;
 import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForRate;
-import com.techstudio.erp.moneychanger.client.ui.PricingDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.PricingDataProvider;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
@@ -61,6 +61,12 @@ public class PosPresenter
     void showAmtPanel(boolean visible);
 
     void showRatePanel(boolean visible);
+
+    void showIconHome(boolean visible);
+
+    void showIconBack(boolean visible);
+
+    void showIconMenu(boolean visible);
 
     void resetSelections();
 
@@ -195,11 +201,27 @@ public class PosPresenter
   }
 
   protected void onReveal() {
+    super.onReveal();
+    reset();
   }
 
   @Override
-  public void switchView() {
-    Log.debug("Switching views ...");
+  public void onBack() {
+    switch (step) {
+      case BUY:
+        shiftToStep(Step.CONFIRM);
+        break;
+      case DETAILS:
+        lineItems.remove(pendingLineItem);
+      case SELL:
+        shiftToStep(Step.BUY);
+        break;
+    }
+  }
+
+  @Override
+  public void selectCategories() {
+
   }
 
   @Override
@@ -218,19 +240,6 @@ public class PosPresenter
   public void saveTransaction() {
     Log.debug("Saving tx ...");
     reset();
-  }
-
-  @Override
-  public void skipStep() {
-    Log.debug("Transacting with default currency ...");
-    switch (step) {
-      case BUY:
-        shiftToStep(Step.SELL);
-        break;
-      case SELL:
-        shiftToStep(Step.DETAILS);
-        break;
-    }
   }
 
   @Override
@@ -455,12 +464,12 @@ public class PosPresenter
     }
 
     proxy.setItemBuy(itemToBuy);
-    PricingProxy itemToBuyPricing = pricingDataProvider.getSpotRateForCode(itemToBuy.getCode());
+    PricingProxy itemToBuyPricing = pricingDataProvider.getByCode(itemToBuy.getCode());
     proxy.setBuyUnitPrice(itemToBuyPricing.getBidRate());
     proxy.setBuyQuantity(BigDecimal.ZERO);
 
     proxy.setItemSell(itemToSell);
-    PricingProxy itemToSellPricing = pricingDataProvider.getSpotRateForCode(itemToSell.getCode());
+    PricingProxy itemToSellPricing = pricingDataProvider.getByCode(itemToSell.getCode());
     proxy.setSellUnitPrice(itemToSellPricing.getAskRate());
     proxy.setSellQuantity(BigDecimal.ZERO);
 
@@ -473,10 +482,24 @@ public class PosPresenter
     // 3 panels to hide/show : 1.TxPanel contains -> 2.ItemPanel 3.RatePanel
     if (step.itemSelecting) {
       getView().showItemPanel(step.itemSelecting);
+      getView().showIconMenu(true);
+      if (lineItems.isEmpty()) {
+        getView().showIconHome(true);
+        getView().showIconBack(false);
+      } else {
+        getView().showIconHome(false);
+        getView().showIconBack(true);
+      }
     } else if (step.amtEntering) {
       getView().showAmtPanel(step.amtEntering);
+      getView().showIconMenu(false);
+      getView().showIconHome(false);
+      getView().showIconBack(true);
     } else {
       getView().showRatePanel(!(step.amtEntering || step.itemSelecting));
+      getView().showIconMenu(false);
+      getView().showIconHome(false);
+      getView().showIconBack(false);
     }
 
     getView().setStep(step.inst);

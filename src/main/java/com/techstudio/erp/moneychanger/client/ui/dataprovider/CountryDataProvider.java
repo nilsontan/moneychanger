@@ -5,12 +5,14 @@
  * Solution Pte Ltd ("Confidential Information").
  */
 
-package com.techstudio.erp.moneychanger.client.ui;
+package com.techstudio.erp.moneychanger.client.ui.dataprovider;
 
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
+import com.techstudio.erp.moneychanger.client.ui.MultiDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.CountryProxy;
 import com.techstudio.erp.moneychanger.shared.service.CountryRequest;
 

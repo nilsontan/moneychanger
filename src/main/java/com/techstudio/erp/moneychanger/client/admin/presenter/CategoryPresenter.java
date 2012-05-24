@@ -7,9 +7,12 @@
 
 package com.techstudio.erp.moneychanger.client.admin.presenter;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.common.base.Strings;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
@@ -19,12 +22,13 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.CategoryUiHandlers;
-import com.techstudio.erp.moneychanger.client.ui.CategoryDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.CategoryDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.FirstLoad;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.MyDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
 
@@ -46,38 +50,58 @@ public class CategoryPresenter
   }
 
   public interface MyView extends View, HasUiHandlers<CategoryUiHandlers> {
-//    HasSelectedValue<CategoryProxy> getList();
+    HasData<CategoryProxy> getListing();
 
-    HasData<CategoryProxy> getTable();
+    void showListPanel();
 
-    void enableCreateButton(boolean isValid);
+    void showDetailPanel();
 
-    void enableUpdateButton(boolean isValid);
+    void showAddButtons();
+
+    void showEditButtons();
 
     void setCategoryCode(String code);
 
     void setCategoryName(String name);
+
+    void showLoading(boolean visible);
   }
 
-  private final Provider<CategoryRequest> categoryRequestProvider;
-  private final CategoryDataProvider categoryDataProvider;
+  private final Provider<CategoryRequest> requestProvider;
+  private final MyDataProvider<CategoryProxy> dataProvider;
 
-  private Long id;
   private String code;
   private String name;
+  private Step step;
 
   @Inject
   public CategoryPresenter(final EventBus eventBus,
                            final MyView view,
                            final MyProxy proxy,
-                           final Provider<CategoryRequest> categoryRequestProvider,
-                           final CategoryDataProvider categoryDataProvider) {
+                           final Provider<CategoryRequest> requestProvider,
+                           final CategoryDataProvider dataProvider) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
-    this.categoryRequestProvider = categoryRequestProvider;
-    this.categoryDataProvider = categoryDataProvider;
-    this.categoryDataProvider.addDataDisplay(getView().getTable());
+    this.requestProvider = requestProvider;
+    this.dataProvider = dataProvider;
+    this.dataProvider.addOnFirstLoadHandler(onFirstLoad);
+    getView().showLoading(true);
+    this.dataProvider.addDataDisplay(getView().getListing());
   }
+
+  FirstLoad.OnFirstLoad onFirstLoad = new FirstLoad.OnFirstLoad() {
+    @Override
+    public void onSuccess(FirstLoad firstLoad) {
+      Timer timer = new Timer() {
+        @Override
+        public void run() {
+          getView().showLoading(false);
+        }
+      };
+
+      timer.schedule(1000);
+    }
+  };
 
   @Override
   protected void revealInParent() {
@@ -87,53 +111,76 @@ public class CategoryPresenter
   @Override
   protected void onReset() {
     super.onReset();
+    reset();
+  }
 
-    if (id == null) {
-      code = "";
-      name = "";
-      updateView();
-    } else {
-      categoryRequestProvider.get().fetch(id)
-          .fire(new Receiver<CategoryProxy>() {
-            @Override
-            public void onSuccess(CategoryProxy response) {
-              code = response.getCode();
-              name = response.getName();
-              updateView();
-            }
-          });
-    }
+  @Override
+  protected void onReveal() {
+    super.onReveal();
+    reset();
+  }
+
+  private void reset() {
+    code = "";
+    name = "";
+    step = Step.LIST;
+    RangeChangeEvent.fire(getView().getListing(), getView().getListing().getVisibleRange());
+    loadEntity();
+    updateView();
+  }
+
+  @Override
+  public void onBack() {
+    step = Step.LIST;
+    updateView();
+  }
+
+  @Override
+  public void onNext() {
+    step = Step.ADD;
+    code = "";
+    name = "";
+    updateView();
   }
 
   @Override
   public void setCategoryCode(String code) {
     this.code = code.trim().toUpperCase();
-    updateView();
+    getView().setCategoryCode(this.code);
   }
 
   @Override
   public void setCategoryName(String name) {
     this.name = name.trim();
+    getView().setCategoryName(this.name);
+  }
+
+  @Override
+  public void edit(String code) {
+    this.code = code;
+    step = Step.EDIT;
+    loadEntity();
     updateView();
   }
 
   @Override
-  public void createCategory() {
+  public void create() {
     if (!isFormValid()) {
       return;
     }
-    categoryRequestProvider.get().fetchByProperty("code", code)
+    requestProvider.get().fetchByProperty("code", code)
         .fire(new Receiver<List<CategoryProxy>>() {
           @Override
           public void onSuccess(List<CategoryProxy> response) {
             if (response.isEmpty()) {
-              CategoryRequest request = categoryRequestProvider.get();
+              CategoryRequest request = requestProvider.get();
               CategoryProxy proxy = request.create(CategoryProxy.class);
               fillData(proxy);
               request.save(proxy).fire(new Receiver<CategoryProxy>() {
                 @Override
                 public void onSuccess(CategoryProxy response) {
-                  categoryDataProvider.updateAllData();
+                  dataProvider.updateData();
+                  step = Step.LIST;
                   updateView();
                 }
               });
@@ -145,26 +192,37 @@ public class CategoryPresenter
   }
 
   @Override
-  public void updateCategory() {
+  public void update() {
     if (!isFormValid()) {
       return;
     }
-    categoryRequestProvider.get().fetchByProperty("code", code)
+
+    requestProvider.get().fetchByProperty("code", code)
         .fire(new Receiver<List<CategoryProxy>>() {
           @Override
           public void onSuccess(List<CategoryProxy> response) {
             if (response.isEmpty()) {
-              Window.alert("A category with that code does not exist!");
+              Window.alert("The code \"" + code + "\" does not exist!");
+              step = Step.LIST;
+              updateView();
             } else {
-              CategoryRequest request = categoryRequestProvider.get();
+              CategoryRequest request = requestProvider.get();
               CategoryProxy proxy = response.get(0);
               proxy = request.edit(proxy);
               fillData(proxy);
               request.save(proxy).fire(new Receiver<CategoryProxy>() {
                 @Override
                 public void onSuccess(CategoryProxy response) {
-                  categoryDataProvider.updateAllData();
-                  updateView();
+                  dataProvider.updateData();
+                  Timer timer = new Timer() {
+                    @Override
+                    public void run() {
+                      step = Step.LIST;
+                      updateView();
+                    }
+                  };
+
+                  timer.schedule(300);
                 }
               });
             }
@@ -173,12 +231,52 @@ public class CategoryPresenter
   }
 
   @Override
-  public void prepareFromRequest(PlaceRequest placeRequest) {
-    String idString = placeRequest.getParameter("id", "");
-    try {
-      id = Long.parseLong(idString);
-    } catch (NumberFormatException e) {
-      id = null;
+  public void delete() {
+    if (!step.equals(Step.EDIT)) {
+      return;
+    }
+
+    requestProvider.get()
+        .fetchByProperty("code", code)
+        .fire(new Receiver<List<CategoryProxy>>() {
+          @Override
+          public void onSuccess(List<CategoryProxy> response) {
+            if (response.isEmpty()) {
+              Window.alert("The code \"" + code + "\" does not exist!");
+              step = Step.LIST;
+              updateView();
+            } else {
+              CategoryProxy proxy = response.get(0);
+              requestProvider.get()
+                  .purge(proxy)
+                  .fire(new Receiver<Void>() {
+                    @Override
+                    public void onSuccess(Void response) {
+                      dataProvider.updateData();
+                      step = Step.LIST;
+                      updateView();
+                    }
+                  });
+            }
+          }
+        });
+  }
+
+  private void loadEntity() {
+    if (code != null && !code.isEmpty()) {
+      CategoryProxy proxy = dataProvider.getByCode(code);
+      if (proxy == null) {
+        code = "";
+        name = "";
+        Log.error("Code not found: " + code);
+        onBack();
+      } else {
+        code = proxy.getCode();
+        name = proxy.getName();
+      }
+    } else {
+      code = "";
+      name = "";
     }
   }
 
@@ -190,13 +288,27 @@ public class CategoryPresenter
   private void updateView() {
     getView().setCategoryCode(code);
     getView().setCategoryName(name);
-    boolean isValid = isFormValid();
-    getView().enableCreateButton(isValid);
-    getView().enableUpdateButton(isValid);
+    switch (step) {
+      case LIST:
+        getView().showListPanel();
+        break;
+      case ADD:
+        getView().showDetailPanel();
+        getView().showAddButtons();
+        break;
+      case EDIT:
+        getView().showDetailPanel();
+        getView().showEditButtons();
+        break;
+    }
   }
 
   private boolean isFormValid() {
     return !Strings.isNullOrEmpty(code)
         && !Strings.isNullOrEmpty(name);
+  }
+
+  private enum Step {
+    LIST, ADD, EDIT
   }
 }

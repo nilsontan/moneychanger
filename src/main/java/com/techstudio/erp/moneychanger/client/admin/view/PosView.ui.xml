@@ -26,6 +26,17 @@
       <g:Label text="POS is loading ..." />
       <div class="progress-bar" />
     </g:HTMLPanel>
+    <g:HTMLPanel ui:field="ancBar">
+      <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home" />
+      </g:Anchor>
+      <g:Anchor ui:field="ancBack" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-left" />
+      </g:Anchor>
+      <g:Anchor ui:field="ancMenu" addStyleNames="homeBar-icon homeBar-icon-r icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-grid" />
+      </g:Anchor>
+    </g:HTMLPanel>
     <div class="bar page-title">
       <g:Label ui:field="currentStep" addStyleNames="{res.pos.step}" />
     </div>

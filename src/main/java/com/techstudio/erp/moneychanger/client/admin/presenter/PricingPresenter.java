@@ -12,7 +12,6 @@ import com.google.common.base.Strings;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
@@ -22,13 +21,14 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.PricingUiHandlers;
 import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForCosting;
-import com.techstudio.erp.moneychanger.client.ui.PricingDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.FirstLoad;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.MyDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.PricingDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.PricingProxy;
 import com.techstudio.erp.moneychanger.shared.service.PricingRequest;
 
@@ -51,8 +51,6 @@ public class PricingPresenter
   public interface MyView extends View, HasUiHandlers<PricingUiHandlers> {
     HasData<PricingProxy> getListing();
 
-//    HasData<PricingProxy> getItemPriceListing();
-
     void showDetailPanel();
 
     void showListPanel();
@@ -62,10 +60,12 @@ public class PricingPresenter
     void setPriceAsk(String askRate);
 
     void setPriceBid(String bidRate);
+
+    void showLoading(boolean visible);
   }
 
-  private final Provider<PricingRequest> pricingRequestProvider;
-  private final PricingDataProvider pricingDataProvider;
+  private final Provider<PricingRequest> requestProvider;
+  private final MyDataProvider<PricingProxy> dataProvider;
 
   private String code;
   private String name;
@@ -80,14 +80,30 @@ public class PricingPresenter
   public PricingPresenter(final EventBus eventBus,
                           final MyView view,
                           final MyProxy proxy,
-                          final Provider<PricingRequest> pricingRequestProvider,
-                          final PricingDataProvider pricingDataProvider) {
+                          final Provider<PricingRequest> requestProvider,
+                          final PricingDataProvider dataProvider) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
-    this.pricingRequestProvider = pricingRequestProvider;
-    this.pricingDataProvider = pricingDataProvider;
-    this.pricingDataProvider.addDataDisplay(getView().getListing());
+    this.requestProvider = requestProvider;
+    this.dataProvider = dataProvider;
+    this.dataProvider.addOnFirstLoadHandler(onFirstLoad);
+    getView().showLoading(true);
+    this.dataProvider.addDataDisplay(getView().getListing());
   }
+
+  FirstLoad.OnFirstLoad onFirstLoad = new FirstLoad.OnFirstLoad() {
+    @Override
+    public void onSuccess(FirstLoad firstLoad) {
+      Timer timer = new Timer() {
+        @Override
+        public void run() {
+          getView().showLoading(false);
+        }
+      };
+
+      timer.schedule(1000);
+    }
+  };
 
   @Override
   protected void revealInParent() {
@@ -98,31 +114,8 @@ public class PricingPresenter
   protected void onReset() {
     super.onReset();
     loadEntity();
-    RangeChangeEvent.fire(getView().getListing(), getView().getListing().getVisibleRange());
+//    RangeChangeEvent.fire(getView().getListing(), getView().getListing().getVisibleRange());
     getView().showListPanel();
-  }
-
-  private void loadEntity() {
-    if (code != null && !code.isEmpty()) {
-      PricingProxy pricingProxy = pricingDataProvider.getSpotRateForCode(code);
-      if (pricingProxy == null) {
-        code = "";
-        name = "";
-        bidRate = BigDecimal.ONE;
-        askRate = BigDecimal.ONE;
-      } else {
-        code = pricingProxy.getCode();
-        name = pricingProxy.getName();
-        bidRate = pricingProxy.getBidRate();
-        askRate = pricingProxy.getAskRate();
-      }
-    } else {
-      code = "";
-      name = "";
-      bidRate = BigDecimal.ONE;
-      askRate = BigDecimal.ONE;
-    }
-    updateView();
   }
 
   @Override
@@ -130,12 +123,6 @@ public class PricingPresenter
     super.onReveal();
     loadEntity();
     getView().showListPanel();
-  }
-
-  @Override
-  public void setPricingCode(final String code) {
-    this.code = code.trim().toUpperCase();
-    updateView();
   }
 
   @Override
@@ -152,7 +139,7 @@ public class PricingPresenter
 
   @Override
   public void edit(String code) {
-    this.code = code;
+    this.code = code.trim();
     loadEntity();
     getView().showDetailPanel();
   }
@@ -167,14 +154,15 @@ public class PricingPresenter
     if (!isFormValid()) {
       return;
     }
-    pricingRequestProvider.get().fetchByProperty("code", code)
+    requestProvider.get().fetchByProperty("code", code)
         .fire(new Receiver<List<PricingProxy>>() {
           @Override
           public void onSuccess(List<PricingProxy> response) {
             if (response.isEmpty()) {
-              Window.alert("An exchange rate with that code does not exist!");
+              Window.alert("That code " + code + " does not exist!");
+              getView().showListPanel();
             } else {
-              PricingRequest request = pricingRequestProvider.get();
+              PricingRequest request = requestProvider.get();
               PricingProxy proxy = response.get(0);
               proxy = request.edit(proxy);
               fillData(proxy);
@@ -182,7 +170,7 @@ public class PricingPresenter
                   .fire(new Receiver<PricingProxy>() {
                     @Override
                     public void onSuccess(PricingProxy response) {
-                      pricingDataProvider.updateData();
+                      dataProvider.updateData();
                       Timer timer = new Timer() {
                         @Override
                         public void run() {
@@ -203,9 +191,27 @@ public class PricingPresenter
     // Deletion of Pricing is not allowed
   }
 
-  @Override
-  public void prepareFromRequest(PlaceRequest placeRequest) {
-    code = placeRequest.getParameter("c", "");
+  private void loadEntity() {
+    if (code != null && !code.isEmpty()) {
+      PricingProxy pricingProxy = dataProvider.getByCode(code);
+      if (pricingProxy == null) {
+        code = "";
+        name = "";
+        bidRate = BigDecimal.ONE;
+        askRate = BigDecimal.ONE;
+      } else {
+        code = pricingProxy.getCode();
+        name = pricingProxy.getName();
+        bidRate = pricingProxy.getBidRate();
+        askRate = pricingProxy.getAskRate();
+      }
+    } else {
+      code = "";
+      name = "";
+      bidRate = BigDecimal.ONE;
+      askRate = BigDecimal.ONE;
+    }
+    updateView();
   }
 
   private void fillData(PricingProxy proxy) {

@@ -13,15 +13,15 @@ import com.gwtplatform.mvp.client.UiHandlers;
  * @author Nilson
  */
 public interface PosUiHandlers extends UiHandlers {
-  void switchView();
+  void onBack();
+
+  void selectCategories();
 
   void addToTransaction();
 
   void deleteTransaction();
 
   void saveTransaction();
-
-  void skipStep();
 
   int itemSelected(String itemCode);
 

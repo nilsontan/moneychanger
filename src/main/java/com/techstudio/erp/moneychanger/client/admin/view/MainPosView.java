@@ -7,17 +7,12 @@
 
 package com.techstudio.erp.moneychanger.client.admin.view;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
-import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.presenter.MainPosPresenter;
 import com.techstudio.erp.moneychanger.client.admin.presenter.MainPosPresenter.MyView;
 
@@ -40,12 +35,6 @@ public class MainPosView
   HTMLPanel loadingMessage;
 
   @UiField
-  Anchor ancHome;
-
-  @UiField
-  Anchor ancMenu;
-
-  @UiField
   HTMLPanel mainContentContainer;
 
   @Inject
@@ -56,17 +45,6 @@ public class MainPosView
   @Override
   public Widget asWidget() {
     return widget;
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("ancHome")
-  public void onClickHome(ClickEvent event) {
-    History.newItem(NameTokens.getMenuPage());
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("ancMenu")
-  public void onClickMenu(ClickEvent event) {
   }
 
   @Override

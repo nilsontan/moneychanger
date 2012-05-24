@@ -24,7 +24,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.CurrencyUiHandlers;
-import com.techstudio.erp.moneychanger.client.ui.CurrencyDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.CurrencyDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 import com.techstudio.erp.moneychanger.shared.service.CurrencyRequest;
 

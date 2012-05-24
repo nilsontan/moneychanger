@@ -13,8 +13,6 @@ import com.gwtplatform.mvp.client.UiHandlers;
  * @author Nilson
  */
 public interface PricingUiHandlers extends UiHandlers {
-  void setPricingCode(String code);
-
   void setPricingAskRate(String askRate);
 
   void setPricingBidRate(String bidRate);

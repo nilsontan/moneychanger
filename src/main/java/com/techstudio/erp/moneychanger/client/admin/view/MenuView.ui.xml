@@ -20,7 +20,7 @@
         <m:OrderedList addStyleNames="centered round-table" width="100%">
           <m:MyMenuListItem ui:field="bPos" name="Access POS" iconName="icon-grid" addStyleNames="first" />
           <m:MyMenuListItem ui:field="bPricing" name="Pricing" iconName="icon-star" />
-          <m:MyMenuListItem ui:field="bSettings" name="Settings" iconName="icon-info" addStyleNames="last" />
+          <m:MyMenuListItem ui:field="bSettings" name="Settings" iconName="icon-flower" addStyleNames="last" />
         </m:OrderedList>
       </div>
       <div class="menu-container">

@@ -1,4 +1,4 @@
-package com.techstudio.erp.moneychanger.client.ui;
+package com.techstudio.erp.moneychanger.client.ui.cell;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;

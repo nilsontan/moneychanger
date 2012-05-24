@@ -19,7 +19,7 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
-import com.techstudio.erp.moneychanger.client.ui.ItemDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.ItemDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 
 /**

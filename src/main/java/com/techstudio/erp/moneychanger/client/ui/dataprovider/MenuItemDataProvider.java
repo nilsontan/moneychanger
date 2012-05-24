@@ -5,7 +5,7 @@
  * Solution Pte Ltd ("Confidential Information").
  */
 
-package com.techstudio.erp.moneychanger.client.ui;
+package com.techstudio.erp.moneychanger.client.ui.dataprovider;
 
 import com.google.common.collect.Lists;
 import com.google.gwt.view.client.AsyncDataProvider;

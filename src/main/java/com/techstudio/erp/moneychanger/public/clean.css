@@ -225,7 +225,6 @@ input::-webkit-inner-spin-button {
 
 .gwt-Button:hover, .gwt-Button:focus, .soft-bg:hover, .soft-bg:focus {
   background: #DFDFDF;
-  border: 1px solid #BBB;
   text-shadow: 0 1px 0 white;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#E0E0E0));
   background-image: -webkit-linear-gradient(#F9F9F9, #E0E0E0);
@@ -233,6 +232,10 @@ input::-webkit-inner-spin-button {
   background-image: -ms-linear-gradient(#F9F9F9, #E0E0E0);
   background-image: -o-linear-gradient(#F9F9F9, #E0E0E0);
   background-image: linear-gradient(#F9F9F9, #E0E0E0);
+}
+
+.gwt-Button:hover, .gwt-Button:focus {
+  border: 1px solid #BBB;
 }
 
 .gwt-Button:active, .soft-bg:active {
@@ -265,6 +268,10 @@ input::-webkit-inner-spin-button {
   background-image: linear-gradient(white, #F1F1F1);
 }
 
+.gwt-Anchor {
+  cursor: pointer;
+}
+
 .round-table {
   padding: 0.2em 0;
 }
@@ -291,6 +298,20 @@ input::-webkit-inner-spin-button {
 
 .last.first {
   border-width: 1px;
+}
+
+.padding-s {
+  padding: 0.2em;
+}
+
+.loadingDock {
+  display: block;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  width: 60%;
+  height: 9em;
+  text-align: center;
 }
 
 /*-  ICONS
@@ -412,8 +433,21 @@ input::-webkit-inner-spin-button {
   background-position: -612px 50%;
 }
 
+.icon-bullet {
+  background-position: -720px 50%;
+}
+
 /*-  STRUCTURE
 ----------------------------------------------------------------------*/
+
+.step {
+  color: #3E3E3E;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 0 1px 0 white;
+  text-transform: uppercase;
+  padding-top: 0.8em;
+}
 
 .page-title, .page-title.bar {
   border-width: 1px 0;
@@ -838,6 +872,7 @@ div.di-r-container {
 
 .menuListItem-item, .lineItem-item {
   padding: 0.3em 3em;
+  cursor: pointer;
 }
 
 .round-table .first .menuListItem-item, .round-table .first .lineItem-item {

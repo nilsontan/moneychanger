@@ -24,7 +24,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.CountryUiHandlers;
-import com.techstudio.erp.moneychanger.client.ui.CountryDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.CountryDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.CountryProxy;
 import com.techstudio.erp.moneychanger.shared.service.CountryRequest;
 

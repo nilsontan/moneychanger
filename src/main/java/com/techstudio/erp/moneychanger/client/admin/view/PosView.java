@@ -13,12 +13,11 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.presenter.PosPresenter.MyView;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.client.ui.*;
@@ -41,6 +40,18 @@ public class PosView
 
   @UiField(provided = true)
   final Resources res;
+
+  @UiField
+  HTMLPanel ancBar;
+
+  @UiField
+  Anchor ancHome;
+
+  @UiField
+  Anchor ancBack;
+
+  @UiField
+  Anchor ancMenu;
 
   /**
    * Main Panel
@@ -130,6 +141,24 @@ public class PosView
   }
 
   @SuppressWarnings("unused")
+  @UiHandler("ancHome")
+  public void onClickHome(ClickEvent event) {
+    History.newItem(NameTokens.getMenuPage());
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("ancBack")
+  public void onClickBack(ClickEvent event) {
+    getUiHandlers().onBack();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("ancMenu")
+  public void onClickMenu(ClickEvent event) {
+    getUiHandlers().selectCategories();
+  }
+
+  @SuppressWarnings("unused")
   @UiHandler("txAdd")
   public void onTxAdd(ClickEvent event) {
     getUiHandlers().addToTransaction();
@@ -215,6 +244,21 @@ public class PosView
       mainPanel.setStyleName("slideshow show3");
       itemMenu.setVisible(false);
     }
+  }
+
+  @Override
+  public void showIconHome(boolean visible) {
+    ancHome.setVisible(visible);
+  }
+
+  @Override
+  public void showIconBack(boolean visible) {
+    ancBack.setVisible(visible);
+  }
+
+  @Override
+  public void showIconMenu(boolean visible) {
+    ancMenu.setVisible(visible);
   }
 
   public void resetSelections() {
@@ -394,6 +438,13 @@ public class PosView
         }
       });
 
+      myLineItem.addClickHandler(new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+          getUiHandlers().modifyItem(index);
+        }
+      });
+
       count++;
 
       switch (lineItem.getTransactionType()) {
@@ -418,5 +469,6 @@ public class PosView
     loadingMessage.setVisible(visible);
     currentStep.setVisible(!visible);
     mainPanel.setVisible(!visible);
+    ancBar.setVisible(!visible);
   }
 }

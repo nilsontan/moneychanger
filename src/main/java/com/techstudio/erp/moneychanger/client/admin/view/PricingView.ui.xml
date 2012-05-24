@@ -5,31 +5,32 @@
              xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui">
 
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
-  <ui:style>
-    .padding {
-      padding: 0.2em;
-    }
-  </ui:style>
 
   <g:HTMLPanel>
+    <g:HTMLPanel ui:field="loadingMessage" addStyleNames="loadingDock">
+      <g:Image resource="{res.iLoadingIcon}" />
+      <g:Label text="Loading Price ..." />
+      <div class="progress-bar" />
+    </g:HTMLPanel>
+    <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home" />
+    </g:Anchor>
     <div class="bar page-title">
-      <g:Label text="Pricing" addStyleNames="{res.pos.step}" />
+      <g:Label ui:field="currentStep" text="Pricing" addStyleNames="step" />
     </div>
     <div class="content bodyBg">
       <g:HTMLPanel ui:field="mainPanel" addStyleNames="slider">
-        <g:HTMLPanel ui:field="listingPanel" addStyleNames="centered slide1">
-          <!--<c:CellTable ui:field="priceListing" />
-          <c:SimplePager ui:field="priceListingPager" location="CENTER" />-->
-          <c:CellList ui:field="priceL" />
+        <g:HTMLPanel addStyleNames="centered slide1">
+          <c:CellList ui:field="list" />
           <m:ShowMorePagerPanel ui:field="pagerPanel" />
           <m:RangeLabelPager ui:field="pager" />
         </g:HTMLPanel>
         <g:HTMLPanel addStyleNames="centered slide2">
-          <g:HTMLPanel addStyleNames="{style.padding}">
+          <g:HTMLPanel addStyleNames="padding-s">
             <div class="field-container">
-              <g:Label ui:field="prLabel" addStyleNames="form-title group-title" />
-              <m:LabelInput text="Bid" type="number" ui:field="prBid" addStyleNames="rate" />
-              <m:LabelInput text="Ask" type="number" ui:field="prAsk" addStyleNames="rate" />
+              <g:Label ui:field="label" addStyleNames="form-title group-title" />
+              <m:LabelInput text="Bid" type="number" ui:field="bid" addStyleNames="rate" />
+              <m:LabelInput text="Ask" type="number" ui:field="ask" addStyleNames="rate" />
             </div>
             <!--<g:HTMLPanel addStyleNames="icon-container">
               <span class="icon-set icon-set-left icon-add" />
@@ -37,7 +38,7 @@
             </g:HTMLPanel>-->
             <g:HTMLPanel addStyleNames="icon-container">
               <span class="icon-set icon-set-left icon-tick" />
-              <g:Button ui:field="prSav" text="Save" />
+              <g:Button ui:field="save" text="Save" />
             </g:HTMLPanel>
             <!--<g:HTMLPanel addStyleNames="icon-container">
               <span class="icon-set icon-set-left icon-cross" />

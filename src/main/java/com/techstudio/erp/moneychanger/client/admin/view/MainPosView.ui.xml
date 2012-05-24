@@ -18,12 +18,6 @@
       <g:Label text="Please wait ..." />
       <div class="progress-bar" />
     </g:HTMLPanel>
-    <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
-      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home" />
-    </g:Anchor>
-    <g:Anchor ui:field="ancMenu" addStyleNames="homeBar-icon homeBar-icon-r icon-container-a">
-      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-grid" />
-    </g:Anchor>
     <g:HTMLPanel ui:field="mainContentContainer" />
   </g:HTMLPanel>
 </ui:UiBinder>

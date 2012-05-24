@@ -25,7 +25,11 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.ItemUiHandlers;
-import com.techstudio.erp.moneychanger.client.ui.*;
+import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
+import com.techstudio.erp.moneychanger.client.ui.UomDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.CurrencyDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.DataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.ItemDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
@@ -79,7 +83,7 @@ public class ItemPresenter
 
   private final Provider<ItemRequest> itemRequestProvider;
   private final ItemDataProvider itemDataProvider;
-  private final CategoryDataProvider categoryDataProvider;
+  private final DataProvider<CategoryProxy> categoryDataProvider;
   private final CurrencyDataProvider currencyDataProvider;
   private final UomDataProvider uomDataProvider;
 
@@ -99,7 +103,7 @@ public class ItemPresenter
                        final MyProxy proxy,
                        final Provider<ItemRequest> itemRequestProvider,
                        final ItemDataProvider itemDataProvider,
-                       final CategoryDataProvider categoryDataProvider,
+                       final DataProvider<CategoryProxy> categoryDataProvider,
                        final CurrencyDataProvider currencyDataProvider,
                        final UomDataProvider uomDataProvider) {
     super(eventBus, view, proxy);
@@ -108,7 +112,7 @@ public class ItemPresenter
     this.itemDataProvider = itemDataProvider;
     this.itemDataProvider.addDataDisplay(getView().getItemTable());
     this.categoryDataProvider = categoryDataProvider;
-    this.categoryDataProvider.addDataListDisplay(getView().getCategoryList());
+//    this.categoryDataProvider.addDataListDisplay(getView().getCategoryList());
     this.currencyDataProvider = currencyDataProvider;
     this.currencyDataProvider.addDataListDisplay(getView().getCurrencyList());
     this.uomDataProvider = uomDataProvider;
@@ -149,10 +153,10 @@ public class ItemPresenter
   @Override
   protected void onReveal() {
     super.onReveal();
-    categoryDataProvider.updateListData();
+//    categoryDataProvider.updateListData();
     currencyDataProvider.updateListData();
     uomDataProvider.updateListData();
-    if (categoryDataProvider.getDefaultCategory() == null) {
+    if (categoryDataProvider.getDefault() == null) {
       Window.alert("There are no available Categories. Please create a Category first");
     } else if (currencyDataProvider.getDefaultCurrency() == null) {
       Window.alert("There are no available Currencies. Please create a Currency first");
@@ -162,7 +166,7 @@ public class ItemPresenter
       code = "";
       name = "";
       fullName = "";
-      category = categoryDataProvider.getDefaultCategory();
+      category = categoryDataProvider.getDefault();
       currency = currencyDataProvider.getDefaultCurrency();
       uom = uomDataProvider.getDefaultUom();
       uomRate = BigDecimal.ONE;

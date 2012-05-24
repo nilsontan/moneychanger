@@ -5,10 +5,8 @@
  * Solution Pte Ltd ("Confidential Information").
  */
 
-package com.techstudio.erp.moneychanger.client.ui;
+package com.techstudio.erp.moneychanger.client.ui.dataprovider;
 
-import com.google.common.collect.Maps;
-import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
 import com.google.inject.Inject;
@@ -19,55 +17,53 @@ import com.techstudio.erp.moneychanger.shared.proxy.PricingProxy;
 import com.techstudio.erp.moneychanger.shared.service.PricingRequest;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Nilson
  */
 @Singleton
-public class PricingDataProvider extends AsyncDataProvider<PricingProxy> {
+public class PricingDataProvider extends AbstractDataProvider<PricingProxy> {
 
-  private final Provider<PricingRequest> pricingRequestProvider;
+  private final Provider<PricingRequest> requestProvider;
 
-  private Map<String, PricingProxy> itemPriceMap = Maps.newHashMap();
+  private boolean firstLoad = true;
 
   @Inject
-  public PricingDataProvider(Provider<PricingRequest> pricingRequestProvider) {
-    this.pricingRequestProvider = pricingRequestProvider;
-    updateData();
+  public PricingDataProvider(Provider<PricingRequest> requestProvider) {
+    this.requestProvider = requestProvider;
   }
 
+  @Override
   public void updateData() {
-    pricingRequestProvider.get()
+    requestProvider.get()
         .fetchAll()
         .fire(new Receiver<List<PricingProxy>>() {
           @Override
-          public void onSuccess(List<PricingProxy> pricingProxies) {
-            updateMap(pricingProxies);
+          public void onSuccess(List<PricingProxy> proxies) {
+            updateMap(proxies);
+            if (firstLoad) {
+              onSuccessfulLoad();
+              firstLoad = false;
+            }
+            for (HasData<PricingProxy> display : getDataDisplays()) {
+              onRangeChanged(display);
+            }
           }
         });
-
-    for (HasData<PricingProxy> display : getDataDisplays()) {
-      onRangeChanged(display);
-    }
-  }
-
-  public PricingProxy getSpotRateForCode(String itemCode) {
-    return itemPriceMap.get(itemCode);
   }
 
   @Override
   protected void onRangeChanged(HasData<PricingProxy> display) {
     final Range range = display.getVisibleRange();
-    pricingRequestProvider.get()
+    requestProvider.get()
         .fetchRange(range.getStart(), range.getLength())
         .fire(new Receiver<List<PricingProxy>>() {
           @Override
-          public void onSuccess(List<PricingProxy> pricingProxies) {
-            updateRowData(range.getStart(), pricingProxies);
+          public void onSuccess(List<PricingProxy> proxies) {
+            updateRowData(range.getStart(), proxies);
           }
         });
-    pricingRequestProvider.get()
+    requestProvider.get()
         .getCount()
         .fire(new Receiver<Integer>() {
           @Override
@@ -75,12 +71,5 @@ public class PricingDataProvider extends AsyncDataProvider<PricingProxy> {
             updateRowCount(total, true);
           }
         });
-  }
-
-  private void updateMap(List<PricingProxy> pricingProxies) {
-    itemPriceMap.clear();
-    for (PricingProxy pricingProxy : pricingProxies) {
-      itemPriceMap.put(pricingProxy.getCode(), pricingProxy);
-    }
   }
 }

@@ -7,22 +7,25 @@
 
 package com.techstudio.erp.moneychanger.client.admin.view;
 
-import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.NoSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.presenter.CategoryPresenter;
+import com.techstudio.erp.moneychanger.client.ui.LabelInput;
+import com.techstudio.erp.moneychanger.client.ui.RangeLabelPager;
+import com.techstudio.erp.moneychanger.client.ui.ShowMorePagerPanel;
+import com.techstudio.erp.moneychanger.client.ui.cell.CategoryCell;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 
 /**
@@ -38,27 +41,51 @@ public class CategoryView
   private final Widget widget;
 
   @UiField
-  TextBox categoryCode;
+  Anchor ancHome;
 
   @UiField
-  TextBox categoryName;
+  Anchor ancBack;
 
   @UiField
-  Button categoryCreate;
+  Anchor ancNext;
 
   @UiField
-  Button categoryUpdate;
+  HTMLPanel loadingMessage;
 
   @UiField
-  CellTable<CategoryProxy> categoryTable = new CellTable<CategoryProxy>();
+  Label currentStep;
 
   @UiField
-  SimplePager categoryPager = new SimplePager();
+  HTMLPanel mainPanel;
+
+  @UiField(provided = true)
+  CellList<CategoryProxy> list = new CellList<CategoryProxy>(new CategoryCell());
+
+  @UiField
+  ShowMorePagerPanel pagerPanel = new ShowMorePagerPanel();
+
+  @UiField
+  RangeLabelPager pager = new RangeLabelPager();
+
+  @UiField
+  LabelInput code;
+
+  @UiField
+  LabelInput name;
+
+  @UiField
+  Button add;
+
+  @UiField
+  Button save;
+
+  @UiField
+  Button delete;
 
   @Inject
   public CategoryView(final Binder binder) {
     widget = binder.createAndBindUi(this);
-    setupCategoryTable();
+    setUpListing();
   }
 
   @Override
@@ -66,79 +93,121 @@ public class CategoryView
     return widget;
   }
 
-  @UiHandler("categoryCode")
-  public void onCategoryCodeChange(ValueChangeEvent<String> event) {
+  @SuppressWarnings("unused")
+  @UiHandler("ancHome")
+  public void onClickHome(ClickEvent event) {
+    History.newItem(NameTokens.getMenuPage());
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("ancBack")
+  public void onClickBack(ClickEvent event) {
+    getUiHandlers().onBack();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("ancNext")
+  public void onClickNext(ClickEvent event) {
+    getUiHandlers().onNext();
+  }
+
+  @UiHandler("code")
+  public void onBidChange(ValueChangeEvent<String> event) {
     getUiHandlers().setCategoryCode(event.getValue());
   }
 
-  @UiHandler("categoryName")
-  public void onCategoryNameChange(ValueChangeEvent<String> event) {
+  @UiHandler("name")
+  public void onAskChange(ValueChangeEvent<String> event) {
     getUiHandlers().setCategoryName(event.getValue());
   }
 
   @SuppressWarnings("unused")
-  @UiHandler("categoryCreate")
-  public void onCreateCurrency(ClickEvent event) {
-    getUiHandlers().createCategory();
+  @UiHandler("add")
+  public void onCreate(ClickEvent event) {
+    getUiHandlers().create();
   }
 
   @SuppressWarnings("unused")
-  @UiHandler("categoryUpdate")
-  public void onUpdateCurrency(ClickEvent event) {
-    getUiHandlers().updateCategory();
+  @UiHandler("save")
+  public void onUpdate(ClickEvent event) {
+    getUiHandlers().update();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("delete")
+  public void onDelete(ClickEvent event) {
+    getUiHandlers().delete();
   }
 
   @Override
-  public HasData<CategoryProxy> getTable() {
-    return categoryTable;
+  public HasData<CategoryProxy> getListing() {
+    return list;
   }
 
   @Override
-  public void enableCreateButton(boolean isValid) {
-    categoryCreate.setEnabled(isValid);
+  public void showListPanel() {
+    mainPanel.setStyleName("slider show1");
+    list.setVisible(true);
+    ancHome.setVisible(true);
+    ancNext.setVisible(true);
+    ancBack.setVisible(false);
   }
 
   @Override
-  public void enableUpdateButton(boolean isValid) {
-    categoryUpdate.setEnabled(isValid);
+  public void showDetailPanel() {
+    mainPanel.setStyleName("slider show2");
+    list.setVisible(false);
+    ancHome.setVisible(false);
+    ancNext.setVisible(false);
+    ancBack.setVisible(true);
+  }
+
+  @Override
+  public void showAddButtons() {
+    add.setVisible(true);
+    save.setVisible(false);
+    delete.setVisible(false);
+  }
+
+  @Override
+  public void showEditButtons() {
+    add.setVisible(false);
+    save.setVisible(true);
+    delete.setVisible(true);
   }
 
   @Override
   public void setCategoryCode(String code) {
-    categoryCode.setValue(code);
+    this.code.setValue(code);
   }
 
   @Override
   public void setCategoryName(String name) {
-    categoryName.setValue(name);
+    this.name.setValue(name);
   }
 
-  private void setupCategoryTable() {
-    Column<CategoryProxy, String> categoryCodeColumn = new Column<CategoryProxy, String>(new EditTextCell()) {
+  @Override
+  public void showLoading(boolean visible) {
+    loadingMessage.setVisible(visible);
+    currentStep.setVisible(!visible);
+    mainPanel.setVisible(!visible);
+  }
+
+  private void setUpListing() {
+    final NoSelectionModel<CategoryProxy> selectionModel = new NoSelectionModel<CategoryProxy>();
+    list.setSelectionModel(selectionModel);
+    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
       @Override
-      public String getValue(CategoryProxy categoryProxy) {
-        return categoryProxy.getCode();
+      public void onSelectionChange(SelectionChangeEvent event) {
+        CategoryProxy selected = selectionModel.getLastSelectedObject();
+        if (selected != null) {
+          getUiHandlers().edit(selected.getCode());
+        }
       }
-    };
-    categoryTable.addColumn(categoryCodeColumn, "Code");
+    });
 
-    Column<CategoryProxy, String> categoryNameColumn = new Column<CategoryProxy, String>(new EditTextCell()) {
-      @Override
-      public String getValue(CategoryProxy categoryProxy) {
-        return categoryProxy.getName();
-      }
-    };
-    categoryTable.addColumn(categoryNameColumn, "Name");
-
-//    Column<CategoryProxy, Long> linkColumn = new Column<CategoryProxy, Long>(new CategoryLinkCell()) {
-//      @Override
-//      public Long getValue(CategoryProxy categoryProxy) {
-//        return categoryProxy.getId();
-//      }
-//    };
-//    categoryTable.addColumn(linkColumn);
-
-    categoryPager.setDisplay(categoryTable);
+    pagerPanel.setDisplay(list);
+    pager.setDisplay(list);
   }
 
 }
