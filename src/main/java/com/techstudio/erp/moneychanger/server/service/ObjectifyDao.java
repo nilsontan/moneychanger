@@ -39,7 +39,7 @@ public class ObjectifyDao<T> extends MyDAOBase {
     MyObjectifyService.register(Currency.class);
     MyObjectifyService.register(LineItem.class);
     MyObjectifyService.register(Uom.class);
-    MyObjectifyService.register(SpotRate.class);
+    MyObjectifyService.register(Pricing.class);
     MyObjectifyService.register(Transaction.class);
   }
 

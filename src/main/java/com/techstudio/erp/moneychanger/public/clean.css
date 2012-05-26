@@ -361,8 +361,8 @@ input::-webkit-inner-spin-button {
   border-radius: 9px;
 }
 
-.icon-add {
-  background-position: 0px 50%;
+.icon-plus {
+  background-position: 0 50%;
 }
 
 .icon-minus {
@@ -781,13 +781,14 @@ div.di-r-container {
 }
 
 .field {
+  position: relative;
   -webkit-appearance: none;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 0;
+  padding: 0 0.1em;
   float: left;
   overflow: hidden;
   width: 100%;
@@ -798,7 +799,7 @@ div.di-r-container {
   width: 40%;
 }
 
-.rate input {
+.rate input, .rate select, .rate textarea {
   width: 60%;
 }
 
@@ -1176,7 +1177,7 @@ div.di-r-container {
     width: 40%;
   }
 
-  .field input {
+  .field input, .field select, .field textarea {
     width: 60%;
   }
 }

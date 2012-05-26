@@ -7,32 +7,25 @@
 
 package com.techstudio.erp.moneychanger.client.admin.view;
 
-import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.NoSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.presenter.ItemPresenter;
-import com.techstudio.erp.moneychanger.client.resources.Resources;
-import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
-import com.techstudio.erp.moneychanger.client.ui.ItemMenuImageUploader;
-import com.techstudio.erp.moneychanger.client.ui.SelectOneListBox;
+import com.techstudio.erp.moneychanger.client.ui.*;
+import com.techstudio.erp.moneychanger.client.ui.cell.ItemCell;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
-import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
-import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
-import gwtupload.client.IUploadStatus;
-import gwtupload.client.IUploader;
 
 /**
  * @author Nilson
@@ -46,7 +39,224 @@ public class ItemView
 
   private final Widget widget;
 
-  final Resources resources;
+  @UiField
+  HTMLPanel ancBar;
+
+  @UiField
+  Anchor ancHome;
+
+  @UiField
+  Anchor ancBack;
+
+  @UiField
+  Anchor ancNext;
+
+  @UiField
+  HTMLPanel loadingMessage;
+
+  @UiField
+  Label currentStep;
+
+  @UiField
+  HTMLPanel mainPanel;
+
+  @UiField(provided = true)
+  CellList<ItemProxy> list = new CellList<ItemProxy>(new ItemCell());
+
+  @UiField
+  ShowMorePagerPanel pagerPanel = new ShowMorePagerPanel();
+
+  @UiField
+  RangeLabelPager pager = new RangeLabelPager();
+
+  @UiField
+  LabelInput code;
+
+  @UiField
+  LabelInput name;
+
+  @UiField
+  LabelInput fullname;
+
+  @UiField(provided = true)
+  SelectOneListBox<CategoryProxy> categoryList
+      = new SelectOneListBox<CategoryProxy>(new SelectOneListBox.OptionFormatter<CategoryProxy>() {
+    @Override
+    public String getLabel(CategoryProxy option) {
+      return option.getName();
+    }
+
+    @Override
+    public String getValue(CategoryProxy option) {
+      return option.getId().toString();
+    }
+  });
+
+  @UiField
+  Button add;
+
+  @UiField
+  Button save;
+
+  @UiField
+  Button delete;
+
+  @Inject
+  public ItemView(final Binder binder) {
+    widget = binder.createAndBindUi(this);
+    setUpListing();
+  }
+
+  @Override
+  public Widget asWidget() {
+    return widget;
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("ancHome")
+  public void onClickHome(ClickEvent event) {
+    History.newItem(NameTokens.getMenuPage());
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("ancBack")
+  public void onClickBack(ClickEvent event) {
+    getUiHandlers().onBack();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("ancNext")
+  public void onClickNext(ClickEvent event) {
+    getUiHandlers().onNext();
+  }
+
+  @UiHandler("code")
+  public void onCodeChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setCode(event.getValue());
+  }
+
+  @UiHandler("name")
+  public void onNameChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setName(event.getValue());
+  }
+
+  @UiHandler("fullname")
+  public void onAskChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setFullName(event.getValue());
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("categoryList")
+  public void onCategoryChange(ValueChangeEvent<CategoryProxy> event) {
+    getUiHandlers().setCategory(categoryList.getSelectedValue());
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("add")
+  public void onCreate(ClickEvent event) {
+    getUiHandlers().create();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("save")
+  public void onUpdate(ClickEvent event) {
+    getUiHandlers().update();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("delete")
+  public void onDelete(ClickEvent event) {
+    getUiHandlers().delete();
+  }
+
+  @Override
+  public HasData<ItemProxy> getListing() {
+    return list;
+  }
+
+  @Override
+  public HasSelectedValue<CategoryProxy> getCategoryList() {
+    return categoryList;
+  }
+
+  @Override
+  public void showListPanel() {
+    mainPanel.setStyleName("slider show1");
+    list.setVisible(true);
+    ancHome.setVisible(true);
+    ancNext.setVisible(true);
+    ancBack.setVisible(false);
+  }
+
+  @Override
+  public void showDetailPanel() {
+    mainPanel.setStyleName("slider show2");
+    list.setVisible(false);
+    ancHome.setVisible(false);
+    ancNext.setVisible(false);
+    ancBack.setVisible(true);
+  }
+
+  @Override
+  public void showAddButtons() {
+    add.setVisible(true);
+    save.setVisible(false);
+    delete.setVisible(false);
+  }
+
+  @Override
+  public void showEditButtons() {
+    add.setVisible(false);
+    save.setVisible(true);
+    delete.setVisible(true);
+  }
+
+  @Override
+  public void setCode(String code) {
+    this.code.setValue(code);
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name.setValue(name);
+  }
+
+  @Override
+  public void setFullname(String fullname) {
+    this.fullname.setValue(fullname);
+  }
+
+  @Override
+  public void setCategory(CategoryProxy categoryProxy) {
+    this.categoryList.setSelectedValue(categoryProxy);
+  }
+
+  @Override
+  public void showLoading(boolean visible) {
+    loadingMessage.setVisible(visible);
+    currentStep.setVisible(!visible);
+    mainPanel.setVisible(!visible);
+    ancBar.setVisible(!visible);
+  }
+
+  private void setUpListing() {
+    final NoSelectionModel<ItemProxy> selectionModel = new NoSelectionModel<ItemProxy>();
+    list.setSelectionModel(selectionModel);
+    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+      @Override
+      public void onSelectionChange(SelectionChangeEvent event) {
+        ItemProxy selected = selectionModel.getLastSelectedObject();
+        if (selected != null) {
+          getUiHandlers().edit(selected.getCode());
+        }
+      }
+    });
+
+    pagerPanel.setDisplay(list);
+    pager.setDisplay(list);
+  }
+
+  /*final Resources resources;
 
   @UiField(provided = true)
   ItemMenuImageUploader itemImageUploader;
@@ -335,5 +545,5 @@ public class ItemView
     itemTable.setPageSize(10);
 
     itemPager.setDisplay(itemTable);
-  }
+  }*/
 }

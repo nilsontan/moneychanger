@@ -12,6 +12,7 @@ import com.google.gwt.view.client.Range;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
 import com.techstudio.erp.moneychanger.shared.proxy.CountryProxy;
 import com.techstudio.erp.moneychanger.shared.service.CountryRequest;
 
@@ -43,6 +44,7 @@ public class CountryDataProvider extends AbstractDataProvider<CountryProxy> {
         .fire(new Receiver<List<CountryProxy>>() {
           @Override
           public void onSuccess(List<CountryProxy> proxies) {
+            updateRowCount(proxies.size(), true);
             updateMap(proxies);
             if (firstLoad) {
               onSuccessfulLoad();
@@ -56,7 +58,7 @@ public class CountryDataProvider extends AbstractDataProvider<CountryProxy> {
   }
 
   @Override
-  protected void onRangeChanged(HasData<CountryProxy> display) {
+  protected void onRangeChanged(final HasData<CountryProxy> display) {
     final Range range = display.getVisibleRange();
     requestProvider.get()
         .fetchRange(range.getStart(), range.getLength())
@@ -64,15 +66,7 @@ public class CountryDataProvider extends AbstractDataProvider<CountryProxy> {
         .fire(new Receiver<List<CountryProxy>>() {
           @Override
           public void onSuccess(List<CountryProxy> proxies) {
-            updateRowData(range.getStart(), proxies);
-          }
-        });
-    requestProvider.get()
-        .getCount()
-        .fire(new Receiver<Integer>() {
-          @Override
-          public void onSuccess(Integer total) {
-            updateRowCount(total, true);
+            updateRowData(display, range.getStart(), proxies);
           }
         });
   }
@@ -83,6 +77,10 @@ public class CountryDataProvider extends AbstractDataProvider<CountryProxy> {
       findDefault();
     }
     return DEFAULT;
+  }
+
+  @Override
+  protected void onValueChanged(HasSelectedValue<CountryProxy> display) {
   }
 
   private void findDefault() {

@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
 
@@ -44,6 +45,7 @@ public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
         .fire(new Receiver<List<CategoryProxy>>() {
           @Override
           public void onSuccess(List<CategoryProxy> proxies) {
+            updateRowCount(proxies.size(), true);
             updateMap(proxies);
             if (firstLoad) {
               onSuccessfulLoad();
@@ -52,29 +54,23 @@ public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
             for (HasData<CategoryProxy> display : getDataDisplays()) {
               onRangeChanged(display);
             }
+            updateList(proxies);
           }
         });
   }
 
   @Override
-  protected void onRangeChanged(HasData<CategoryProxy> display) {
+  protected void onRangeChanged(final HasData<CategoryProxy> display) {
     final Range range = display.getVisibleRange();
     requestProvider.get()
         .fetchRange(range.getStart(), range.getLength())
         .fire(new Receiver<List<CategoryProxy>>() {
           @Override
           public void onSuccess(List<CategoryProxy> proxies) {
-            updateRowData(range.getStart(), proxies);
+            updateRowData(display, range.getStart(), proxies);
           }
         });
-    requestProvider.get()
-        .getCount()
-        .fire(new Receiver<Integer>() {
-          @Override
-          public void onSuccess(Integer total) {
-            updateRowCount(total, true);
-          }
-        });
+
   }
 
   @Override
@@ -83,6 +79,10 @@ public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
       findDefault();
     }
     return DEFAULT;
+  }
+
+  @Override
+  protected void onValueChanged(HasSelectedValue<CategoryProxy> display) {
   }
 
   private void findDefault() {

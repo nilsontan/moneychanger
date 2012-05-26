@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
 import com.techstudio.erp.moneychanger.shared.proxy.PricingProxy;
 import com.techstudio.erp.moneychanger.shared.service.PricingRequest;
 
@@ -40,6 +41,7 @@ public class PricingDataProvider extends AbstractDataProvider<PricingProxy> {
         .fire(new Receiver<List<PricingProxy>>() {
           @Override
           public void onSuccess(List<PricingProxy> proxies) {
+            updateRowCount(proxies.size(), true);
             updateMap(proxies);
             if (firstLoad) {
               onSuccessfulLoad();
@@ -53,23 +55,19 @@ public class PricingDataProvider extends AbstractDataProvider<PricingProxy> {
   }
 
   @Override
-  protected void onRangeChanged(HasData<PricingProxy> display) {
+  protected void onRangeChanged(final HasData<PricingProxy> display) {
     final Range range = display.getVisibleRange();
     requestProvider.get()
         .fetchRange(range.getStart(), range.getLength())
         .fire(new Receiver<List<PricingProxy>>() {
           @Override
           public void onSuccess(List<PricingProxy> proxies) {
-            updateRowData(range.getStart(), proxies);
+            updateRowData(display, range.getStart(), proxies);
           }
         });
-    requestProvider.get()
-        .getCount()
-        .fire(new Receiver<Integer>() {
-          @Override
-          public void onSuccess(Integer total) {
-            updateRowCount(total, true);
-          }
-        });
+  }
+
+  @Override
+  protected void onValueChanged(HasSelectedValue<PricingProxy> display) {
   }
 }

@@ -2,17 +2,68 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:c="urn:import:com.google.gwt.user.cellview.client"
-             xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui"
-             xmlns:u="urn:import:gwtupload.client">
+             xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui">
 
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
-  <ui:style>
-    .centered {
-      margin: 0 auto;
-    }
-  </ui:style>
 
-  <g:FlowPanel>
+  <g:HTMLPanel>
+    <g:HTMLPanel ui:field="loadingMessage" addStyleNames="loadingDock">
+      <g:Image resource="{res.iLoadingIcon}" />
+      <g:Label text="Loading Items ..." />
+      <div class="progress-bar" />
+    </g:HTMLPanel>
+    <g:HTMLPanel ui:field="ancBar">
+      <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home" />
+      </g:Anchor>
+      <g:Anchor ui:field="ancBack" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-left" />
+      </g:Anchor>
+      <g:Anchor ui:field="ancNext" addStyleNames="homeBar-icon homeBar-icon-r icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-cross" />
+      </g:Anchor>
+    </g:HTMLPanel>
+    <div class="bar page-title">
+      <g:Label ui:field="currentStep" text="Item" addStyleNames="step" />
+    </div>
+    <div class="content bodyBg">
+      <g:HTMLPanel ui:field="mainPanel" addStyleNames="slider">
+        <g:HTMLPanel addStyleNames="centered slide1">
+          <c:CellList ui:field="list" />
+          <m:ShowMorePagerPanel ui:field="pagerPanel" />
+          <m:RangeLabelPager ui:field="pager" />
+        </g:HTMLPanel>
+        <g:HTMLPanel addStyleNames="centered slide2">
+          <g:HTMLPanel addStyleNames="padding-s">
+            <div class="field-container">
+              <m:LabelInput text="Code" type="text" ui:field="code" addStyleNames="rate" />
+              <m:LabelInput text="Name" type="text" ui:field="name" addStyleNames="rate" />
+              <m:LabelInput text="Full Name" type="text" ui:field="fullname" addStyleNames="rate" />
+              <span class="field rate">
+                <span style="position:absolute; top:0.7em; right:0.8em;" class="icon-set icon-down" />
+                <label>Category</label>
+                <m:SelectOneListBox ui:field="categoryList" />
+              </span>
+            </div>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-add" />
+              <g:Button ui:field="add" text="Add" />
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-tick" />
+              <g:Button ui:field="save" text="Save" />
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-plus" />
+              <g:Button ui:field="delete" text="Delete" addStyleNames="bar-red" />
+            </g:HTMLPanel>
+          </g:HTMLPanel>
+        </g:HTMLPanel>
+      </g:HTMLPanel>
+    </div>
+  </g:HTMLPanel>
+
+  <!--<g:FlowPanel>
     <g:Label text="Item List" addStyleNames="{res.admin.pageTitle}" />
     <g:Label text="Create or Update items quickly" addStyleNames="{res.admin.pageDescription}" />
     <g:HorizontalPanel spacing="10">
@@ -24,7 +75,7 @@
         <g:FlowPanel>
           <g:Label text="Item Info" addStyleNames="{res.admin.formTitle}" />
           <m:ItemMenuImageUploader ui:field="itemImageUploader" autoSubmit="true" addStyleNames="{style.centered}" />
-          <!--<u:SingleUploader type="BUTTON" ui:field="itemImageUploader" autoSubmit="true" addStyleNames="{style.centered}" />-->
+          &lt;!&ndash;<u:SingleUploader type="BUTTON" ui:field="itemImageUploader" autoSubmit="true" addStyleNames="{style.centered}" />&ndash;&gt;
           <g:Grid ui:field="itemGrid">
             <g:row>
               <g:customCell>
@@ -96,6 +147,6 @@
         </g:FlowPanel>
       </g:DecoratorPanel>
     </g:HorizontalPanel>
-  </g:FlowPanel>
+  </g:FlowPanel>-->
 
 </ui:UiBinder>

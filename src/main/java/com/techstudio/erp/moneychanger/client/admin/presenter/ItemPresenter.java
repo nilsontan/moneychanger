@@ -7,10 +7,12 @@
 
 package com.techstudio.erp.moneychanger.client.admin.presenter;
 
-import com.google.common.base.CharMatcher;
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.common.base.Strings;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
@@ -20,21 +22,20 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.ItemUiHandlers;
 import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
-import com.techstudio.erp.moneychanger.client.ui.UomDataProvider;
-import com.techstudio.erp.moneychanger.client.ui.dataprovider.CurrencyDataProvider;
-import com.techstudio.erp.moneychanger.client.ui.dataprovider.DataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.CategoryDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.FirstLoad;
 import com.techstudio.erp.moneychanger.client.ui.dataprovider.ItemDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.MyDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
-import com.techstudio.erp.moneychanger.shared.proxy.CurrencyProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
-import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.PricingProxy;
 import com.techstudio.erp.moneychanger.shared.service.ItemRequest;
+import com.techstudio.erp.moneychanger.shared.service.PricingRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -52,7 +53,7 @@ public class ItemPresenter
   }
 
   public interface MyView extends View, HasUiHandlers<ItemUiHandlers> {
-    HasData<ItemProxy> getItemTable();
+    /*HasData<ItemProxy> getItemTable();
 
     HasSelectedValue<CategoryProxy> getCategoryList();
 
@@ -78,46 +79,94 @@ public class ItemPresenter
 
     void setItemUomRate(String uomRate);
 
-    void setItemImageUrl(String itemImageUrl);
+    void setItemImageUrl(String itemImageUrl);*/
+
+    HasData<ItemProxy> getListing();
+
+    HasSelectedValue<CategoryProxy> getCategoryList();
+
+    void showListPanel();
+
+    void showDetailPanel();
+
+    void showAddButtons();
+
+    void showEditButtons();
+
+    void setCode(String code);
+
+    void setName(String name);
+
+    void setFullname(String fullname);
+
+    void setCategory(CategoryProxy categoryProxy);
+
+    void showLoading(boolean visible);
   }
 
-  private final Provider<ItemRequest> itemRequestProvider;
-  private final ItemDataProvider itemDataProvider;
-  private final DataProvider<CategoryProxy> categoryDataProvider;
-  private final CurrencyDataProvider currencyDataProvider;
-  private final UomDataProvider uomDataProvider;
+  private final Provider<ItemRequest> requestProvider;
+  private final Provider<PricingRequest> pricingRequestProvider;
+  private final MyDataProvider<ItemProxy> dataProvider;
+  private final MyDataProvider<CategoryProxy> categoryDataProvider;
+//  private final CurrencyDataProvider currencyDataProvider;
+//  private final UomDataProvider uomDataProvider;
 
-  private Long id;
+//  private Long id;
+//  private String code;
+//  private String name;
+//  private String fullName;
+//  private CurrencyProxy currency;
+//  private UomProxy uom;
+//  private BigDecimal uomRate;
+//  private String imageUrl;
+
   private String code;
   private String name;
   private String fullName;
   private CategoryProxy category;
-  private CurrencyProxy currency;
-  private UomProxy uom;
-  private BigDecimal uomRate;
-  private String imageUrl;
+
+  private Step step;
 
   @Inject
   public ItemPresenter(final EventBus eventBus,
                        final MyView view,
                        final MyProxy proxy,
-                       final Provider<ItemRequest> itemRequestProvider,
-                       final ItemDataProvider itemDataProvider,
-                       final DataProvider<CategoryProxy> categoryDataProvider,
-                       final CurrencyDataProvider currencyDataProvider,
-                       final UomDataProvider uomDataProvider) {
+                       final Provider<ItemRequest> requestProvider,
+                       final Provider<PricingRequest> pricingRequestProvider,
+                       final ItemDataProvider dataProvider,
+                       final CategoryDataProvider categoryDataProvider
+//                       final CurrencyDataProvider currencyDataProvider
+//                       final UomDataProvider uomDataProvider
+  ) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
-    this.itemRequestProvider = itemRequestProvider;
-    this.itemDataProvider = itemDataProvider;
-    this.itemDataProvider.addDataDisplay(getView().getItemTable());
+    getView().showLoading(true);
+    this.requestProvider = requestProvider;
+    this.pricingRequestProvider = pricingRequestProvider;
+    this.dataProvider = dataProvider;
+    this.dataProvider.addOnFirstLoadHandler(onFirstLoad);
     this.categoryDataProvider = categoryDataProvider;
-//    this.categoryDataProvider.addDataListDisplay(getView().getCategoryList());
-    this.currencyDataProvider = currencyDataProvider;
-    this.currencyDataProvider.addDataListDisplay(getView().getCurrencyList());
-    this.uomDataProvider = uomDataProvider;
-    this.uomDataProvider.addDataListDisplay(getView().getUomList());
+    this.categoryDataProvider.addDataListDisplay(getView().getCategoryList());
+    this.dataProvider.addDataDisplay(getView().getListing());
+//    this.currencyDataProvider = currencyDataProvider;
+//    this.currencyDataProvider.addDataListDisplay(getView().getCurrencyList());
+//    this.uomDataProvider = uomDataProvider;
+//    this.uomDataProvider.addDataListDisplay(getView().getUomList());
   }
+
+  FirstLoad.OnFirstLoad onFirstLoad = new FirstLoad.OnFirstLoad() {
+    @Override
+    public void onSuccess(FirstLoad firstLoad) {
+      Timer timer = new Timer() {
+        @Override
+        public void run() {
+          getView().showLoading(false);
+        }
+      };
+
+      timer.schedule(1000);
+    }
+  };
 
   @Override
   protected void revealInParent() {
@@ -127,9 +176,258 @@ public class ItemPresenter
   @Override
   protected void onReset() {
     super.onReset();
+    reset();
+  }
+
+  @Override
+  protected void onReveal() {
+    reset();
+  }
+
+  @Override
+  public void onBack() {
+    step = Step.LIST;
+    updateView();
+  }
+
+  @Override
+  public void onNext() {
+    step = Step.ADD;
+    resetFields();
+    updateView();
+  }
+
+  @Override
+  public void setCode(String code) {
+    this.code = code.trim().toUpperCase();
+    getView().setCode(this.code);
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name = name.trim();
+    getView().setName(this.name);
+  }
+
+  @Override
+  public void setFullName(String fullName) {
+    this.fullName = fullName.trim();
+    getView().setFullname(this.fullName);
+  }
+
+  @Override
+  public void setCategory(CategoryProxy selectedValue) {
+    this.category = selectedValue;
+    getView().setCategory(selectedValue);
+  }
+
+  @Override
+  public void edit(String code) {
+    this.code = code;
+    step = Step.EDIT;
+    loadEntity();
+    updateView();
+  }
+
+  @Override
+  public void create() {
+    if (!isFormValid()) {
+      return;
+    }
+    requestProvider.get().fetchByProperty("code", code)
+        .fire(new Receiver<List<ItemProxy>>() {
+          @Override
+          public void onSuccess(List<ItemProxy> response) {
+            if (response.isEmpty()) {
+              ItemRequest request = requestProvider.get();
+              ItemProxy proxy = request.create(ItemProxy.class);
+              fillData(proxy);
+              request.save(proxy).fire(new Receiver<ItemProxy>() {
+                @Override
+                public void onSuccess(ItemProxy response) {
+                  dataProvider.updateData();
+                  PricingRequest pricingRequest = pricingRequestProvider.get();
+                  PricingProxy pricingProxy = pricingRequest.create(PricingProxy.class);
+                  pricingProxy.setCode(code);
+                  pricingProxy.setName(name);
+                  pricingProxy.setBidRate(BigDecimal.ONE);
+                  pricingProxy.setAskRate(BigDecimal.ONE);
+                  pricingRequest.save(pricingProxy)
+                      .fire(new Receiver<PricingProxy>() {
+                        @Override
+                        public void onSuccess(PricingProxy response) {
+                          step = Step.LIST;
+                          updateView();
+                        }
+                      });
+                }
+              });
+            } else {
+              Window.alert("An item with that code already exist!");
+            }
+          }
+        });
+  }
+
+  @Override
+  public void update() {
+    if (!isFormValid()) {
+      return;
+    }
+
+    requestProvider.get().fetchByProperty("code", code)
+        .fire(new Receiver<List<ItemProxy>>() {
+          @Override
+          public void onSuccess(List<ItemProxy> response) {
+            if (response.isEmpty()) {
+              Window.alert("The code \"" + code + "\" does not exist!");
+              step = Step.LIST;
+              updateView();
+            } else {
+              ItemRequest request = requestProvider.get();
+              ItemProxy proxy = response.get(0);
+              proxy = request.edit(proxy);
+              fillData(proxy);
+              request.save(proxy).fire(new Receiver<ItemProxy>() {
+                @Override
+                public void onSuccess(ItemProxy response) {
+                  dataProvider.updateData();
+                  Timer timer = new Timer() {
+                    @Override
+                    public void run() {
+                      step = Step.LIST;
+                      updateView();
+                    }
+                  };
+
+                  timer.schedule(300);
+                }
+              });
+            }
+          }
+        });
+  }
+
+  @Override
+  public void delete() {
+    if (!step.equals(Step.EDIT)) {
+      return;
+    }
+
+    requestProvider.get()
+        .fetchByProperty("code", code)
+        .fire(new Receiver<List<ItemProxy>>() {
+          @Override
+          public void onSuccess(List<ItemProxy> response) {
+            if (response.isEmpty()) {
+              Window.alert("The code \"" + code + "\" does not exist!");
+              step = Step.LIST;
+              updateView();
+            } else {
+              ItemProxy proxy = response.get(0);
+              requestProvider.get()
+                  .purge(proxy)
+                  .fire(new Receiver<Void>() {
+                    @Override
+                    public void onSuccess(Void response) {
+                      dataProvider.updateData();
+                      pricingRequestProvider.get().fetchByProperty("code", code)
+                          .fire(new Receiver<List<PricingProxy>>() {
+                            @Override
+                            public void onSuccess(List<PricingProxy> response) {
+                              if (!response.isEmpty()) {
+                                pricingRequestProvider.get()
+                                    .purge(response.get(0))
+                                    .fire();
+                              }
+                              step = Step.LIST;
+                              updateView();
+                            }
+                          });
+                    }
+                  });
+            }
+          }
+        });
+  }
+
+  private void reset() {
+    resetFields();
+    step = Step.LIST;
+    RangeChangeEvent.fire(getView().getListing(), getView().getListing().getVisibleRange());
+    loadEntity();
+    updateView();
+  }
+
+  private void resetFields() {
+    code = "";
+    name = "";
+    fullName = "";
+    category = categoryDataProvider.getDefault();
+  }
+
+  private void loadEntity() {
+    if (code != null && !code.isEmpty()) {
+      ItemProxy proxy = dataProvider.getByCode(code);
+      if (proxy == null) {
+        resetFields();
+        Log.error("Code not found: " + code);
+        onBack();
+      } else {
+        code = proxy.getCode();
+        name = proxy.getName();
+        fullName = proxy.getFullName();
+        category = proxy.getCategory();
+      }
+    } else {
+      resetFields();
+    }
+  }
+
+  private void fillData(ItemProxy proxy) {
+    proxy.setCode(code);
+    proxy.setName(name);
+    proxy.setFullName(fullName);
+    proxy.setCategory(category);
+  }
+
+  private void updateView() {
+    getView().setCode(code);
+    getView().setName(name);
+    getView().setFullname(fullName);
+    getView().setCategory(category);
+    switch (step) {
+      case LIST:
+        getView().showListPanel();
+        break;
+      case ADD:
+        getView().showDetailPanel();
+        getView().showAddButtons();
+        break;
+      case EDIT:
+        getView().showDetailPanel();
+        getView().showEditButtons();
+        break;
+    }
+  }
+
+  private boolean isFormValid() {
+    return !Strings.isNullOrEmpty(code)
+        && !Strings.isNullOrEmpty(name)
+        && !Strings.isNullOrEmpty(fullName)
+        && category != null;
+  }
+
+  private enum Step {
+    LIST, ADD, EDIT
+  }
+
+  /*@Override
+  protected void onReset() {
+    super.onReset();
 
     if (id != null) {
-      itemRequestProvider.get().fetch(id)
+      requestProvider.get().fetch(id)
           .with(ItemProxy.CATEGORY)
           .with(ItemProxy.CURRENCY)
           .with(ItemProxy.UOM)
@@ -229,12 +527,12 @@ public class ItemPresenter
     if (!isFormValid()) {
       return;
     }
-    itemRequestProvider.get().fetchByProperty("code", code)
+    requestProvider.get().fetchByProperty("code", code)
         .fire(new Receiver<List<ItemProxy>>() {
           @Override
           public void onSuccess(List<ItemProxy> response) {
             if (response.isEmpty()) {
-              ItemRequest request = itemRequestProvider.get();
+              ItemRequest request = requestProvider.get();
               ItemProxy proxy = request.create(ItemProxy.class);
               fillData(proxy);
               request.save(proxy)
@@ -244,7 +542,7 @@ public class ItemPresenter
                   .fire(new Receiver<ItemProxy>() {
                     @Override
                     public void onSuccess(ItemProxy response) {
-                      itemDataProvider.updateTableData();
+                      dataProvider.updateTableData();
                       updateView();
                     }
                   });
@@ -260,14 +558,14 @@ public class ItemPresenter
     if (!isFormValid()) {
       return;
     }
-    itemRequestProvider.get().fetchByProperty("code", code)
+    requestProvider.get().fetchByProperty("code", code)
         .fire(new Receiver<List<ItemProxy>>() {
           @Override
           public void onSuccess(List<ItemProxy> response) {
             if (response.isEmpty()) {
               Window.alert("An item with that code does not exist!");
             } else {
-              ItemRequest request = itemRequestProvider.get();
+              ItemRequest request = requestProvider.get();
               ItemProxy proxy = response.get(0);
               proxy = request.edit(proxy);
               fillData(proxy);
@@ -278,7 +576,7 @@ public class ItemPresenter
                   .fire(new Receiver<ItemProxy>() {
                     @Override
                     public void onSuccess(ItemProxy response) {
-                      itemDataProvider.updateTableData();
+                      dataProvider.updateTableData();
                       updateView();
                     }
                   });
@@ -335,5 +633,5 @@ public class ItemPresenter
   private BigDecimal returnUomRate(String uomRate) {
     String filterOutNonDigits = CharMatcher.DIGIT.retainFrom(uomRate).trim();
     return new BigDecimal(filterOutNonDigits);
-  }
+  }*/
 }

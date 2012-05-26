@@ -245,23 +245,23 @@ public class DataReset
   }
 
   private void resetSpotRates() {
-    List<SpotRate> spotRates = Lists.newArrayList();
+    List<Pricing> pricings = Lists.newArrayList();
     for (ArrayList<String> spotRate : readTextFromResource("spotrate.txt")) {
       assert spotRate.size() == 3 : "Spot Rate not of size 6: " + spotRate;
-      SpotRate mySpotRate = new SpotRate();
-      mySpotRate.setCode(spotRate.get(0));
-      mySpotRate.setName(itemMap.get(spotRate.get(0)).getName());
-      mySpotRate.setBidRate(new BigDecimal(spotRate.get(1)));
-      mySpotRate.setAskRate(new BigDecimal(spotRate.get(2)));
-      spotRates.add(mySpotRate);
+      Pricing myPricing = new Pricing();
+      myPricing.setCode(spotRate.get(0));
+      myPricing.setName(itemMap.get(spotRate.get(0)).getName());
+      myPricing.setBidRate(new BigDecimal(spotRate.get(1)));
+      myPricing.setAskRate(new BigDecimal(spotRate.get(2)));
+      pricings.add(myPricing);
     }
 
     SpotRateDao spotRateDao = new SpotRateDao();
 
     spotRateDao.deleteAll(spotRateDao.listAll());
     System.out.println("Spot Rates purgeAll");
-    
-    spotRateDao.putAll(spotRates);
+
+    spotRateDao.putAll(pricings);
     System.out.println("Spot Rates saveAll");
 
     System.out.println("Spot Rates setup done");
@@ -278,7 +278,7 @@ public class DataReset
 
     String line;
     try {
-      while((line = reader.readLine()) != null) {
+      while ((line = reader.readLine()) != null) {
         list.add(Lists.newArrayList(Splitter.on(",").trimResults().split(line)));
       }
     } catch (IOException e) {
@@ -352,5 +352,5 @@ public class DataReset
     // GAE developers too lazy to fix this :P
     return imagesService.getServingUrl(blobKey).replace("0.0.0.0", "127.0.0.1");
   }
-  
+
 }

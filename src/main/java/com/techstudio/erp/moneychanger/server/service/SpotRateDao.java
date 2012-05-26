@@ -7,10 +7,10 @@
 
 package com.techstudio.erp.moneychanger.server.service;
 
-import com.techstudio.erp.moneychanger.server.domain.SpotRate;
+import com.techstudio.erp.moneychanger.server.domain.Pricing;
 
 /**
  * @author Nilson
  */
-public class SpotRateDao extends MyObjectifyDao<SpotRate> {
+public class SpotRateDao extends MyObjectifyDao<Pricing> {
 }

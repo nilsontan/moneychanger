@@ -12,9 +12,9 @@ import java.math.BigDecimal;
  */
 @Cached
 @Entity
-public class SpotRate extends MyDatastoreObject {
+public class Pricing extends MyDatastoreObject {
 
-  public static final SpotRate EMPTY = new SpotRate();
+  public static final Pricing EMPTY = new Pricing();
 
   @Unindexed
   BigDecimal askRate = BigDecimal.ONE;
@@ -22,7 +22,7 @@ public class SpotRate extends MyDatastoreObject {
   @Unindexed
   BigDecimal bidRate = BigDecimal.ONE;
 
-  public SpotRate() {
+  public Pricing() {
   }
 
   public BigDecimal getAskRate() {
@@ -43,8 +43,8 @@ public class SpotRate extends MyDatastoreObject {
 
   @Override
   public boolean equals(final Object obj) {
-    if (obj instanceof SpotRate) {
-      final SpotRate other = (SpotRate) obj;
+    if (obj instanceof Pricing) {
+      final Pricing other = (Pricing) obj;
       return Objects.equal(getCode(), other.getCode());
     } else {
       return false;
