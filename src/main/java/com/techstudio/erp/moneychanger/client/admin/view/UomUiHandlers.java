@@ -13,11 +13,17 @@ import com.gwtplatform.mvp.client.UiHandlers;
  * @author Nilson
  */
 public interface UomUiHandlers extends UiHandlers {
-  void setUomCode(String code);
+  void setCode(String code);
 
-  void setUomName(String name);
+  void setName(String name);
 
-  void createUom();
+  void setScale(String scale);
 
-  void updateUom();
+  void edit(String code);
+
+  void create();
+
+  void delete();
+
+  void update();
 }

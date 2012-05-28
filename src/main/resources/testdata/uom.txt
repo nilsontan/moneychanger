@@ -1,2 +1,2 @@
-UN,Unit
-EA,Each
+WH,Whole,0
+DE,Decimal,2

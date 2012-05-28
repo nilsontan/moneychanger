@@ -7,22 +7,23 @@
 
 package com.techstudio.erp.moneychanger.client.admin.view;
 
-import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.NoSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.admin.presenter.UomPresenter;
+import com.techstudio.erp.moneychanger.client.ui.LabelInput;
+import com.techstudio.erp.moneychanger.client.ui.RangeLabelPager;
+import com.techstudio.erp.moneychanger.client.ui.ShowMorePagerPanel;
+import com.techstudio.erp.moneychanger.client.ui.cell.UomCell;
 import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
 
 /**
@@ -38,27 +39,45 @@ public class UomView
   private final Widget widget;
 
   @UiField
-  TextBox uomCode;
+  Anchor ancHome;
 
   @UiField
-  TextBox uomName;
+  HTMLPanel loadingMessage;
 
   @UiField
-  Button uomUpdate;
+  Label currentStep;
 
   @UiField
-  Button uomCreate;
+  HTMLPanel mainPanel;
+
+  @UiField(provided = true)
+  CellList<UomProxy> list = new CellList<UomProxy>(new UomCell());
 
   @UiField
-  CellTable<UomProxy> uomTable = new CellTable<UomProxy>();
+  ShowMorePagerPanel pagerPanel = new ShowMorePagerPanel();
 
   @UiField
-  SimplePager uomPager = new SimplePager();
+  RangeLabelPager pager = new RangeLabelPager();
+
+  @UiField
+  Label label;
+
+  @UiField
+  LabelInput code;
+
+  @UiField
+  LabelInput name;
+
+  @UiField
+  LabelInput scale;
+
+  @UiField
+  Button save;
 
   @Inject
   public UomView(final Binder binder) {
     widget = binder.createAndBindUi(this);
-    setupUomTable();
+    setUpListing();
   }
 
   @Override
@@ -66,81 +85,76 @@ public class UomView
     return widget;
   }
 
-  @UiHandler("uomCode")
+  @UiHandler("code")
   void onUomCodeChange(ValueChangeEvent<String> event) {
-    getUiHandlers().setUomCode(event.getValue());
+    getUiHandlers().setCode(event.getValue());
   }
 
-  @UiHandler("uomName")
+  @UiHandler("name")
   void onUomNameChange(ValueChangeEvent<String> event) {
-    getUiHandlers().setUomName(event.getValue());
+    getUiHandlers().setName(event.getValue());
   }
 
   @SuppressWarnings("unused")
-  @UiHandler("uomCreate")
+  @UiHandler("save")
   void onCreateUom(ClickEvent event) {
-    getUiHandlers().createUom();
-  }
-
-  @SuppressWarnings("unused")
-  @UiHandler("uomUpdate")
-  void onUpdateUom(ClickEvent event) {
-    getUiHandlers().updateUom();
+    getUiHandlers().update();
   }
 
   @Override
-  public HasData<UomProxy> getTable() {
-    return uomTable;
+  public HasData<UomProxy> getListing() {
+    return list;
   }
 
   @Override
-  public void enableCreateButton(boolean enabled) {
-    uomCreate.setEnabled(enabled);
+  public void showListPanel() {
+    mainPanel.setStyleName("slider show1");
+    list.setVisible(true);
   }
 
   @Override
-  public void enableUpdateButton(boolean enabled) {
-    uomUpdate.setEnabled(enabled);
+  public void showDetailPanel() {
+    mainPanel.setStyleName("slider show2");
+    list.setVisible(false);
   }
 
   @Override
-  public void setUomCode(String code) {
-    uomCode.setValue(code);
+  public void setCode(String code) {
+    this.code.setValue(code);
   }
 
   @Override
-  public void setUomName(String name) {
-    uomName.setValue(name);
+  public void setName(String name) {
+    this.name.setValue(name);
   }
 
-  private void setupUomTable() {
-    Column<UomProxy, String> uomCodeColumn = new Column<UomProxy, String>(new EditTextCell()) {
+  @Override
+  public void setScale(String scale) {
+    this.scale.setValue(scale);
+  }
+
+  @Override
+  public void showLoading(boolean visible) {
+    loadingMessage.setVisible(visible);
+    currentStep.setVisible(!visible);
+    mainPanel.setVisible(!visible);
+  }
+
+  private void setUpListing() {
+    final NoSelectionModel<UomProxy> selectionModel = new NoSelectionModel<UomProxy>();
+    list.setSelectionModel(selectionModel);
+    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
       @Override
-      public String getValue(UomProxy uomProxy) {
-        return uomProxy.getCode();
+      public void onSelectionChange(SelectionChangeEvent event) {
+        UomProxy selected = selectionModel.getLastSelectedObject();
+        if (selected != null) {
+          getUiHandlers().edit(selected.getCode());
+        }
       }
-    };
-    uomTable.addColumn(uomCodeColumn, "Code");
+    });
 
-    Column<UomProxy, String> uomNameColumn = new Column<UomProxy, String>(new EditTextCell()) {
-      @Override
-      public String getValue(UomProxy uomProxy) {
-        return uomProxy.getName();
-      }
-    };
-    uomTable.addColumn(uomNameColumn, "Name");
-
-//    Column<UomProxy, Long> linkColumn = new Column<UomProxy, Long>(new UomLinkCell()) {
-//      @Override
-//      public Long getValue(UomProxy uomProxy) {
-//        return uomProxy.getId();
-//      }
-//    };
-//    uomTable.addColumn(linkColumn);
-
-    uomTable.setPageSize(10);
-
-    uomPager.setDisplay(uomTable);
+    pagerPanel.setDisplay(list);
+    pager.setDisplay(list);
   }
 
 }

@@ -42,7 +42,6 @@ public class DataReset
 
   @Override
   public String resetData() {
-    resetCategories();
     resetCurrencies();
     resetUoms();
 
@@ -62,6 +61,7 @@ public class DataReset
 
   private void onUomSetupCompleted() {
     uomSetupCompleted = true;
+    resetCategories();
     onDomainDataSetupCompleted();
   }
 
@@ -87,10 +87,11 @@ public class DataReset
   private void resetCategories() {
     List<Category> categories = Lists.newArrayList();
     for (ArrayList<String> category : readTextFromResource("category.txt")) {
-      assert category.size() == 2 : "Category not of size 2: " + category;
+      assert category.size() == 3 : "Category not of size 3: " + category;
       Category myCategory = new Category();
       myCategory.setCode(category.get(0));
       myCategory.setName(category.get(1));
+      myCategory.setUom(uomMap.get(category.get(2)));
       categories.add(myCategory);
     }
 
@@ -142,10 +143,11 @@ public class DataReset
   private void resetUoms() {
     List<Uom> uoms = Lists.newArrayList();
     for (ArrayList<String> uom : readTextFromResource("uom.txt")) {
-      assert uom.size() == 2 : "Uom not of size 2: " + uom;
+      assert uom.size() == 3 : "Uom not of size 3: " + uom;
       Uom myUom = new Uom();
       myUom.setCode(uom.get(0));
       myUom.setName(uom.get(1));
+      myUom.setScale(Integer.parseInt(uom.get(2)));
       uoms.add(myUom);
     }
 
@@ -194,15 +196,14 @@ public class DataReset
     resetItemImages();
     List<Item> items = Lists.newArrayList();
     for (ArrayList<String> item : readTextFromResource("item.txt")) {
-      assert item.size() == 6 : "Item not of size 6: " + item;
+      assert item.size() == 5 : "Item not of size 5: " + item;
       Item myItem = new Item();
       myItem.setCode(item.get(0));
       myItem.setName(item.get(1));
       myItem.setFullName(item.get(2));
       myItem.setCategory(categoryMap.get(item.get(3)));
       myItem.setCurrency(currencyMap.get("SGD"));
-      myItem.setUom(uomMap.get(item.get(4)));
-      myItem.setUomRate(new BigDecimal(item.get(5)));
+      myItem.setUomRate(new BigDecimal(item.get(4)));
       String imgKey = item.get(0).toLowerCase() + ".png";
       String imgBlobKeyString = itemImagesMap.get(imgKey);
       myItem.setImageUrl(imgBlobKeyString);
@@ -222,8 +223,8 @@ public class DataReset
     }
     System.out.println("Items saveAll");
 
-    onItemSetupCompleted();
     System.out.println("Items setup done");
+    onItemSetupCompleted();
   }
 
   private void resetItemImages() {
@@ -246,13 +247,13 @@ public class DataReset
 
   private void resetSpotRates() {
     List<Pricing> pricings = Lists.newArrayList();
-    for (ArrayList<String> spotRate : readTextFromResource("spotrate.txt")) {
-      assert spotRate.size() == 3 : "Spot Rate not of size 6: " + spotRate;
+    for (ArrayList<String> pricing : readTextFromResource("spotrate.txt")) {
+      assert pricing.size() == 3 : "Spot Rate not of size 3: " + pricing;
       Pricing myPricing = new Pricing();
-      myPricing.setCode(spotRate.get(0));
-      myPricing.setName(itemMap.get(spotRate.get(0)).getName());
-      myPricing.setBidRate(new BigDecimal(spotRate.get(1)));
-      myPricing.setAskRate(new BigDecimal(spotRate.get(2)));
+      myPricing.setCode(pricing.get(0));
+      myPricing.setName(itemMap.get(pricing.get(0)).getName());
+      myPricing.setBidRate(new BigDecimal(pricing.get(1)));
+      myPricing.setAskRate(new BigDecimal(pricing.get(2)));
       pricings.add(myPricing);
     }
 

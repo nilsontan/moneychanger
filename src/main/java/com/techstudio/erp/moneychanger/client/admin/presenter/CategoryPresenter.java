@@ -26,10 +26,13 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.CategoryUiHandlers;
+import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
 import com.techstudio.erp.moneychanger.client.ui.dataprovider.CategoryDataProvider;
 import com.techstudio.erp.moneychanger.client.ui.dataprovider.FirstLoad;
 import com.techstudio.erp.moneychanger.client.ui.dataprovider.MyDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.UomDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
 import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
 
 import java.util.List;
@@ -52,6 +55,8 @@ public class CategoryPresenter
   public interface MyView extends View, HasUiHandlers<CategoryUiHandlers> {
     HasData<CategoryProxy> getListing();
 
+    HasSelectedValue<UomProxy> getUomListing();
+
     void showListPanel();
 
     void showDetailPanel();
@@ -64,14 +69,18 @@ public class CategoryPresenter
 
     void setName(String name);
 
+    void setUom(UomProxy uom);
+
     void showLoading(boolean visible);
   }
 
   private final Provider<CategoryRequest> requestProvider;
   private final MyDataProvider<CategoryProxy> dataProvider;
+  private final MyDataProvider<UomProxy> uomDataProvider;
 
   private String code;
   private String name;
+  private UomProxy uom;
   private Step step;
 
   @Inject
@@ -79,13 +88,16 @@ public class CategoryPresenter
                            final MyView view,
                            final MyProxy proxy,
                            final Provider<CategoryRequest> requestProvider,
-                           final CategoryDataProvider dataProvider) {
+                           final CategoryDataProvider dataProvider,
+                           final UomDataProvider uomDataProvider) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
+    getView().showLoading(true);
     this.requestProvider = requestProvider;
     this.dataProvider = dataProvider;
     this.dataProvider.addOnFirstLoadHandler(onFirstLoad);
-    getView().showLoading(true);
+    this.uomDataProvider = uomDataProvider;
+    this.uomDataProvider.addDataListDisplay(getView().getUomListing());
     this.dataProvider.addDataDisplay(getView().getListing());
   }
 
@@ -143,6 +155,12 @@ public class CategoryPresenter
   public void setName(String name) {
     this.name = name.trim();
     getView().setName(this.name);
+  }
+
+  @Override
+  public void setUom(UomProxy uom) {
+    this.uom = uom;
+    getView().setUom(this.uom);
   }
 
   @Override
@@ -263,6 +281,7 @@ public class CategoryPresenter
   private void resetFields() {
     code = "";
     name = "";
+    uom = uomDataProvider.getDefault();
   }
 
   private void loadEntity() {
@@ -275,6 +294,7 @@ public class CategoryPresenter
       } else {
         code = proxy.getCode();
         name = proxy.getName();
+        uom = proxy.getUom();
       }
     } else {
       resetFields();
@@ -284,11 +304,13 @@ public class CategoryPresenter
   private void fillData(CategoryProxy proxy) {
     proxy.setCode(code);
     proxy.setName(name);
+    proxy.setUom(uom);
   }
 
   private void updateView() {
     getView().setCode(code);
     getView().setName(name);
+    getView().setUom(uom);
     switch (step) {
       case LIST:
         getView().showListPanel();
@@ -306,7 +328,8 @@ public class CategoryPresenter
 
   private boolean isFormValid() {
     return !Strings.isNullOrEmpty(code)
-        && !Strings.isNullOrEmpty(name);
+        && !Strings.isNullOrEmpty(name)
+        && uom != null;
   }
 
   private enum Step {

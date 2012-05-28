@@ -86,4 +86,10 @@ public class MenuView
     History.newItem(NameTokens.getCountryPage());
   }
 
+  @SuppressWarnings("unused")
+  @UiHandler("bUom")
+  public void onClickUom(ClickEvent event) {
+    History.newItem(NameTokens.getUomPage());
+  }
+
 }

@@ -17,8 +17,13 @@ import com.techstudio.erp.moneychanger.server.locator.ObjectifyLocator;
 @ProxyFor(value = Category.class, locator = ObjectifyLocator.class)
 public interface CategoryProxy extends MyEntityProxy {
   public static final String PARENT = "parent";
+  public static final String UOM = "uom";
 
   CategoryProxy getParent();
 
   void setParent(CategoryProxy categoryProxy);
+
+  UomProxy getUom();
+
+  void setUom(UomProxy uomProxy);
 }

@@ -22,11 +22,10 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.presenter.CategoryPresenter;
-import com.techstudio.erp.moneychanger.client.ui.LabelInput;
-import com.techstudio.erp.moneychanger.client.ui.RangeLabelPager;
-import com.techstudio.erp.moneychanger.client.ui.ShowMorePagerPanel;
+import com.techstudio.erp.moneychanger.client.ui.*;
 import com.techstudio.erp.moneychanger.client.ui.cell.CategoryCell;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
 
 /**
  * @author Nilson
@@ -76,6 +75,20 @@ public class CategoryView
   @UiField
   LabelInput name;
 
+  @UiField(provided = true)
+  SelectOneListBox<UomProxy> uomList
+      = new SelectOneListBox<UomProxy>(new SelectOneListBox.OptionFormatter<UomProxy>() {
+    @Override
+    public String getLabel(UomProxy option) {
+      return option.getName();
+    }
+
+    @Override
+    public String getValue(UomProxy option) {
+      return option.getId().toString();
+    }
+  });
+
   @UiField
   Button add;
 
@@ -115,13 +128,18 @@ public class CategoryView
   }
 
   @UiHandler("code")
-  public void onBidChange(ValueChangeEvent<String> event) {
+  public void onCodeChange(ValueChangeEvent<String> event) {
     getUiHandlers().setCode(event.getValue());
   }
 
   @UiHandler("name")
-  public void onAskChange(ValueChangeEvent<String> event) {
+  public void onNameChange(ValueChangeEvent<String> event) {
     getUiHandlers().setName(event.getValue());
+  }
+
+  @UiHandler("uomList")
+  public void onUomChange(ValueChangeEvent<UomProxy> event) {
+    getUiHandlers().setUom(uomList.getSelectedValue());
   }
 
   @SuppressWarnings("unused")
@@ -145,6 +163,11 @@ public class CategoryView
   @Override
   public HasData<CategoryProxy> getListing() {
     return list;
+  }
+
+  @Override
+  public HasSelectedValue<UomProxy> getUomListing() {
+    return uomList;
   }
 
   @Override
@@ -187,6 +210,11 @@ public class CategoryView
   @Override
   public void setName(String name) {
     this.name.setValue(name);
+  }
+
+  @Override
+  public void setUom(UomProxy uom) {
+    this.uomList.setSelectedValue(uom);
   }
 
   @Override

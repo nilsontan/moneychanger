@@ -78,6 +78,9 @@ public class ItemView
   @UiField
   LabelInput fullname;
 
+  @UiField
+  LabelInput uomRate;
+
   @UiField(provided = true)
   SelectOneListBox<CategoryProxy> categoryList
       = new SelectOneListBox<CategoryProxy>(new SelectOneListBox.OptionFormatter<CategoryProxy>() {
@@ -141,8 +144,13 @@ public class ItemView
   }
 
   @UiHandler("fullname")
-  public void onAskChange(ValueChangeEvent<String> event) {
+  public void onFullnameChange(ValueChangeEvent<String> event) {
     getUiHandlers().setFullName(event.getValue());
+  }
+
+  @UiHandler("uomRate")
+  public void onUomRateChange(ValueChangeEvent<String> event) {
+    getUiHandlers().setUomRate(event.getValue());
   }
 
   @SuppressWarnings("unused")
@@ -229,6 +237,11 @@ public class ItemView
   @Override
   public void setCategory(CategoryProxy categoryProxy) {
     this.categoryList.setSelectedValue(categoryProxy);
+  }
+
+  @Override
+  public void setUomRate(String uomRate) {
+    this.uomRate.setValue(uomRate);
   }
 
   @Override

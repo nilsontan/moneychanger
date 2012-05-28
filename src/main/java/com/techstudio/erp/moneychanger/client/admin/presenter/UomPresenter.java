@@ -8,6 +8,7 @@
 package com.techstudio.erp.moneychanger.client.admin.presenter;
 
 import com.google.common.base.Strings;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
@@ -19,12 +20,13 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.UomUiHandlers;
-import com.techstudio.erp.moneychanger.client.ui.UomDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.FirstLoad;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.MyDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.UomDataProvider;
 import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
 import com.techstudio.erp.moneychanger.shared.service.UomRequest;
 
@@ -46,35 +48,41 @@ public class UomPresenter
   }
 
   public interface MyView extends View, HasUiHandlers<UomUiHandlers> {
-    HasData<UomProxy> getTable();
+    HasData<UomProxy> getListing();
 
-    void enableCreateButton(boolean isValid);
+    void showDetailPanel();
 
-    void enableUpdateButton(boolean isValid);
+    void showListPanel();
 
-    void setUomCode(String code);
+    void setCode(String code);
 
-    void setUomName(String name);
+    void setName(String name);
+
+    void setScale(String scale);
+
+    void showLoading(boolean visible);
   }
 
-  private final Provider<UomRequest> uomRequestProvider;
-  private final UomDataProvider uomDataProvider;
+  private final Provider<UomRequest> requestProvider;
+  private final MyDataProvider<UomProxy> dataProvider;
 
-  private Long id;
   private String code;
   private String name;
+  private Integer scale;
 
   @Inject
   public UomPresenter(final EventBus eventBus,
                       final MyView view,
                       final MyProxy proxy,
-                      final Provider<UomRequest> uomRequestProvider,
-                      final UomDataProvider uomDataProvider) {
+                      final Provider<UomRequest> requestProvider,
+                      final UomDataProvider dataProvider) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
-    this.uomRequestProvider = uomRequestProvider;
-    this.uomDataProvider = uomDataProvider;
-    this.uomDataProvider.addDataDisplay(getView().getTable());
+    getView().showLoading(true);
+    this.requestProvider = requestProvider;
+    this.dataProvider = dataProvider;
+    this.dataProvider.addOnFirstLoadHandler(onFirstLoad);
+    this.dataProvider.addDataDisplay(getView().getListing());
   }
 
   @Override
@@ -82,123 +90,142 @@ public class UomPresenter
     RevealContentEvent.fire(this, MainPosPresenter.TYPE_SetMainContent, this);
   }
 
+  FirstLoad.OnFirstLoad onFirstLoad = new FirstLoad.OnFirstLoad() {
+    @Override
+    public void onSuccess(FirstLoad firstLoad) {
+      Timer timer = new Timer() {
+        @Override
+        public void run() {
+          getView().showLoading(false);
+        }
+      };
+
+      timer.schedule(1000);
+    }
+  };
+
   @Override
   protected void onReset() {
     super.onReset();
-
-    if (id == null) {
-      updateView();
-    } else {
-      uomRequestProvider.get().fetch(id)
-          .fire(new Receiver<UomProxy>() {
-            @Override
-            public void onSuccess(UomProxy response) {
-              code = response.getCode();
-              name = response.getName();
-              updateView();
-            }
-          });
-    }
+    loadEntity();
+    getView().showListPanel();
   }
 
   @Override
   protected void onReveal() {
     super.onReveal();
-    uomDataProvider.updateListData();
+    loadEntity();
+    getView().showListPanel();
   }
 
   @Override
-  public void setUomCode(String code) {
-    this.code = code.trim().toUpperCase();
-    updateView();
+  public void setCode(String code) {
+    // code cannot be changed
+    getView().setCode(this.code);
   }
 
   @Override
-  public void setUomName(String name) {
-    this.name = name.trim();
-    updateView();
+  public void setName(String name) {
+    // name cannot be changed
+    getView().setName((this.name));
   }
 
   @Override
-  public void createUom() {
+  public void setScale(String scale) {
+    this.scale = Integer.parseInt(scale.trim());
+    getView().setScale(this.scale.toString());
+  }
+
+  @Override
+  public void edit(String code) {
+    this.code = code.trim();
+    loadEntity();
+    getView().showDetailPanel();
+  }
+
+  @Override
+  public void create() {
+    // Creation of Uom is not allowed
+  }
+
+  @Override
+  public void update() {
     if (!isFormValid()) {
       return;
     }
-    uomRequestProvider.get().fetchByProperty("code", code)
+    requestProvider.get().fetchByProperty("code", code)
         .fire(new Receiver<List<UomProxy>>() {
           @Override
           public void onSuccess(List<UomProxy> response) {
             if (response.isEmpty()) {
-              UomRequest request = uomRequestProvider.get();
-              UomProxy proxy = request.create(UomProxy.class);
-              fillData(proxy);
-              request.save(proxy).fire(new Receiver<UomProxy>() {
-                @Override
-                public void onSuccess(UomProxy response) {
-                  uomDataProvider.updateAllData();
-                  updateView();
-                }
-              });
+              Window.alert("That code " + code + " does not exist!");
+              getView().showListPanel();
             } else {
-              Window.alert("A uom with that code already exist!");
-            }
-          }
-        });
-  }
-
-  @Override
-  public void updateUom() {
-    if (!isFormValid()) {
-      return;
-    }
-    uomRequestProvider.get().fetchByProperty("code", code)
-        .fire(new Receiver<List<UomProxy>>() {
-          @Override
-          public void onSuccess(List<UomProxy> response) {
-            if (response.isEmpty()) {
-              Window.alert("A uom with that code does not exist!");
-            } else {
-              UomRequest request = uomRequestProvider.get();
+              UomRequest request = requestProvider.get();
               UomProxy proxy = response.get(0);
               proxy = request.edit(proxy);
               fillData(proxy);
-              request.save(proxy).fire(new Receiver<UomProxy>() {
-                @Override
-                public void onSuccess(UomProxy response) {
-                  uomDataProvider.updateAllData();
-                  updateView();
-                }
-              });
+              request.save(proxy)
+                  .fire(new Receiver<UomProxy>() {
+                    @Override
+                    public void onSuccess(UomProxy response) {
+                      dataProvider.updateData();
+                      Timer timer = new Timer() {
+                        @Override
+                        public void run() {
+                          getView().showListPanel();
+                        }
+                      };
+
+                      timer.schedule(300);
+                    }
+                  });
             }
           }
         });
   }
 
   @Override
-  public void prepareFromRequest(PlaceRequest placeRequest) {
-    String idString = placeRequest.getParameter("id", "");
-    try {
-      id = Long.parseLong(idString);
-    } catch (NumberFormatException e) {
-      id = null;
+  public void delete() {
+    // Deletion of Uom is not allowed
+  }
+
+  private void loadEntity() {
+    if (code != null && !code.isEmpty()) {
+      UomProxy proxy = dataProvider.getByCode(code);
+      if (proxy == null) {
+        code = "";
+        name = "";
+        scale = 1;
+      } else {
+        code = proxy.getCode();
+        name = proxy.getName();
+        scale = proxy.getScale();
+      }
+    } else {
+      code = "";
+      name = "";
+      scale = 1;
     }
+    updateView();
   }
 
   private void fillData(UomProxy proxy) {
     proxy.setCode(code);
     proxy.setName(name);
+    proxy.setScale(scale);
   }
 
   private void updateView() {
-    getView().setUomCode(code);
-    getView().setUomName(name);
-    boolean isValid = isFormValid();
-    getView().enableCreateButton(isValid);
-    getView().enableUpdateButton(isValid);
+    getView().setCode(code);
+    getView().setName(name);
+    getView().setScale(scale.toString());
   }
 
   private boolean isFormValid() {
     return !Strings.isNullOrEmpty(code)
-        && !Strings.isNullOrEmpty(name);
+        && !Strings.isNullOrEmpty(name)
+        && scale != null;
+
   }
 }

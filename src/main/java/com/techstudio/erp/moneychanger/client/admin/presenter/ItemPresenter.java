@@ -38,6 +38,7 @@ import com.techstudio.erp.moneychanger.shared.service.ItemRequest;
 import com.techstudio.erp.moneychanger.shared.service.PricingRequest;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -101,6 +102,8 @@ public class ItemPresenter
 
     void setCategory(CategoryProxy categoryProxy);
 
+    void setUomRate(String uomRate);
+
     void showLoading(boolean visible);
   }
 
@@ -123,6 +126,7 @@ public class ItemPresenter
   private String code;
   private String name;
   private String fullName;
+  private BigDecimal uomRate;
   private CategoryProxy category;
 
   private Step step;
@@ -213,6 +217,13 @@ public class ItemPresenter
   public void setFullName(String fullName) {
     this.fullName = fullName.trim();
     getView().setFullname(this.fullName);
+  }
+
+  @Override
+  public void setUomRate(String uomRate) {
+    BigDecimal newRate = new BigDecimal(uomRate);
+    this.uomRate = newRate.setScale(category.getUom().getScale(), RoundingMode.HALF_UP);
+    getView().setUomRate(this.uomRate.toString());
   }
 
   @Override
@@ -363,7 +374,11 @@ public class ItemPresenter
     code = "";
     name = "";
     fullName = "";
+    uomRate = BigDecimal.ONE;
     category = categoryDataProvider.getDefault();
+    if (category != null) {
+      uomRate = uomRate.setScale(category.getUom().getScale(), RoundingMode.HALF_UP);
+    }
   }
 
   private void loadEntity() {
@@ -377,6 +392,7 @@ public class ItemPresenter
         code = proxy.getCode();
         name = proxy.getName();
         fullName = proxy.getFullName();
+        uomRate = proxy.getUomRate();
         category = proxy.getCategory();
       }
     } else {
@@ -388,6 +404,7 @@ public class ItemPresenter
     proxy.setCode(code);
     proxy.setName(name);
     proxy.setFullName(fullName);
+    proxy.setUomRate(uomRate);
     proxy.setCategory(category);
   }
 
@@ -395,6 +412,7 @@ public class ItemPresenter
     getView().setCode(code);
     getView().setName(name);
     getView().setFullname(fullName);
+    getView().setUomRate(uomRate.toString());
     getView().setCategory(category);
     switch (step) {
       case LIST:
@@ -415,6 +433,7 @@ public class ItemPresenter
     return !Strings.isNullOrEmpty(code)
         && !Strings.isNullOrEmpty(name)
         && !Strings.isNullOrEmpty(fullName)
+        && uomRate != null
         && category != null;
   }
 

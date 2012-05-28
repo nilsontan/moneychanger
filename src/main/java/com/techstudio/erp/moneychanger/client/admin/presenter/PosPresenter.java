@@ -25,13 +25,14 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.PosUiHandlers;
 import com.techstudio.erp.moneychanger.client.gin.DefaultCurrency;
-import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForItemQty;
 import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForRate;
 import com.techstudio.erp.moneychanger.client.ui.dataprovider.PricingDataProvider;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
+import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.PricingProxy;
+import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
 import com.techstudio.erp.moneychanger.shared.service.ItemRequest;
 import com.techstudio.erp.moneychanger.shared.service.LineItemRequest;
 
@@ -126,6 +127,7 @@ public class PosPresenter
   }
 
   private final Provider<ItemRequest> itemRequestProvider;
+  private final Provider<CategoryRequest> categoryRequestProvider;
   private final Provider<LineItemRequest> lineItemRequestProvider;
   private final PricingDataProvider pricingDataProvider;
 
@@ -134,6 +136,7 @@ public class PosPresenter
   private LineItemProxy pendingLineItem;
   private int nextLine;
 
+  private List<CategoryProxy> categories;
   private String buyItemCode;
 
   @Inject
@@ -143,10 +146,6 @@ public class PosPresenter
   @Inject
   @DefaultScaleForRate
   private int rateScale;
-
-  @Inject
-  @DefaultScaleForItemQty
-  private int qtyScale;
 
   private BigDecimal buyRate;
   private BigDecimal sellRate;
@@ -159,11 +158,13 @@ public class PosPresenter
                       final MyProxy proxy,
                       final PricingDataProvider pricingDataProvider,
                       final Provider<ItemRequest> itemRequestProvider,
+                      final Provider<CategoryRequest> categoryRequestProvider,
                       final Provider<LineItemRequest> lineItemRequestProvider) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
     getView().showLoading(true);
     this.itemRequestProvider = itemRequestProvider;
+    this.categoryRequestProvider = categoryRequestProvider;
     this.lineItemRequestProvider = lineItemRequestProvider;
     this.pricingDataProvider = pricingDataProvider;
     this.pricingDataProvider.updateData();
@@ -177,14 +178,24 @@ public class PosPresenter
               getView().addItemMenu(itemProxy);
             }
 
-            Timer timer = new Timer() {
-              @Override
-              public void run() {
-                getView().showLoading(false);
-              }
-            };
+            PosPresenter.this.categoryRequestProvider.get()
+                .fetchAll()
+                .with(CategoryProxy.UOM)
+                .fire(new Receiver<List<CategoryProxy>>() {
+                  @Override
+                  public void onSuccess(List<CategoryProxy> response) {
+                    categories = response;
 
-            timer.schedule(5000);
+                    Timer timer = new Timer() {
+                      @Override
+                      public void run() {
+                        getView().showLoading(false);
+                      }
+                    };
+
+                    timer.schedule(5000);
+                  }
+                });
           }
         });
   }
@@ -259,14 +270,14 @@ public class PosPresenter
       case SELL:
         itemRequestProvider.get()
             .fetchByProperty("code", buyItemCode)
-            .with(ItemProxy.UOM)
+            .with(ItemProxy.CATEGORY)
             .fire(new Receiver<List<ItemProxy>>() {
               @Override
               public void onSuccess(final List<ItemProxy> buyItem) {
                 assert buyItem.size() > 0 : "No item found for the following code " + buyItemCode;
                 itemRequestProvider.get()
                     .fetchByProperty("code", itemCode)
-                    .with(ItemProxy.UOM)
+                    .with(ItemProxy.CATEGORY)
                     .fire(new Receiver<List<ItemProxy>>() {
                       @Override
                       public void onSuccess(List<ItemProxy> sellItem) {
@@ -292,7 +303,9 @@ public class PosPresenter
     if (itemQuantity == null || itemQuantity.trim().isEmpty()) {
       return;
     }
-    pendingLineItem.setBuyQuantity(returnAmount(itemQuantity).setScale(qtyScale));
+    BigDecimal itemQty = returnAmount(itemQuantity);
+    int scale = findItemBuyCategory().getUom().getScale();
+    pendingLineItem.setBuyQuantity(itemQty.setScale(scale, RoundingMode.HALF_UP));
     recalculateSellQuantity();
     updateItemDetailsRateView();
   }
@@ -302,7 +315,9 @@ public class PosPresenter
     if (itemQuantity == null || itemQuantity.trim().isEmpty()) {
       return;
     }
-    pendingLineItem.setSellQuantity(returnAmount(itemQuantity).setScale(qtyScale));
+    BigDecimal itemQty = returnAmount(itemQuantity);
+    int scale = findItemSellCategory().getUom().getScale();
+    pendingLineItem.setSellQuantity(itemQty.setScale(scale, RoundingMode.HALF_UP));
     recalculateBuyQuantity();
     updateItemDetailsRateView();
   }
@@ -598,21 +613,40 @@ public class PosPresenter
 
   private void recalculateBuyQuantity() {
     if (pendingLineItem.getSellQuantity() != null) {
-      pendingLineItem.setBuyQuantity(pendingLineItem.getSellQuantity().divide(dealRate, qtyScale, RoundingMode.HALF_UP));
+      int scale = findItemBuyCategory().getUom().getScale();
+      pendingLineItem.setBuyQuantity(pendingLineItem.getSellQuantity().divide(dealRate, scale, RoundingMode.HALF_UP));
     }
   }
 
   private void recalculateSellQuantity() {
     if (pendingLineItem.getBuyQuantity() != null) {
+      int scale = findItemSellCategory().getUom().getScale();
       BigDecimal sellQuantity = dealRate.multiply(
           pendingLineItem.getBuyQuantity(), MathContext.UNLIMITED)
-          .setScale(qtyScale, RoundingMode.HALF_UP);
+          .setScale(scale, RoundingMode.HALF_UP);
       pendingLineItem.setSellQuantity(sellQuantity);
     }
   }
 
   private BigDecimal inverse(BigDecimal number) {
     return BigDecimal.ONE.divide(number, rateScale, RoundingMode.HALF_UP);
+  }
+
+  private CategoryProxy findItemBuyCategory() {
+    return findCategory(pendingLineItem.getItemBuy().getCategory().getCode());
+  }
+
+  private CategoryProxy findItemSellCategory() {
+    return findCategory(pendingLineItem.getItemSell().getCategory().getCode());
+  }
+
+  private CategoryProxy findCategory(String code) {
+    for (CategoryProxy proxy : categories) {
+      if (proxy.getCode().equals(code)) {
+        return proxy;
+      }
+    }
+    throw new RuntimeException("No Category found for this code: " + code);
   }
 
   /**

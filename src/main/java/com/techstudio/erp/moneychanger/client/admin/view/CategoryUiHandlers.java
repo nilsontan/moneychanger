@@ -8,6 +8,7 @@
 package com.techstudio.erp.moneychanger.client.admin.view;
 
 import com.gwtplatform.mvp.client.UiHandlers;
+import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
 
 /**
  * @author Nilson
@@ -20,6 +21,8 @@ public interface CategoryUiHandlers extends UiHandlers {
   void setCode(String code);
 
   void setName(String name);
+
+  void setUom(UomProxy uom);
 
   void edit(String code);
 

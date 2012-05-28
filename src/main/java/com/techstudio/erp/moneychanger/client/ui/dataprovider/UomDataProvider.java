@@ -11,28 +11,26 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.Singleton;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
-import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
-import com.techstudio.erp.moneychanger.shared.service.CategoryRequest;
+import com.techstudio.erp.moneychanger.shared.proxy.UomProxy;
+import com.techstudio.erp.moneychanger.shared.service.UomRequest;
 
 import java.util.List;
 
 /**
  * @author Nilson
  */
-@Singleton
-public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
+public class UomDataProvider extends AbstractDataProvider<UomProxy> {
 
-  private static CategoryProxy DEFAULT;
+  private static UomProxy DEFAULT;
 
-  private final Provider<CategoryRequest> requestProvider;
+  private final Provider<UomRequest> requestProvider;
 
   private boolean firstLoad = true;
 
   @Inject
-  public CategoryDataProvider(Provider<CategoryRequest> requestProvider) {
+  public UomDataProvider(Provider<UomRequest> requestProvider) {
     this.requestProvider = requestProvider;
     updateData();
     findDefault();
@@ -42,17 +40,16 @@ public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
   public void updateData() {
     requestProvider.get()
         .fetchAll()
-        .with(CategoryProxy.UOM)
-        .fire(new Receiver<List<CategoryProxy>>() {
+        .fire(new Receiver<List<UomProxy>>() {
           @Override
-          public void onSuccess(List<CategoryProxy> proxies) {
+          public void onSuccess(List<UomProxy> proxies) {
             updateRowCount(proxies.size(), true);
             updateMap(proxies);
             if (firstLoad) {
               onSuccessfulLoad();
               firstLoad = false;
             }
-            for (HasData<CategoryProxy> display : getDataDisplays()) {
+            for (HasData<UomProxy> display : getDataDisplays()) {
               onRangeChanged(display);
             }
             updateList(proxies);
@@ -61,13 +58,13 @@ public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
   }
 
   @Override
-  protected void onRangeChanged(final HasData<CategoryProxy> display) {
+  protected void onRangeChanged(final HasData<UomProxy> display) {
     final Range range = display.getVisibleRange();
     requestProvider.get()
         .fetchRange(range.getStart(), range.getLength())
-        .fire(new Receiver<List<CategoryProxy>>() {
+        .fire(new Receiver<List<UomProxy>>() {
           @Override
-          public void onSuccess(List<CategoryProxy> proxies) {
+          public void onSuccess(List<UomProxy> proxies) {
             updateRowData(display, range.getStart(), proxies);
           }
         });
@@ -75,7 +72,7 @@ public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
   }
 
   @Override
-  public CategoryProxy getDefault() {
+  public UomProxy getDefault() {
     if (DEFAULT == null) {
       findDefault();
     }
@@ -83,17 +80,15 @@ public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
   }
 
   @Override
-  protected void onValueChanged(HasSelectedValue<CategoryProxy> display) {
+  protected void onValueChanged(HasSelectedValue<UomProxy> display) {
   }
 
   private void findDefault() {
     if (DEFAULT == null) {
-      requestProvider.get()
-          .fetchAll()
-          .with(CategoryProxy.UOM)
-          .fire(new Receiver<List<CategoryProxy>>() {
+      requestProvider.get().fetchAll()
+          .fire(new Receiver<List<UomProxy>>() {
             @Override
-            public void onSuccess(List<CategoryProxy> responses) {
+            public void onSuccess(List<UomProxy> responses) {
               if (responses.isEmpty()) {
               } else {
                 DEFAULT = responses.get(0);

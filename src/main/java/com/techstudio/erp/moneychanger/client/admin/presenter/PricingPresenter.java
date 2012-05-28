@@ -114,7 +114,6 @@ public class PricingPresenter
   protected void onReset() {
     super.onReset();
     loadEntity();
-//    RangeChangeEvent.fire(getView().getListing(), getView().getListing().getVisibleRange());
     getView().showListPanel();
   }
 

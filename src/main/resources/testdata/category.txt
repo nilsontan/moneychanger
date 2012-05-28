@@ -1,2 +1,2 @@
-MON,Money Change
-PHO,Phone Card
+MON,Money Change,DE
+PHO,Phone Card,WH

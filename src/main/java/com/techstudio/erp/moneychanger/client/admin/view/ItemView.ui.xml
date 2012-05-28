@@ -20,7 +20,7 @@
         <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-left" />
       </g:Anchor>
       <g:Anchor ui:field="ancNext" addStyleNames="homeBar-icon homeBar-icon-r icon-container-a">
-        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-cross" />
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-plus" />
       </g:Anchor>
     </g:HTMLPanel>
     <div class="bar page-title">
@@ -39,6 +39,7 @@
               <m:LabelInput text="Code" type="text" ui:field="code" addStyleNames="rate" />
               <m:LabelInput text="Name" type="text" ui:field="name" addStyleNames="rate" />
               <m:LabelInput text="Full Name" type="text" ui:field="fullname" addStyleNames="rate" />
+              <m:LabelInput text="Rate" type="number" ui:field="uomRate" addStyleNames="rate" />
               <span class="field rate">
                 <span style="position:absolute; top:0.7em; right:0.8em;" class="icon-set icon-down" />
                 <label>Category</label>
@@ -54,7 +55,7 @@
               <g:Button ui:field="save" text="Save" />
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="icon-container">
-              <span class="icon-set icon-set-left icon-plus" />
+              <span class="icon-set icon-set-left icon-cross" />
               <g:Button ui:field="delete" text="Delete" addStyleNames="bar-red" />
             </g:HTMLPanel>
           </g:HTMLPanel>

@@ -28,7 +28,8 @@
         <m:OrderedList addStyleNames="centered round-table" width="100%">
           <m:MyMenuListItem ui:field="bItem" name="Item" iconName="icon-star" addStyleNames="first" />
           <m:MyMenuListItem ui:field="bCategory" name="Category" iconName="icon-star" />
-          <m:MyMenuListItem ui:field="bCountry" name="Country" iconName="icon-star" addStyleNames="last" />
+          <m:MyMenuListItem ui:field="bCountry" name="Country" iconName="icon-star" />
+          <m:MyMenuListItem ui:field="bUom" name="Uom" iconName="icon-star" addStyleNames="last" />
         </m:OrderedList>
       </div>
     </g:HTMLPanel>

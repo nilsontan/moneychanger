@@ -16,4 +16,7 @@ import com.techstudio.erp.moneychanger.server.locator.ObjectifyLocator;
  */
 @ProxyFor(value = Uom.class, locator = ObjectifyLocator.class)
 public interface UomProxy extends MyEntityProxy {
+  int getScale();
+
+  void setScale(int scale);
 }

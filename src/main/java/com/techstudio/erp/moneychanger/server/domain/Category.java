@@ -13,6 +13,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
 import com.techstudio.erp.moneychanger.server.service.CategoryDao;
+import com.techstudio.erp.moneychanger.server.service.UomDao;
 
 @Cached
 @Entity
@@ -21,6 +22,8 @@ public class Category extends MyDatastoreObject {
   public static final Category EMPTY = new Category();
 
   private Key<Category> parent;
+
+  private Key<Uom> uom;
 
   public Category() {
   }
@@ -43,11 +46,30 @@ public class Category extends MyDatastoreObject {
     this.parent = new CategoryDao().key(parent);
   }
 
+  public Uom getUom() {
+    if (uom == null) {
+      return Uom.EMPTY;
+    }
+    try {
+      return new UomDao().get(uom);
+    } catch (EntityNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public void setUom(Uom uom) {
+    if (uom.equals(Uom.EMPTY)) {
+      return;
+    }
+    this.uom = new UomDao().key(uom);
+  }
+
   @Override
   public boolean equals(final Object obj) {
     if (obj instanceof Category) {
       final Category other = (Category) obj;
       return Objects.equal(getCode(), other.getCode())
+          && Objects.equal(getUom(), other.getUom())
           && Objects.equal(parent, other.parent);
     } else {
       return false;

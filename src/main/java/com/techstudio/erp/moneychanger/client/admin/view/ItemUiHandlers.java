@@ -24,6 +24,8 @@ public interface ItemUiHandlers extends UiHandlers {
 
   void setFullName(String fullName);
 
+  void setUomRate(String uomRate);
+
   void setCategory(CategoryProxy selectedValue);
 
   void edit(String code);

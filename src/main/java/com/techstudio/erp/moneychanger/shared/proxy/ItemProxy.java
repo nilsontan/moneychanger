@@ -30,10 +30,6 @@ public interface ItemProxy extends MyExEntityProxy {
 
   void setCurrency(CurrencyProxy currencyProxy);
 
-  UomProxy getUom();
-
-  void setUom(UomProxy uomProxy);
-
   BigDecimal getUomRate();
 
   void setUomRate(BigDecimal uomRate);

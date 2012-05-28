@@ -1,24 +1,24 @@
-AUD,Australian Dollar,Australian Dollar,MON,UN,1
-GBP,British Pound,British Pound,MON,UN,1
-CAD,Canadian Dollar,Canadian Dollar,MON,UN,1
-DKK,Danish Krone,Danish Krone,MON,UN,100
-EUR,Euro,Euro,MON,UN,1
-HKD,Hong Kong Dollar,Hong Kong Dollar,MON,UN,100
-INR,Indian Rupee,Indian Rupee,MON,UN,100
-IDR,Indonesian Rupiah,Indonesian Rupiah,MON,UN,100000
-JPY,Japanese Yen,Japanese Yen,MON,UN,1000
-KRW,Korean Won,Korean Won,MON,UN,1000
-MYR,Malaysian Ringgit,Malaysian Ringgit,MON,UN,100
-NOK,Norwegian Krone,Norwegian Krone,MON,UN,100
-NZD,NZ Dollar,New Zealand Dollar,MON,UN,1
-PHP,Philippine Peso,Philippine Peso,MON,UN,100
-SAR,Saudi Riyal,Saudi Arabian Riyal,MON,UN,100
-SGD,Singapore Dollar,Singapore Dollar,MON,UN,1
-ZAR,South African Rand,South African Rand,MON,UN,100
-SEK,Swedish Krona,Swedish Krona,MON,UN,100
-CHF,Swiss Franc,Swiss Franc,MON,UN,1
-TWD,Taiwan Dollar,New Taiwan Dollar,MON,UN,100
-THB,Thai Baht,Thai Baht,MON,UN,100
-AED,UAE Dirham,UAE Dirham,MON,UN,100
-USD,US Dollar,United States Dollar,MON,UN,1
-VND,Vietnam Dong,Vietnam Dong,MON,UN,1000
+AUD,Australian Dollar,Australian Dollar,MON,1
+GBP,British Pound,British Pound,MON,1
+CAD,Canadian Dollar,Canadian Dollar,MON,1
+DKK,Danish Krone,Danish Krone,MON,100
+EUR,Euro,Euro,MON,1
+HKD,Hong Kong Dollar,Hong Kong Dollar,MON,100
+INR,Indian Rupee,Indian Rupee,MON,100
+IDR,Indonesian Rupiah,Indonesian Rupiah,MON,100000
+JPY,Japanese Yen,Japanese Yen,MON,1000
+KRW,Korean Won,Korean Won,MON,1000
+MYR,Malaysian Ringgit,Malaysian Ringgit,MON,100
+NOK,Norwegian Krone,Norwegian Krone,MON,100
+NZD,NZ Dollar,New Zealand Dollar,MON,1
+PHP,Philippine Peso,Philippine Peso,MON,100
+SAR,Saudi Riyal,Saudi Arabian Riyal,MON,100
+SGD,Singapore Dollar,Singapore Dollar,MON,1
+ZAR,South African Rand,South African Rand,MON,100
+SEK,Swedish Krona,Swedish Krona,MON,100
+CHF,Swiss Franc,Swiss Franc,MON,1
+TWD,Taiwan Dollar,New Taiwan Dollar,MON,100
+THB,Thai Baht,Thai Baht,MON,100
+AED,UAE Dirham,UAE Dirham,MON,100
+USD,US Dollar,United States Dollar,MON,1
+VND,Vietnam Dong,Vietnam Dong,MON,1000

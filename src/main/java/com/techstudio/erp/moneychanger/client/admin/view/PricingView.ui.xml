@@ -32,18 +32,10 @@
               <m:LabelInput text="Bid" type="number" ui:field="bid" addStyleNames="rate" />
               <m:LabelInput text="Ask" type="number" ui:field="ask" addStyleNames="rate" />
             </div>
-            <!--<g:HTMLPanel addStyleNames="icon-container">
-              <span class="icon-set icon-set-left icon-add" />
-              <g:Button ui:field="prAdd" text="Add" />
-            </g:HTMLPanel>-->
             <g:HTMLPanel addStyleNames="icon-container">
               <span class="icon-set icon-set-left icon-tick" />
               <g:Button ui:field="save" text="Save" />
             </g:HTMLPanel>
-            <!--<g:HTMLPanel addStyleNames="icon-container">
-              <span class="icon-set icon-set-left icon-cross" />
-              <g:Button ui:field="prDel" text="Delete" addStyleNames="bar-red" />
-            </g:HTMLPanel>-->
           </g:HTMLPanel>
         </g:HTMLPanel>
       </g:HTMLPanel>

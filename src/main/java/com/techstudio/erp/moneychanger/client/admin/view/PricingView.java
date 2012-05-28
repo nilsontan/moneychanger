@@ -70,14 +70,8 @@ public class PricingView
   @UiField
   LabelInput ask;
 
-//  @UiField
-//  Button prAdd;
-
   @UiField
   Button save;
-
-//  @UiField
-//  Button prDel;
 
   @Inject
   public PricingView(Binder binder) {
