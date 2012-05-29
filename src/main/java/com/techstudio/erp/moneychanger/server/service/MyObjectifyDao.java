@@ -25,7 +25,7 @@ public class MyObjectifyDao<T> extends ObjectifyDao<T> {
     delete(object);
   }
 
-  public List<T> fetchByProperty(String prop, String value) {
+  public List<T> fetchByProperty(String prop, Object value) {
     return listByProperty(prop, value);
   }
 

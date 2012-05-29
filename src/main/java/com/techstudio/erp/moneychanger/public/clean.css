@@ -976,18 +976,32 @@ div.di-r-container {
 }
 
 .slider .slide1, .slider .slide2,
+.slideshow .menu-category,
 .slideshow .menu1, .slideshow .menu2,
 .slideshow .menu3 {
   position: relative;
   top: 0;
   overflow: hidden;
 
+  /*-webkit-transition: all 1s ease-out;*/
+  /*-moz-transition: all 1s ease-out;*/
+  /*-o-transition: all 1s ease-out;*/
+  /*-ms-transition: all 1s ease-out;*/
+  /*transition: all 1s ease-out;*/
+  float: left;
+}
+
+.slideshow .menu-category {
+  z-index: 1;
+  float: right;
+  border: 1px solid #AAA;
+  border-width: 0 0 0 1px;
+
   -webkit-transition: all 1s ease-out;
   -moz-transition: all 1s ease-out;
   -o-transition: all 1s ease-out;
   -ms-transition: all 1s ease-out;
   transition: all 1s ease-out;
-  float: left;
 }
 
 .slideshow {
@@ -1003,7 +1017,26 @@ div.di-r-container {
 .slideshow.show3 {
 }
 
-.slider.show1 .slide1,
+.slideshow .menu-category {
+  -webkit-transform: translate(0, -100%);
+  -moz-transform: translate(0, -100%);
+  -o-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+
+.slideshow.showCat .menu-category {
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+
+.slideshow.show1 .menu1
+.slideshow.show2 .menu2, .slideshow.show3 .menu3 {
+
+}
+
+/*.slider.show1 .slide1,
 .slideshow.show1 .menu1 {
   -webkit-transform: translate(0, 0);
   -moz-transform: translate(0, 0);
@@ -1012,19 +1045,19 @@ div.di-r-container {
 }
 
 .slider.show2 .slide1, .slider.show2 .slide2,
-.slideshow.show2 .menu2 {
+.slideshow.show2 .menu2, .slideshow.show3 .menu3 {
   -webkit-transform: translate(-100%, 0);
   -moz-transform: translate(-100%, 0);
   -o-transform: translate(-100%, 0);
   transform: translate(-100%, 0);
 }
 
-.slideshow.show3 .menu3 {
+*//*.slideshow.show3 .menu3 {
   -webkit-transform: translate(-200%, 0);
   -moz-transform: translate(-200%, 0);
   -o-transform: translate(-200%, 0);
   transform: translate(-200%, 0);
-}
+}*//*
 
 .slider.show1 .slide2,
 .slideshow.show1 .menu2, .slideshow.show3 .menu2 {
@@ -1049,7 +1082,7 @@ div.di-r-container {
 }
 
 .slider.show2 .slide1, .slider.show2 .slide2 {
-}
+}*/
 
 @-moz-keyframes slide-out {
   0%    {left: 0%;}

@@ -28,12 +28,12 @@
     </div>
     <div class="content bodyBg">
       <g:HTMLPanel ui:field="mainPanel" addStyleNames="slider">
-        <g:HTMLPanel addStyleNames="centered slide1">
+        <g:HTMLPanel ui:field="listPanel" addStyleNames="centered slide1">
           <c:CellList ui:field="list" />
           <m:ShowMorePagerPanel ui:field="pagerPanel" />
           <m:RangeLabelPager ui:field="pager" />
         </g:HTMLPanel>
-        <g:HTMLPanel addStyleNames="centered slide2">
+        <g:HTMLPanel ui:field="detailPanel" addStyleNames="centered slide2">
           <g:HTMLPanel addStyleNames="padding-s">
             <div class="field-container">
               <m:LabelInput text="Code" type="text" ui:field="code" addStyleNames="rate" />

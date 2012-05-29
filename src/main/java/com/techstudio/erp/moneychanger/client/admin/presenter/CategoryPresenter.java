@@ -94,10 +94,10 @@ public class CategoryPresenter
     getView().setUiHandlers(this);
     getView().showLoading(true);
     this.requestProvider = requestProvider;
-    this.dataProvider = dataProvider;
-    this.dataProvider.addOnFirstLoadHandler(onFirstLoad);
     this.uomDataProvider = uomDataProvider;
     this.uomDataProvider.addDataListDisplay(getView().getUomListing());
+    this.dataProvider = dataProvider;
+    this.dataProvider.addOnFirstLoadHandler(onFirstLoad);
     this.dataProvider.addDataDisplay(getView().getListing());
   }
 

@@ -8,6 +8,7 @@
 package com.techstudio.erp.moneychanger.client.admin.view;
 
 import com.gwtplatform.mvp.client.UiHandlers;
+import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 
 /**
  * @author Nilson
@@ -46,4 +47,6 @@ public interface PosUiHandlers extends UiHandlers {
   void removeLineItemIndex(int index);
 
   void modifyItem(int index);
+
+  void switchCategory(CategoryProxy categoryProxy);
 }

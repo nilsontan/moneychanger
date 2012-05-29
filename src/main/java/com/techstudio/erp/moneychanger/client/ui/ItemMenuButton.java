@@ -15,7 +15,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.*;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
@@ -54,7 +53,7 @@ public class ItemMenuButton extends Composite
 
   public ItemMenuButton(ItemProxy itemProxy) {
     this();
-    if (itemProxy.getImageUrl().isEmpty()) {
+    if (itemProxy.getImageUrl() == null || itemProxy.getImageUrl().isEmpty()) {
       setImageUrl("moneychanger/images/nia.png");
     } else {
       setImageUrl(itemProxy.getImageUrl());

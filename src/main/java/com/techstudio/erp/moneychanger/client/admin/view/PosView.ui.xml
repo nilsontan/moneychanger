@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:c="urn:import:com.google.gwt.user.cellview.client"
              xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui">
 
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
@@ -13,6 +14,12 @@
       width: 60%;
       height: 9em;
       text-align: center;
+    }
+
+    .hiddenMenuBar {
+      width: 33.33333333%;
+      position: absolute;
+      overflow: hidden;
     }
 
     .padding {
@@ -42,6 +49,11 @@
     </div>
     <div id="content" class="content bodyBg">
       <g:HTMLPanel ui:field="mainPanel" addStyleNames="slideshow">
+        <g:HTMLPanel addStyleNames="{style.hiddenMenuBar}">
+          <g:HTMLPanel ui:field="categoryPulldown" addStyleNames="menu-category">
+            <c:CellList ui:field="categoryList" />
+          </g:HTMLPanel>
+        </g:HTMLPanel>
         <g:HTMLPanel ui:field="itemPanel" addStyleNames="itemListing menu1">
           <m:OrderedList ui:field="itemMenu" width="100%" />
           <div style="height:0.2em; clear;both;" />

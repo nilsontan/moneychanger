@@ -11,6 +11,7 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.Lists;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.view.client.HasData;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
@@ -26,6 +27,9 @@ import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.view.PosUiHandlers;
 import com.techstudio.erp.moneychanger.client.gin.DefaultCurrency;
 import com.techstudio.erp.moneychanger.client.gin.DefaultScaleForRate;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.CategoryDataProvider;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.FirstLoad;
+import com.techstudio.erp.moneychanger.client.ui.dataprovider.MyDataProvider;
 import com.techstudio.erp.moneychanger.client.ui.dataprovider.PricingDataProvider;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
@@ -57,11 +61,13 @@ public class PosPresenter
   }
 
   public interface MyView extends View, HasUiHandlers<PosUiHandlers> {
+    HasData<CategoryProxy> getListing();
+
     void showItemPanel(boolean visible);
 
-    void showAmtPanel(boolean visible);
+    void showQtyPanel(boolean visible);
 
-    void showRatePanel(boolean visible);
+    void showTxPanel(boolean visible);
 
     void showIconHome(boolean visible);
 
@@ -72,6 +78,8 @@ public class PosPresenter
     void resetSelections();
 
     void setStep(String step);
+
+    void clearItemMenu();
 
     void addItemMenu(ItemProxy item);
 
@@ -129,6 +137,7 @@ public class PosPresenter
   private final Provider<ItemRequest> itemRequestProvider;
   private final Provider<CategoryRequest> categoryRequestProvider;
   private final Provider<LineItemRequest> lineItemRequestProvider;
+  private final MyDataProvider<CategoryProxy> categoryDataProvider;
   private final PricingDataProvider pricingDataProvider;
 
   private Step step;
@@ -137,6 +146,7 @@ public class PosPresenter
   private int nextLine;
 
   private List<CategoryProxy> categories;
+  private CategoryProxy selCategory;
   private String buyItemCode;
 
   @Inject
@@ -157,6 +167,7 @@ public class PosPresenter
                       final MyView view,
                       final MyProxy proxy,
                       final PricingDataProvider pricingDataProvider,
+                      final CategoryDataProvider categoryDataProvider,
                       final Provider<ItemRequest> itemRequestProvider,
                       final Provider<CategoryRequest> categoryRequestProvider,
                       final Provider<LineItemRequest> lineItemRequestProvider) {
@@ -166,39 +177,27 @@ public class PosPresenter
     this.itemRequestProvider = itemRequestProvider;
     this.categoryRequestProvider = categoryRequestProvider;
     this.lineItemRequestProvider = lineItemRequestProvider;
+    this.categoryDataProvider = categoryDataProvider;
+    this.categoryDataProvider.addOnFirstLoadHandler(onFirstLoad);
+    this.categoryDataProvider.addDataDisplay(getView().getListing());
     this.pricingDataProvider = pricingDataProvider;
     this.pricingDataProvider.updateData();
-
-    this.itemRequestProvider.get()
-        .fetchAll()
-        .fire(new Receiver<List<ItemProxy>>() {
-          @Override
-          public void onSuccess(List<ItemProxy> responses) {
-            for (ItemProxy itemProxy : responses) {
-              getView().addItemMenu(itemProxy);
-            }
-
-            PosPresenter.this.categoryRequestProvider.get()
-                .fetchAll()
-                .with(CategoryProxy.UOM)
-                .fire(new Receiver<List<CategoryProxy>>() {
-                  @Override
-                  public void onSuccess(List<CategoryProxy> response) {
-                    categories = response;
-
-                    Timer timer = new Timer() {
-                      @Override
-                      public void run() {
-                        getView().showLoading(false);
-                      }
-                    };
-
-                    timer.schedule(5000);
-                  }
-                });
-          }
-        });
   }
+
+  FirstLoad.OnFirstLoad onFirstLoad = new FirstLoad.OnFirstLoad() {
+    @Override
+    public void onSuccess(FirstLoad firstLoad) {
+      Timer timer = new Timer() {
+        @Override
+        public void run() {
+          selCategory = PosPresenter.this.categoryDataProvider.getDefault();
+          resetItems();
+        }
+      };
+
+      timer.schedule(1000);
+    }
+  };
 
   @Override
   protected void revealInParent() {
@@ -427,6 +426,49 @@ public class PosPresenter
     shiftToStep(Step.DETAILS);
   }
 
+  @Override
+  public void switchCategory(CategoryProxy categoryProxy) {
+    if (!categoryProxy.equals(selCategory)) {
+      getView().showLoading(true);
+      selCategory = categoryProxy;
+      resetItems();
+    }
+
+  }
+
+  private void resetItems() {
+    itemRequestProvider.get()
+        .fetchByCategory(ItemProxy.CATEGORY, selCategory)
+        .fire(new Receiver<List<ItemProxy>>() {
+          @Override
+          public void onSuccess(List<ItemProxy> responses) {
+            getView().clearItemMenu();
+            for (ItemProxy itemProxy : responses) {
+              getView().addItemMenu(itemProxy);
+            }
+
+            PosPresenter.this.categoryRequestProvider.get()
+                .fetchAll()
+                .with(CategoryProxy.UOM)
+                .fire(new Receiver<List<CategoryProxy>>() {
+                  @Override
+                  public void onSuccess(List<CategoryProxy> response) {
+                    categories = response;
+
+                    Timer timer = new Timer() {
+                      @Override
+                      public void run() {
+                        getView().showLoading(false);
+                      }
+                    };
+
+                    timer.schedule(500);
+                  }
+                });
+          }
+        });
+  }
+
   private void reset() {
     lineItems = Lists.newArrayList();
     pendingLineItem = null;
@@ -506,12 +548,12 @@ public class PosPresenter
         getView().showIconBack(true);
       }
     } else if (step.amtEntering) {
-      getView().showAmtPanel(step.amtEntering);
+      getView().showQtyPanel(step.amtEntering);
       getView().showIconMenu(false);
       getView().showIconHome(false);
       getView().showIconBack(true);
     } else {
-      getView().showRatePanel(!(step.amtEntering || step.itemSelecting));
+      getView().showTxPanel(!(step.amtEntering || step.itemSelecting));
       getView().showIconMenu(false);
       getView().showIconHome(false);
       getView().showIconBack(false);

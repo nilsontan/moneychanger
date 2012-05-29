@@ -12,17 +12,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
-import com.techstudio.erp.moneychanger.client.resources.Resources;
-import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 
 /**
  * @author Nilson
@@ -68,15 +63,13 @@ public class MyLineItem extends Composite
 
   public MyLineItem(LineItemProxy lineItemProxy) {
     this();
-    ItemProxy itemToBuy = lineItemProxy.getItemBuy();
-    BigDecimal buyQty = lineItemProxy.getBuyQuantity().multiply(itemToBuy.getUomRate(), MathContext.UNLIMITED);
+    BigDecimal buyQty = lineItemProxy.getBuyQuantity();
     itemBuy.setText(lineItemProxy.getItemBuy().getCode());
-    itemBuyQty.setText(formatValue(buyQty));
+    itemBuyQty.setText(buyQty.toString());
 
-    ItemProxy itemToSell = lineItemProxy.getItemSell();
-    BigDecimal sellQty = lineItemProxy.getSellQuantity().multiply(itemToSell.getUomRate(), MathContext.UNLIMITED);
+    BigDecimal sellQty = lineItemProxy.getSellQuantity();
     itemSell.setText(lineItemProxy.getItemSell().getCode());
-    itemSellQty.setText(formatValue(sellQty));
+    itemSellQty.setText(sellQty.toString());
   }
 
   public Anchor getLineItemRemove() {
@@ -85,10 +78,5 @@ public class MyLineItem extends Composite
 
   public Anchor getLineItemEdit() {
     return lineItemEdit;
-  }
-
-  private String formatValue(BigDecimal number) {
-    NumberFormat numberFormat = NumberFormat.getFormat("###,###,###,##0.00");
-    return numberFormat.format(number.doubleValue());
   }
 }

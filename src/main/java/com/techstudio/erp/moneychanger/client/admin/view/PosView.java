@@ -13,14 +13,20 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.NoSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.presenter.PosPresenter.MyView;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.client.ui.*;
+import com.techstudio.erp.moneychanger.client.ui.cell.CategoryCell;
+import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.LineItemProxy;
 
@@ -65,6 +71,16 @@ public class PosView
 
   @UiField
   Label currentStep;
+
+  /**
+   * Category Panel
+   */
+
+  @UiField
+  HTMLPanel categoryPulldown;
+
+  @UiField(provided = true)
+  CellList<CategoryProxy> categoryList = new CellList<CategoryProxy>(new CategoryCell());
 
   /**
    * Item Panel (itp)
@@ -133,6 +149,7 @@ public class PosView
   public PosView(final Binder binder, final Resources res) {
     this.res = res;
     widget = binder.createAndBindUi(this);
+    setUpListing();
   }
 
   @Override
@@ -155,7 +172,11 @@ public class PosView
   @SuppressWarnings("unused")
   @UiHandler("ancMenu")
   public void onClickMenu(ClickEvent event) {
-    getUiHandlers().selectCategories();
+    if (mainPanel.getStyleName().contains("showCat")) {
+      mainPanel.removeStyleName("showCat");
+    } else {
+      mainPanel.addStyleName("showCat");
+    }
   }
 
   @SuppressWarnings("unused")
@@ -223,26 +244,40 @@ public class PosView
   }
 
   @Override
+  public HasData<CategoryProxy> getListing() {
+    return categoryList;
+  }
+
+  @Override
   public void showItemPanel(boolean visible) {
     if (visible) {
-      mainPanel.setStyleName("slideshow show1");
-      itemMenu.setVisible(true);
+//      mainPanel.setStyleName("slideshow show1");
+      itemPanel.setVisible(true);
+//      itemMenu.setVisible(true);
+      qtyPanel.setVisible(false);
+      transactionPanel.setVisible(false);
     }
   }
 
   @Override
-  public void showAmtPanel(boolean visible) {
+  public void showQtyPanel(boolean visible) {
     if (visible) {
-      mainPanel.setStyleName("slideshow show2");
-      itemMenu.setVisible(false);
+//      mainPanel.setStyleName("slideshow show2");
+      itemPanel.setVisible(false);
+//      itemMenu.setVisible(false);
+      qtyPanel.setVisible(true);
+      transactionPanel.setVisible(false);
     }
   }
 
   @Override
-  public void showRatePanel(boolean visible) {
+  public void showTxPanel(boolean visible) {
     if (visible) {
-      mainPanel.setStyleName("slideshow show3");
-      itemMenu.setVisible(false);
+//      mainPanel.setStyleName("slideshow show3");
+      itemPanel.setVisible(false);
+//      itemMenu.setVisible(false);
+      qtyPanel.setVisible(false);
+      transactionPanel.setVisible(true);
     }
   }
 
@@ -270,6 +305,11 @@ public class PosView
   @Override
   public void setStep(String step) {
     currentStep.setText(step);
+  }
+
+  @Override
+  public void clearItemMenu() {
+    itemMenu.clear();
   }
 
   @Override
@@ -470,5 +510,20 @@ public class PosView
     currentStep.setVisible(!visible);
     mainPanel.setVisible(!visible);
     ancBar.setVisible(!visible);
+  }
+
+  private void setUpListing() {
+    final NoSelectionModel<CategoryProxy> selectionModel = new NoSelectionModel<CategoryProxy>();
+    categoryList.setSelectionModel(selectionModel);
+    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+      @Override
+      public void onSelectionChange(SelectionChangeEvent event) {
+        CategoryProxy selected = selectionModel.getLastSelectedObject();
+        if (selected != null) {
+          getUiHandlers().switchCategory(selected);
+          mainPanel.removeStyleName("showCat");
+        }
+      }
+    });
   }
 }

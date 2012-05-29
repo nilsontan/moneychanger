@@ -60,6 +60,12 @@ public class ItemView
   @UiField
   HTMLPanel mainPanel;
 
+  @UiField
+  HTMLPanel listPanel;
+
+  @UiField
+  HTMLPanel detailPanel;
+
   @UiField(provided = true)
   CellList<ItemProxy> list = new CellList<ItemProxy>(new ItemCell());
 
@@ -189,8 +195,10 @@ public class ItemView
 
   @Override
   public void showListPanel() {
-    mainPanel.setStyleName("slider show1");
-    list.setVisible(true);
+//    mainPanel.setStyleName("slider show1");
+//    list.setVisible(true);
+    listPanel.setVisible(true);
+    detailPanel.setVisible(false);
     ancHome.setVisible(true);
     ancNext.setVisible(true);
     ancBack.setVisible(false);
@@ -198,8 +206,10 @@ public class ItemView
 
   @Override
   public void showDetailPanel() {
-    mainPanel.setStyleName("slider show2");
-    list.setVisible(false);
+//    mainPanel.setStyleName("slider show2");
+//    list.setVisible(false);
+    listPanel.setVisible(false);
+    detailPanel.setVisible(true);
     ancHome.setVisible(false);
     ancNext.setVisible(false);
     ancBack.setVisible(true);

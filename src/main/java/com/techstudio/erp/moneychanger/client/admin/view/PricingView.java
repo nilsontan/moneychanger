@@ -44,6 +44,9 @@ public class PricingView
   Anchor ancHome;
 
   @UiField
+  Anchor ancBack;
+
+  @UiField
   HTMLPanel loadingMessage;
 
   @UiField
@@ -51,6 +54,12 @@ public class PricingView
 
   @UiField
   HTMLPanel mainPanel;
+
+  @UiField
+  HTMLPanel listPanel;
+
+  @UiField
+  HTMLPanel detailPanel;
 
   @UiField(provided = true)
   CellList<PricingProxy> list = new CellList<PricingProxy>(new ItemPriceCell());
@@ -90,6 +99,12 @@ public class PricingView
     History.newItem(NameTokens.getMenuPage());
   }
 
+  @SuppressWarnings("unused")
+  @UiHandler("ancBack")
+  public void onClickBack(ClickEvent event) {
+    showListPanel();
+  }
+
   @UiHandler("bid")
   public void onBidChange(ValueChangeEvent<String> event) {
     getUiHandlers().setPricingBidRate(event.getValue());
@@ -125,14 +140,22 @@ public class PricingView
 
   @Override
   public void showListPanel() {
-    mainPanel.setStyleName("slider show1");
-    list.setVisible(true);
+//    mainPanel.setStyleName("slider show1");
+//    list.setVisible(true);
+    listPanel.setVisible(true);
+    detailPanel.setVisible(false);
+    ancHome.setVisible(true);
+    ancBack.setVisible(false);
   }
 
   @Override
   public void showDetailPanel() {
-    mainPanel.setStyleName("slider show2");
-    list.setVisible(false);
+//    mainPanel.setStyleName("slider show2");
+//    list.setVisible(false);
+    listPanel.setVisible(false);
+    detailPanel.setVisible(true);
+    ancHome.setVisible(false);
+    ancBack.setVisible(true);
   }
 
   @Override

@@ -12,6 +12,7 @@ import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.Service;
 import com.techstudio.erp.moneychanger.server.locator.DaoServiceLocator;
 import com.techstudio.erp.moneychanger.server.service.ItemDao;
+import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 
 import java.util.List;
@@ -34,4 +35,6 @@ public interface ItemRequest extends RequestContext {
   Request<List<ItemProxy>> fetchRange(Integer start, Integer length);
 
   Request<Integer> getCount();
+
+  Request<List<ItemProxy>> fetchByCategory(String prop, CategoryProxy categoryProxy);
 }

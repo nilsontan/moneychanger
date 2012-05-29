@@ -22,3 +22,6 @@ THB,Thai Baht,Thai Baht,MON,100
 AED,UAE Dirham,UAE Dirham,MON,100
 USD,US Dollar,United States Dollar,MON,1
 VND,Vietnam Dong,Vietnam Dong,MON,1000
+009,009 $10,009 $10,PHO,1
+C88,CHINA 88,CHINA 88,PHO,1
+PHX,Phoenix $10,Phoenix $10,PHO,1

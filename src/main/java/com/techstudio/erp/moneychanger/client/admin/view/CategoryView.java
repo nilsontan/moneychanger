@@ -60,6 +60,12 @@ public class CategoryView
   @UiField
   HTMLPanel mainPanel;
 
+  @UiField
+  HTMLPanel listPanel;
+
+  @UiField
+  HTMLPanel detailPanel;
+
   @UiField(provided = true)
   CellList<CategoryProxy> list = new CellList<CategoryProxy>(new CategoryCell());
 
@@ -172,8 +178,10 @@ public class CategoryView
 
   @Override
   public void showListPanel() {
-    mainPanel.setStyleName("slider show1");
-    list.setVisible(true);
+//    mainPanel.setStyleName("slider show1");
+//    list.setVisible(true);
+    listPanel.setVisible(true);
+    detailPanel.setVisible(false);
     ancHome.setVisible(true);
     ancNext.setVisible(true);
     ancBack.setVisible(false);
@@ -181,8 +189,10 @@ public class CategoryView
 
   @Override
   public void showDetailPanel() {
-    mainPanel.setStyleName("slider show2");
-    list.setVisible(false);
+//    mainPanel.setStyleName("slider show2");
+//    list.setVisible(false);
+    listPanel.setVisible(false);
+    detailPanel.setVisible(true);
     ancHome.setVisible(false);
     ancNext.setVisible(false);
     ancBack.setVisible(true);

@@ -13,12 +13,14 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.admin.presenter.UomPresenter;
 import com.techstudio.erp.moneychanger.client.ui.LabelInput;
 import com.techstudio.erp.moneychanger.client.ui.RangeLabelPager;
@@ -42,6 +44,9 @@ public class UomView
   Anchor ancHome;
 
   @UiField
+  Anchor ancBack;
+
+  @UiField
   HTMLPanel loadingMessage;
 
   @UiField
@@ -49,6 +54,12 @@ public class UomView
 
   @UiField
   HTMLPanel mainPanel;
+
+  @UiField
+  HTMLPanel listPanel;
+
+  @UiField
+  HTMLPanel detailPanel;
 
   @UiField(provided = true)
   CellList<UomProxy> list = new CellList<UomProxy>(new UomCell());
@@ -96,6 +107,18 @@ public class UomView
   }
 
   @SuppressWarnings("unused")
+  @UiHandler("ancHome")
+  public void onClickHome(ClickEvent event) {
+    History.newItem(NameTokens.getMenuPage());
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("ancBack")
+  public void onClickBack(ClickEvent event) {
+    showListPanel();
+  }
+
+  @SuppressWarnings("unused")
   @UiHandler("save")
   void onCreateUom(ClickEvent event) {
     getUiHandlers().update();
@@ -108,14 +131,22 @@ public class UomView
 
   @Override
   public void showListPanel() {
-    mainPanel.setStyleName("slider show1");
-    list.setVisible(true);
+//    mainPanel.setStyleName("slider show1");
+//    list.setVisible(true);
+    listPanel.setVisible(true);
+    detailPanel.setVisible(false);
+    ancHome.setVisible(true);
+    ancBack.setVisible(false);
   }
 
   @Override
   public void showDetailPanel() {
-    mainPanel.setStyleName("slider show2");
-    list.setVisible(false);
+//    mainPanel.setStyleName("slider show2");
+//    list.setVisible(false);
+    listPanel.setVisible(false);
+    detailPanel.setVisible(true);
+    ancHome.setVisible(false);
+    ancBack.setVisible(true);
   }
 
   @Override

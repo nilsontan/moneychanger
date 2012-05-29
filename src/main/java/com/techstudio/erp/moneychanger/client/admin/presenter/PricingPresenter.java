@@ -84,10 +84,10 @@ public class PricingPresenter
                           final PricingDataProvider dataProvider) {
     super(eventBus, view, proxy);
     getView().setUiHandlers(this);
+    getView().showLoading(true);
     this.requestProvider = requestProvider;
     this.dataProvider = dataProvider;
     this.dataProvider.addOnFirstLoadHandler(onFirstLoad);
-    getView().showLoading(true);
     this.dataProvider.addDataDisplay(getView().getListing());
   }
 

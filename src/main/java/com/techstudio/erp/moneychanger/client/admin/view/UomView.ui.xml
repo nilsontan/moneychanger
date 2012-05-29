@@ -15,17 +15,20 @@
     <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
       <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home" />
     </g:Anchor>
+    <g:Anchor ui:field="ancBack" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-left" />
+    </g:Anchor>
     <div class="bar page-title">
       <g:Label ui:field="currentStep" text="Uom" addStyleNames="step" />
     </div>
     <div class="content bodyBg">
       <g:HTMLPanel ui:field="mainPanel" addStyleNames="slider">
-        <g:HTMLPanel addStyleNames="centered slide1">
+        <g:HTMLPanel ui:field="listPanel" addStyleNames="centered slide1">
           <c:CellList ui:field="list" />
           <m:ShowMorePagerPanel ui:field="pagerPanel" />
           <m:RangeLabelPager ui:field="pager" />
         </g:HTMLPanel>
-        <g:HTMLPanel addStyleNames="centered slide2">
+        <g:HTMLPanel ui:field="detailPanel" addStyleNames="centered slide2">
           <g:HTMLPanel addStyleNames="padding-s">
             <div class="field-container">
               <g:Label ui:field="label" addStyleNames="form-title group-title" />
