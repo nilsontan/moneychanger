@@ -37,7 +37,6 @@ public class ObjectifyDao<T> extends MyDAOBase {
     MyObjectifyService.register(Category.class);
     MyObjectifyService.register(Country.class);
     MyObjectifyService.register(Currency.class);
-    MyObjectifyService.register(LineItem.class);
     MyObjectifyService.register(Uom.class);
     MyObjectifyService.register(Pricing.class);
     MyObjectifyService.register(Transaction.class);
@@ -112,6 +111,14 @@ public class ObjectifyDao<T> extends MyDAOBase {
     Query<T> q = ofy().query(clazz);
     q.filter(propName, propValue);
     return q.listKeys();
+  }
+
+  public List<T> listByProperties(Map<String, Object> filters) {
+    Query<T> q = ofy().query(clazz);
+    for (Map.Entry<String, Object> entry : filters.entrySet()) {
+      q = q.filter(entry.getKey(), entry.getValue());
+    }
+    return q.list();
   }
 
   public List<T> listByExample(T exampleObj) {

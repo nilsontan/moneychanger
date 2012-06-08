@@ -36,6 +36,8 @@ public abstract class AbstractDataProvider<T extends MyEntityProxy>
 
   Map<String, T> map = Maps.newHashMap();
 
+  protected boolean firstLoad = true;
+
   @Override
   public void addDataDisplay(HasData<T> display) {
     super.addDataDisplay(display);
@@ -70,6 +72,11 @@ public abstract class AbstractDataProvider<T extends MyEntityProxy>
         onFirstLoadList.remove(handler);
       }
     };
+  }
+
+  @Override
+  public void firstLoad() {
+    firstLoad = true;
   }
 
   @Override
@@ -110,6 +117,8 @@ public abstract class AbstractDataProvider<T extends MyEntityProxy>
 
     // Initialize the display with the current list.
     onValueChanged(display);
+
+    load();
   }
 
   protected abstract void onValueChanged(HasSelectedValue<T> display);

@@ -27,8 +27,6 @@ public class CountryDataProvider extends AbstractDataProvider<CountryProxy> {
 
   private final Provider<CountryRequest> requestProvider;
 
-  private boolean firstLoad = true;
-
   @Inject
   public CountryDataProvider(Provider<CountryRequest> requestProvider) {
     this.requestProvider = requestProvider;

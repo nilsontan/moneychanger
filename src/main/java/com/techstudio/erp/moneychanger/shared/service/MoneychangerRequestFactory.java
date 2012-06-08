@@ -23,8 +23,6 @@ public interface MoneychangerRequestFactory extends RequestFactory {
 
   ItemRequest itemRequest();
 
-  LineItemRequest lineItemRequest();
-
   PricingRequest spotRateRequest();
 
   TransactionRequest transactionRequest();

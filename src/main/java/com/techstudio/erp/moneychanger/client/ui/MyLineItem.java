@@ -64,11 +64,11 @@ public class MyLineItem extends Composite
   public MyLineItem(LineItemProxy lineItemProxy) {
     this();
     BigDecimal buyQty = lineItemProxy.getBuyQuantity();
-    itemBuy.setText(lineItemProxy.getItemBuy().getCode());
+    itemBuy.setText(lineItemProxy.getItemBuy());
     itemBuyQty.setText(buyQty.toString());
 
     BigDecimal sellQty = lineItemProxy.getSellQuantity();
-    itemSell.setText(lineItemProxy.getItemSell().getCode());
+    itemSell.setText(lineItemProxy.getItemSell());
     itemSellQty.setText(sellQty.toString());
   }
 

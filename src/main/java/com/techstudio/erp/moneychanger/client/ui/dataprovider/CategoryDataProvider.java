@@ -29,8 +29,6 @@ public class CategoryDataProvider extends AbstractDataProvider<CategoryProxy> {
 
   private final Provider<CategoryRequest> requestProvider;
 
-  private boolean firstLoad = true;
-
   @Inject
   public CategoryDataProvider(Provider<CategoryRequest> requestProvider) {
     this.requestProvider = requestProvider;

@@ -1,0 +1,103 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:c="urn:import:com.google.gwt.user.cellview.client"
+             xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui">
+
+  <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+  <ui:style>
+    .loadingDock {
+      display: block;
+      position: absolute;
+      top: 20%;
+      left: 20%;
+      width: 60%;
+      height: 9em;
+      text-align: center;
+    }
+
+    .hiddenMenuBar {
+      width: 33.33333333%;
+      position: absolute;
+      overflow: hidden;
+    }
+
+    .minSize {
+      min-height: 5em;
+    }
+  </ui:style>
+
+  <g:HTMLPanel>
+    <g:HTMLPanel ui:field="loadingMessage" addStyleNames="{style.loadingDock}">
+      <g:Image resource="{res.iLoadingIcon}" />
+      <g:Label text="POS is loading ..." />
+      <div class="progress-bar" />
+    </g:HTMLPanel>
+    <g:HTMLPanel ui:field="ancBar">
+      <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home" />
+      </g:Anchor>
+      <g:Anchor ui:field="ancBack" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-left" />
+      </g:Anchor>
+      <g:Anchor ui:field="ancMenu" addStyleNames="homeBar-icon homeBar-icon-r icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-grid" />
+      </g:Anchor>
+    </g:HTMLPanel>
+    <div class="bar page-title">
+      <g:Label ui:field="currentStep" addStyleNames="{res.pos.step}" />
+    </div>
+    <div id="content" class="content bodyBg">
+      <g:HTMLPanel ui:field="mainPanel" addStyleNames="slideshow">
+        <g:HTMLPanel addStyleNames="{style.hiddenMenuBar}">
+          <g:HTMLPanel ui:field="categoryPulldown" addStyleNames="menu-category">
+            <c:CellList ui:field="categoryList" />
+          </g:HTMLPanel>
+        </g:HTMLPanel>
+        <g:HTMLPanel ui:field="itemPanel" addStyleNames="{style.minSize} itemListing menu1">
+          <m:OrderedList ui:field="itemMenu" width="100%" />
+          <div style="height:0.2em; clear;both;" />
+        </g:HTMLPanel>
+        <g:HTMLPanel ui:field="qtyPanel" addStyleNames="centered menu2">
+          <g:HTMLPanel addStyleNames="padding-s">
+            <div class="item-details">
+              <g:HTMLPanel addStyleNames="item-details-r">
+                <m:LabelInput ui:field="qtpBuyQty" type="number" addStyleNames="details-lb-g" />
+                <m:LabelInput ui:field="qtpSellQty" type="number" addStyleNames="details-lb-b" />
+              </g:HTMLPanel>
+            </div>
+            <div class="field-container">
+              <m:LabelInput ui:field="qtpRate1" type="number" addStyleNames="rate" />
+              <m:LabelInput ui:field="qtpRate2" type="number" addStyleNames="rate" />
+              <m:LabelInput ui:field="qtpRate3" type="number" addStyleNames="rate" />
+              <m:LabelInput ui:field="qtpRate4" type="number" addStyleNames="rate" />
+              <m:LabelInput ui:field="qtpRate5" type="number" addStyleNames="rate" />
+              <m:LabelInput ui:field="qtpRate6" type="number" addStyleNames="rate" />
+            </div>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-star" />
+              <g:Button ui:field="qtpOK" text="Confirm" />
+            </g:HTMLPanel>
+          </g:HTMLPanel>
+        </g:HTMLPanel>
+        <g:HTMLPanel ui:field="transactionPanel" addStyleNames="centered menu3">
+          <g:HTMLPanel addStyleNames="padding-s">
+            <m:OrderedList ui:field="lineItemTable" addStyleNames="centered round-table" width="99%" />
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-add" />
+              <g:Button ui:field="txAdd" text="Add another item" />
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-tick" />
+              <g:Button ui:field="txSav" text="Save this transaction" addStyleNames="bar-green" />
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-cross" />
+              <g:Button ui:field="txDel" text="Delete this transaction" addStyleNames="bar-red" />
+            </g:HTMLPanel>
+          </g:HTMLPanel>
+        </g:HTMLPanel>
+      </g:HTMLPanel>
+    </div>
+  </g:HTMLPanel>
+</ui:UiBinder>

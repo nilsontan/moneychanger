@@ -14,5 +14,7 @@ public interface FirstLoad {
 
   HandlerRegistration addOnFirstLoadHandler(final OnFirstLoad handler);
 
+  void firstLoad();
+
   void load();
 }

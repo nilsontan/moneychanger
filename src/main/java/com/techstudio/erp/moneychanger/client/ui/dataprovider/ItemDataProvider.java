@@ -25,8 +25,6 @@ public class ItemDataProvider extends AbstractDataProvider<ItemProxy> {
 
   private final Provider<ItemRequest> requestProvider;
 
-  private boolean firstLoad = true;
-
   @Inject
   public ItemDataProvider(Provider<ItemRequest> requestProvider) {
     this.requestProvider = requestProvider;
@@ -52,6 +50,7 @@ public class ItemDataProvider extends AbstractDataProvider<ItemProxy> {
             for (HasData<ItemProxy> display : getDataDisplays()) {
               onRangeChanged(display);
             }
+            updateList(proxies);
           }
         });
   }

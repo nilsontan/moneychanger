@@ -14,7 +14,7 @@ import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.client.gin.DispatchAsyncModule;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import com.techstudio.erp.moneychanger.client.admin.presenter.*;
+import com.techstudio.erp.moneychanger.client.presenter.*;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.client.util.TestData;
 import com.techstudio.erp.moneychanger.shared.service.MoneychangerRequestFactory;
@@ -45,7 +45,9 @@ public interface MoneychangerGinjector extends Ginjector {
 
   AsyncProvider<CurrencyPresenter> getCurrencyPresenter();
 
-  AsyncProvider<PricingPresenter> getExchangeRatePresenter();
+  AsyncProvider<PricingPresenter> getPricingPresenter();
+
+  AsyncProvider<TransactionPresenter> getTransactionPresenter();
 
   AsyncProvider<UomPresenter> getUomPresenter();
 

@@ -1,6 +1,7 @@
 package com.techstudio.erp.moneychanger.server.service;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.googlecode.objectify.Query;
 
 import java.util.List;
 
@@ -9,7 +10,9 @@ import java.util.List;
  */
 public class MyObjectifyDao<T> extends ObjectifyDao<T> {
   public List<T> fetchAll() {
-    return listAll();
+//    return listAll();
+    Query<T> q = ofy().query(this.clazz);
+    return q.order("code").list();
   }
 
   public T save(T object) {
@@ -35,5 +38,9 @@ public class MyObjectifyDao<T> extends ObjectifyDao<T> {
 
   public Integer getCount() {
     return countAll();
+  }
+
+  public List<T> searchByFilter(T object) {
+    return null;
   }
 }

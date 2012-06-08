@@ -27,8 +27,6 @@ public class UomDataProvider extends AbstractDataProvider<UomProxy> {
 
   private final Provider<UomRequest> requestProvider;
 
-  private boolean firstLoad = true;
-
   @Inject
   public UomDataProvider(Provider<UomRequest> requestProvider) {
     this.requestProvider = requestProvider;

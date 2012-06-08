@@ -46,6 +46,8 @@
   <set-configuration-property name="gin.ginjector"
                               value="com.techstudio.erp.moneychanger.client.gin.MoneychangerGinjector" />
 
+  <set-property name="user.agent" value="safari" />
+
   <!--
        When developing, you may wish to turn on enhanced web mode stack traces.
        Note this adds overhead to the resulting JavaScript so you generally

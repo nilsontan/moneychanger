@@ -13,8 +13,10 @@ import com.google.web.bindery.requestfactory.shared.Service;
 import com.techstudio.erp.moneychanger.server.locator.DaoServiceLocator;
 import com.techstudio.erp.moneychanger.server.service.TransactionDao;
 import com.techstudio.erp.moneychanger.shared.proxy.TransactionProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.TransactionSearchFilterProxy;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nilson
@@ -34,4 +36,6 @@ public interface TransactionRequest extends RequestContext {
   Request<List<TransactionProxy>> fetchRange(Integer start, Integer length);
 
   Request<Integer> getCount();
+
+  Request<List<TransactionProxy>> searchByFilter(TransactionProxy proxy);
 }

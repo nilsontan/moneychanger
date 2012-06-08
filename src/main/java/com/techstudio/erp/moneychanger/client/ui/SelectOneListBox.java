@@ -30,6 +30,7 @@ public class SelectOneListBox<T> extends ListBox implements HasSelectedValue<T> 
     abstract String getValue(T option);
   }
 
+  private boolean includesAll = false;
   private boolean valueChangeHandlerInitialized;
   private T[] options;
   private OptionFormatter<T> formatter;
@@ -50,6 +51,10 @@ public class SelectOneListBox<T> extends ListBox implements HasSelectedValue<T> 
   @SuppressWarnings("unchecked")
   @Override
   public void setOptions(Collection<T> selections) {
+//    if (includesAll && getItemCount() > 0) {
+//      this.removeItem(0);
+//    }
+
     // Remove prior options
     if (options != null) {
       int numItems = this.getItemCount();
@@ -62,6 +67,21 @@ public class SelectOneListBox<T> extends ListBox implements HasSelectedValue<T> 
       String optionLabel = formatter.getLabel(option);
       String optionValue = formatter.getValue(option);
       this.addItem(optionLabel, optionValue);
+    }
+
+//    if (includesAll) {
+//      this.insertItem("All", "", 0);
+//    }
+  }
+
+  @Override
+  public void includesAll(boolean include) {
+    includesAll = include;
+    if (getItemCount() > 0) {
+      this.removeItem(0);
+    }
+    if (include) {
+      this.insertItem("All", "", 0);
     }
   }
 

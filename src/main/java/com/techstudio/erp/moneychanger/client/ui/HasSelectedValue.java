@@ -20,6 +20,13 @@ import java.util.Collection;
 public interface HasSelectedValue<T> extends HasValue<T> {
   void setOptions(Collection<T> options);
 
+  /**
+   * Includes the "All" option
+   *
+   * @param include "All" will be shown if true
+   */
+  void includesAll(boolean include);
+
   void setSelectedValue(T selected);
 
   T getSelectedValue();

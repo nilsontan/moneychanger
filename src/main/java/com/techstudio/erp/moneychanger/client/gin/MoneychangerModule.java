@@ -21,8 +21,8 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
 import com.techstudio.erp.moneychanger.client.MoneychangerPlaceManager;
 import com.techstudio.erp.moneychanger.client.NameTokens;
-import com.techstudio.erp.moneychanger.client.admin.presenter.*;
-import com.techstudio.erp.moneychanger.client.admin.view.*;
+import com.techstudio.erp.moneychanger.client.presenter.*;
+import com.techstudio.erp.moneychanger.client.view.*;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.client.ui.ItemMenuImageFileUpload;
 import com.techstudio.erp.moneychanger.client.util.MoneychangerTestData;
@@ -67,6 +67,8 @@ public class MoneychangerModule extends AbstractPresenterModule {
         CurrencyView.class, CurrencyPresenter.MyProxy.class);
     bindPresenter(PricingPresenter.class, PricingPresenter.MyView.class,
         PricingView.class, PricingPresenter.MyProxy.class);
+    bindPresenter(TransactionPresenter.class, TransactionPresenter.MyView.class,
+        TransactionView.class, TransactionPresenter.MyProxy.class);
     bindPresenter(UomPresenter.class, UomPresenter.MyView.class,
         UomView.class, UomPresenter.MyProxy.class);
     bindPresenter(TestPresenter.class, TestPresenter.MyView.class,
@@ -106,11 +108,6 @@ public class MoneychangerModule extends AbstractPresenterModule {
   @Provides
   ItemRequest provideItemService(MoneychangerRequestFactory requestFactory) {
     return requestFactory.itemRequest();
-  }
-
-  @Provides
-  LineItemRequest provideLineItemService(MoneychangerRequestFactory requestFactory) {
-    return requestFactory.lineItemRequest();
   }
 
   @Provides

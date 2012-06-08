@@ -7,31 +7,37 @@
 
 package com.techstudio.erp.moneychanger.shared.proxy;
 
-import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
-import com.techstudio.erp.moneychanger.server.domain.LineItem;
-import com.techstudio.erp.moneychanger.server.locator.ObjectifyLocator;
+import com.google.web.bindery.requestfactory.shared.ValueProxy;
+import com.techstudio.erp.moneychanger.shared.domain.LineItem;
 import com.techstudio.erp.moneychanger.shared.domain.TransactionType;
-import org.joda.money.Money;
 
 import java.math.BigDecimal;
 
 /**
  * @author Nilson
  */
-@ProxyFor(value = LineItem.class, locator = ObjectifyLocator.class)
-public interface LineItemProxy extends EntityProxy {
+@ProxyFor(value = LineItem.class)
+public interface LineItemProxy extends ValueProxy {
   TransactionType getTransactionType();
 
   void setTransactionType(TransactionType transactionType);
 
-  ItemProxy getItemBuy();
+  String getItemBuy();
 
-  void setItemBuy(ItemProxy item);
+  void setItemBuy(String itemBuy);
 
-  ItemProxy getItemSell();
+  String getCatBuy();
 
-  void setItemSell(ItemProxy item);
+  void setCatBuy(String catBuy);
+
+  String getItemSell();
+
+  void setItemSell(String itemSell);
+
+  String getCatSell();
+
+  void setCatSell(String catSell);
 
   BigDecimal getBuyUnitPrice();
 
@@ -48,10 +54,6 @@ public interface LineItemProxy extends EntityProxy {
   BigDecimal getSellQuantity();
 
   void setSellQuantity(BigDecimal quantity);
-
-  BigDecimal getSubTotal();
-
-  void setSubTotal(BigDecimal subTotal);
 
   Integer getLine();
 

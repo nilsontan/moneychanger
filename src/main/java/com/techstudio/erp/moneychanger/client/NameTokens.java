@@ -36,6 +36,8 @@ public class NameTokens {
 
   public static final String PRICING_PAGE = "!PRICING";
 
+  public static final String TRANSACTION_PAGE = "!TRANSACTION";
+
   public static final String UOM_PAGE = "!UOM";
 
   public static final String SETTINGS_PAGE = "!SETTINGS";
@@ -66,6 +68,10 @@ public class NameTokens {
 
   public static String getPricingPage() {
     return PRICING_PAGE;
+  }
+
+  public static String getTransactionPage() {
+    return TRANSACTION_PAGE;
   }
 
   public static String getUomPage() {

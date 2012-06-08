@@ -27,8 +27,6 @@ public class PricingDataProvider extends AbstractDataProvider<PricingProxy> {
 
   private final Provider<PricingRequest> requestProvider;
 
-  private boolean firstLoad = true;
-
   @Inject
   public PricingDataProvider(Provider<PricingRequest> requestProvider) {
     this.requestProvider = requestProvider;
