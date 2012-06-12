@@ -14,10 +14,14 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.techstudio.erp.moneychanger.client.util.DataResetService;
 import com.techstudio.erp.moneychanger.server.domain.*;
 import com.techstudio.erp.moneychanger.server.service.*;
+import com.techstudio.erp.moneychanger.shared.domain.Address;
 
 import java.io.*;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,15 +34,20 @@ import java.util.zip.ZipInputStream;
 public class DataReset
     extends RemoteServiceServlet implements DataResetService {
 
+  private static final DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd");
+
   private Map<String, Category> categoryMap;
   private Map<String, Currency> currencyMap;
+  private Map<String, Country> countryMap;
   private Map<String, Uom> uomMap;
+  private Map<String, IndividualClient> clientMap;
   private Map<String, Item> itemMap;
   private Map<String, String> itemImagesMap;
 
   private boolean categorySetupCompleted = false;
   private boolean currencySetupCompleted = false;
   private boolean uomSetupCompleted = false;
+  private boolean clientSetupCompleted = false;
 
   @Override
   public String resetData() {
@@ -65,15 +74,30 @@ public class DataReset
     onDomainDataSetupCompleted();
   }
 
+  private void onIndividualClientSetupCompleted() {
+    resetCompanyClients();
+  }
+
+  private void onCompanyClientSetupCompleted() {
+    onClientSetupCompleted();
+  }
+
+  private void onClientSetupCompleted() {
+    clientSetupCompleted = true;
+    onDomainDataSetupCompleted();
+  }
+
   private void onDomainDataSetupCompleted() {
     if (categorySetupCompleted
         && currencySetupCompleted
-        && uomSetupCompleted) {
+        && uomSetupCompleted
+        && clientSetupCompleted) {
       resetItems();
     }
   }
 
   private void onCountrySetupCompleted() {
+    resetClients();
   }
 
   private void onItemSetupCompleted() {
@@ -168,6 +192,104 @@ public class DataReset
     onUomSetupCompleted();
   }
 
+  private void resetClients() {
+    resetIndividualClients();
+  }
+
+  private void resetIndividualClients() {
+    List<IndividualClient> individualClients = Lists.newArrayList();
+
+    for (ArrayList<String> client : readTextFromResource("client-i.txt")) {
+      IndividualClient individualClient = new IndividualClient();
+      individualClient.setCode(client.get(0));
+      individualClient.setName(client.get(1));
+      individualClient.setNric(client.get(2));
+      List<String> longAddress = Lists.newArrayList(Splitter.on("|").trimResults().split(client.get(3)));
+      Address address = new Address();
+      if (!longAddress.isEmpty() && longAddress.size() >= 3) {
+        address.setLine1(longAddress.get(0));
+        address.setLine2(longAddress.get(1));
+        address.setPostcode(longAddress.get(2));
+      }
+      individualClient.setAddress(address);
+      individualClient.setCountry(countryMap.get(client.get(4)));
+      try {
+        individualClient.setDateOfBirth(dtf.parse(client.get(5)));
+      } catch (ParseException e) {
+        e.printStackTrace();
+        individualClient.setDateOfBirth(null);
+      }
+      individualClient.setNationality(countryMap.get(client.get(6)));
+      individualClient.setContactNo(client.get(7));
+      individualClient.setContactNo2(client.get(8));
+      individualClient.setFaxNo(client.get(9));
+      individualClient.setEmail(client.get(10));
+      individualClient.setJobTitle(client.get(11));
+
+      individualClients.add(individualClient);
+    }
+
+    IndividualClientDao individualClientDao = new IndividualClientDao();
+
+    individualClientDao.deleteAll(individualClientDao.listAll());
+    System.out.println("IndividualClients purgeAll");
+
+    individualClientDao.putAll(individualClients);
+    System.out.println("IndividualClients save And map");
+
+    clientMap = Maps.newHashMap();
+    for (IndividualClient individualClient : individualClients) {
+      clientMap.put(individualClient.getCode(), individualClient);
+    }
+
+    System.out.println("IndividualClients setup done");
+    onIndividualClientSetupCompleted();
+  }
+
+  private void resetCompanyClients() {
+    List<CompanyClient> companyClients = Lists.newArrayList();
+
+    for (ArrayList<String> client : readTextFromResource("client-c.txt")) {
+      CompanyClient companyClient = new CompanyClient();
+      companyClient.setCode(client.get(0));
+      companyClient.setName(client.get(1));
+      companyClient.setMoneyChanger("Y".equals(client.get(2)));
+      companyClient.setRemitter("Y".equals(client.get(3)));
+      companyClient.setBizRegNo(client.get(4));
+      companyClient.setLicenseNo(client.get(5));
+      List<String> longAddress = Lists.newArrayList(Splitter.on("|").trimResults().split(client.get(6)));
+      Address address = new Address();
+      if (!longAddress.isEmpty() && longAddress.size() >= 3) {
+        address.setLine1(longAddress.get(0));
+        address.setLine2(longAddress.get(1));
+        address.setPostcode(longAddress.get(2));
+      }
+      companyClient.setAddress(address);
+      companyClient.setCountry(countryMap.get(client.get(7)));
+      companyClient.setContactNo(client.get(8));
+      companyClient.setContactNo2(client.get(9));
+      companyClient.setFaxNo(client.get(10));
+      companyClient.setEmail(client.get(11));
+      companyClient.setWebsite(client.get(12));
+      List<IndividualClient> authorizedList = Lists.newArrayList();
+      authorizedList.add(clientMap.get(client.get(13)));
+      companyClient.setAuthorizedPersons(authorizedList);
+
+      companyClients.add(companyClient);
+    }
+
+    CompanyClientDao companyClientDao = new CompanyClientDao();
+
+    companyClientDao.deleteAll(companyClientDao.listAll());
+    System.out.println("CompanyClients purgeAll");
+
+    companyClientDao.putAll(companyClients);
+    System.out.println("CompanyClients save And map");
+
+    System.out.println("CompanyClients setup done");
+    onCompanyClientSetupCompleted();
+  }
+
   private void resetCountries() {
     List<Country> countries = Lists.newArrayList();
     for (ArrayList<String> country : readTextFromResource("country.txt")) {
@@ -187,6 +309,10 @@ public class DataReset
 
     countryDao.putAll(countries);
     System.out.println("Countries save And map");
+    countryMap = Maps.newHashMap();
+    for (Country country : countries) {
+      countryMap.put(country.getCode(), country);
+    }
 
     System.out.println("Countries setup done");
     onCountrySetupCompleted();

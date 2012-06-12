@@ -9,7 +9,6 @@ package com.techstudio.erp.moneychanger.client.view;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Widget;
@@ -17,7 +16,6 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.presenter.MenuPresenter.MyView;
-import com.techstudio.erp.moneychanger.client.ui.MyMenuListItem;
 
 /**
  * @author Nilson
@@ -30,18 +28,6 @@ public class MenuView
   }
 
   private final Widget widget;
-
-  @UiField
-  MyMenuListItem bPos;
-
-  @UiField
-  MyMenuListItem bPricing;
-
-  @UiField
-  MyMenuListItem bTransaction;
-
-  @UiField
-  MyMenuListItem bSettings;
 
   @Inject
   public MenuView(final Binder binder) {
@@ -87,6 +73,12 @@ public class MenuView
   @UiHandler("bCategory")
   public void onClickCategory(ClickEvent event) {
     History.newItem(NameTokens.getCategoryPage());
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("bClient")
+  public void onClickClient(ClickEvent event) {
+    History.newItem(NameTokens.getClientPage());
   }
 
   @SuppressWarnings("unused")

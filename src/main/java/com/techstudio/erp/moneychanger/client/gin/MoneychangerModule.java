@@ -22,11 +22,11 @@ import com.gwtplatform.mvp.client.proxy.TokenFormatter;
 import com.techstudio.erp.moneychanger.client.MoneychangerPlaceManager;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.presenter.*;
-import com.techstudio.erp.moneychanger.client.view.*;
 import com.techstudio.erp.moneychanger.client.resources.Resources;
 import com.techstudio.erp.moneychanger.client.ui.ItemMenuImageFileUpload;
 import com.techstudio.erp.moneychanger.client.util.MoneychangerTestData;
 import com.techstudio.erp.moneychanger.client.util.TestData;
+import com.techstudio.erp.moneychanger.client.view.*;
 import com.techstudio.erp.moneychanger.shared.service.*;
 import gwtupload.client.IFileInput;
 
@@ -65,6 +65,8 @@ public class MoneychangerModule extends AbstractPresenterModule {
         CountryView.class, CountryPresenter.MyProxy.class);
     bindPresenter(CurrencyPresenter.class, CurrencyPresenter.MyView.class,
         CurrencyView.class, CurrencyPresenter.MyProxy.class);
+    bindPresenter(ClientPresenter.class, ClientPresenter.MyView.class,
+        ClientView.class, ClientPresenter.MyProxy.class);
     bindPresenter(PricingPresenter.class, PricingPresenter.MyView.class,
         PricingView.class, PricingPresenter.MyProxy.class);
     bindPresenter(TransactionPresenter.class, TransactionPresenter.MyView.class,
@@ -96,13 +98,28 @@ public class MoneychangerModule extends AbstractPresenterModule {
   }
 
   @Provides
+  CompanyClientRequest provideCompanyClientService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.companyClientRequest();
+  }
+
+  @Provides
   CountryRequest provideCountryService(MoneychangerRequestFactory requestFactory) {
     return requestFactory.countryRequest();
   }
 
   @Provides
+  ClientRequest provideClientService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.clientRequest();
+  }
+
+  @Provides
   CurrencyRequest provideCurrencyService(MoneychangerRequestFactory requestFactory) {
     return requestFactory.currencyRequest();
+  }
+
+  @Provides
+  IndividualClientRequest provideIndividualClientService(MoneychangerRequestFactory requestFactory) {
+    return requestFactory.individualClientRequest();
   }
 
   @Provides

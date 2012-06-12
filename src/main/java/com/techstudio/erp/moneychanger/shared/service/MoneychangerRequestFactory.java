@@ -19,7 +19,13 @@ public interface MoneychangerRequestFactory extends RequestFactory {
 
   CountryRequest countryRequest();
 
+  CompanyClientRequest companyClientRequest();
+
+  ClientRequest clientRequest();
+
   CurrencyRequest currencyRequest();
+
+  IndividualClientRequest individualClientRequest();
 
   ItemRequest itemRequest();
 

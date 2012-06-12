@@ -1,0 +1,57 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:c="urn:import:com.google.gwt.user.cellview.client"
+             xmlns:m="urn:import:com.techstudio.erp.moneychanger.client.ui">
+
+  <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
+
+  <g:HTMLPanel>
+    <g:HTMLPanel ui:field="loadingMessage" addStyleNames="loadingDock">
+      <g:Image resource="{res.iLoadingIcon}" />
+      <g:Label text="Loading Clients ..." />
+      <div class="progress-bar" />
+    </g:HTMLPanel>
+    <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home" />
+    </g:Anchor>
+    <g:Anchor ui:field="ancBack" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-left" />
+    </g:Anchor>
+    <div class="bar page-title">
+      <g:Label ui:field="currentStep" text="Client" addStyleNames="step" />
+    </div>
+    <div class="content bodyBg">
+      <g:HTMLPanel ui:field="mainPanel" addStyleNames="slider">
+        <g:HTMLPanel ui:field="listPanel" addStyleNames="centered slide1">
+          <c:CellList ui:field="list" />
+          <m:ShowMorePagerPanel ui:field="pagerPanel" />
+          <m:RangeLabelPager ui:field="pager" />
+        </g:HTMLPanel>
+        <g:HTMLPanel ui:field="detailPanel" addStyleNames="centered slide2">
+          <g:HTMLPanel addStyleNames="padding-s">
+            <div class="field-container">
+              <m:LabelInput text="Name" type="text" ui:field="name" />
+              <m:MyCheckBox ui:field="checkBox" />
+              <g:HTMLPanel ui:field="companyPanel1">
+                <div class="field">
+                  <g:Label text="Money Changer" />
+                  <g:CheckBox ui:field="cBoxMChanger" />
+                </div>
+                <div class="field">
+                  <g:Label text="Remittance Agent" />
+                  <g:CheckBox ui:field="cBoxRAgent" />
+                </div>
+              </g:HTMLPanel>
+            </div>
+            <g:HTMLPanel addStyleNames="icon-container">
+              <span class="icon-set icon-set-left icon-tick" />
+              <g:Button ui:field="save" text="Save" />
+            </g:HTMLPanel>
+          </g:HTMLPanel>
+        </g:HTMLPanel>
+      </g:HTMLPanel>
+    </div>
+  </g:HTMLPanel>
+
+</ui:UiBinder>

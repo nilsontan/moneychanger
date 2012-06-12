@@ -32,6 +32,8 @@ public class NameTokens {
 
   public static final String COUNTRY_PAGE = "!COUNTRY";
 
+  public static final String CLIENT_PAGE = "!CLIENT";
+
   public static final String CURRENCY_PAGE = "!CURRENCY";
 
   public static final String PRICING_PAGE = "!PRICING";
@@ -60,6 +62,10 @@ public class NameTokens {
 
   public static String getCountryPage() {
     return COUNTRY_PAGE;
+  }
+
+  public static String getClientPage() {
+    return CLIENT_PAGE;
   }
 
   public static String getCurrencyPage() {

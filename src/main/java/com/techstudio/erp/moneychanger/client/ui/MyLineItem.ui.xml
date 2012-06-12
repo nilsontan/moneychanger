@@ -10,7 +10,7 @@
 
   <g:HTMLPanel ui:field="pane" addStyleNames="{style.container} lineItem-container">
     <g:Anchor ui:field="lineItemRemove" addStyleNames="lineItem-icon lineItem-icon-l icon-container-b bar-red">
-      <span style="position:absolute;" class="icon-set icon-minus"></span>
+      <span style="position:absolute;" class="icon-set icon-minus" />
     </g:Anchor>
     <div class="lineItem-item soft-bg">
       <div class="lineItem-box">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <g:Anchor ui:field="lineItemEdit" addStyleNames="lineItem-icon lineItem-icon-r icon-container-b">
-      <span style="position:absolute;" class="icon-set icon-right"></span>
+      <span style="position:absolute;" class="icon-set icon-right" />
     </g:Anchor>
   </g:HTMLPanel>
 </ui:UiBinder> 
