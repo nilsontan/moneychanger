@@ -31,17 +31,10 @@
         <g:HTMLPanel ui:field="detailPanel" addStyleNames="centered slide2">
           <g:HTMLPanel addStyleNames="padding-s">
             <div class="field-container">
-              <m:LabelInput text="Name" type="text" ui:field="name" />
-              <m:MyCheckBox ui:field="checkBox" />
-              <g:HTMLPanel ui:field="companyPanel1">
-                <div class="field">
-                  <g:Label text="Money Changer" />
-                  <g:CheckBox ui:field="cBoxMChanger" />
-                </div>
-                <div class="field">
-                  <g:Label text="Remittance Agent" />
-                  <g:CheckBox ui:field="cBoxRAgent" />
-                </div>
+              <m:LabelInput ui:field="name"  text="Name" type="text" />
+              <g:HTMLPanel ui:field="companyPanel1" addStyleNames="field">
+                <m:MyCheckBox ui:field="cBoxMChanger" text="Money Changer" width="50%" />
+                <m:MyCheckBox ui:field="cBoxRAgent" text="Remittance Agent" width="50%" />
               </g:HTMLPanel>
             </div>
             <g:HTMLPanel addStyleNames="icon-container">

@@ -213,11 +213,13 @@ public class DataReset
       }
       individualClient.setAddress(address);
       individualClient.setCountry(countryMap.get(client.get(4)));
-      try {
-        individualClient.setDateOfBirth(dtf.parse(client.get(5)));
-      } catch (ParseException e) {
-        e.printStackTrace();
-        individualClient.setDateOfBirth(null);
+      if (!client.get(5).isEmpty()) {
+        try {
+          individualClient.setDateOfBirth(dtf.parse(client.get(5)));
+        } catch (ParseException e) {
+          e.printStackTrace();
+          individualClient.setDateOfBirth(null);
+        }
       }
       individualClient.setNationality(countryMap.get(client.get(6)));
       individualClient.setContactNo(client.get(7));

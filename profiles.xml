@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profilesXml xmlns="http://maven.apache.org/PROFILES/1.0.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://maven.apache.org/PROFILES/1.0.0 http://maven.apache.org/xsd/profiles-1.0.0.xsd">
+  <profiles>
+    <profile>
+      <id>artifactory</id>
+      <repositories>
+        <repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>libs-release</name>
+          <url>http://sg.techstudio.mobi/artifactory/libs-release</url>
+        </repository>
+        <repository>
+          <snapshots/>
+          <id>snapshots</id>
+          <name>libs-snapshot</name>
+          <url>http://sg.techstudio.mobi/artifactory/libs-snapshot</url>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>plugins-release</name>
+          <url>http://sg.techstudio.mobi/artifactory/plugins-release</url>
+        </pluginRepository>
+        <pluginRepository>
+          <snapshots/>
+          <id>snapshots</id>
+          <name>plugins-snapshot</name>
+          <url>http://sg.techstudio.mobi/artifactory/plugins-snapshot</url>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+</profilesXml>

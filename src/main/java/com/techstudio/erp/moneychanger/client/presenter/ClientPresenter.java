@@ -7,6 +7,7 @@
 
 package com.techstudio.erp.moneychanger.client.presenter;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.common.base.Strings;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -57,6 +58,10 @@ public class ClientPresenter
     void setName(String name);
 
     void showLoading(boolean visible);
+
+    void setMChanger(boolean checked);
+
+    void setRAgent(boolean checked);
   }
 
   private final Provider<ClientRequest> requestProvider;
@@ -64,6 +69,8 @@ public class ClientPresenter
 
   private String code;
   private String name;
+  private boolean isMChanger;
+  private boolean isRAgent;
 
   @Inject
   public ClientPresenter(final EventBus eventBus,
@@ -111,6 +118,18 @@ public class ClientPresenter
   public void setName(String name) {
     // name cannot be changed
     getView().setName((this.name));
+  }
+
+  @Override
+  public void toggleMChanger() {
+    isMChanger = !isMChanger;
+    Log.debug("isMChanger: " + isMChanger);
+  }
+
+  @Override
+  public void toggleRAgent() {
+    isRAgent = !isRAgent;
+    Log.debug("isRAgent: " + isRAgent);
   }
 
   @Override
@@ -170,17 +189,22 @@ public class ClientPresenter
     if (code != null && !code.isEmpty()) {
       ClientProxy proxy = dataProvider.getByCode(code);
       if (proxy == null) {
-        code = "";
-        name = "";
+        resetFields();
       } else {
         code = proxy.getCode();
         name = proxy.getName();
+        isMChanger = false;
       }
     } else {
-      code = "";
-      name = "";
+      resetFields();
     }
     updateView();
+  }
+
+  private void resetFields() {
+    code = "";
+    name = "";
+    isMChanger = false;
   }
 
   private void fillData(ClientProxy proxy) {
@@ -190,6 +214,7 @@ public class ClientPresenter
 
   private void updateView() {
     getView().setName(name);
+    getView().setMChanger(isMChanger);
   }
 
   private boolean isFormValid() {

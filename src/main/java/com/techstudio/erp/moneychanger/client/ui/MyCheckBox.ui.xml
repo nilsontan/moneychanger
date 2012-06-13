@@ -3,12 +3,12 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui">
   <ui:with field="res" type="com.techstudio.erp.moneychanger.client.resources.Resources" />
 
-  <g:HTMLPanel addStyleNames="field">
-    <g:Anchor ui:field="lineItemRemove" addStyleNames="lineItem-icon lineItem-icon-l icon-container-b">
-      <span style="position:absolute;" class="icon-set icon-star" />
+  <g:HTMLPanel>
+    <g:Anchor ui:field="check" addStyleNames="checkBox-icon checkBox-icon-l icon-container-b">
+      <span ui:field="icon" class="icon-set icon-left icon-empty" />
     </g:Anchor>
-    <div class="soft-bg">
-      <g:Label text="Check Me" />
-    </div>
+    <span class="checkBox soft-bg">
+      <g:Label ui:field="label" />
+    </span>
   </g:HTMLPanel>
 </ui:UiBinder> 

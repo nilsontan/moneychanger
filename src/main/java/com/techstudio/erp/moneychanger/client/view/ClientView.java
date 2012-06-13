@@ -74,21 +74,17 @@ public class ClientView
   @UiField
   LabelInput name;
 
-  @UiField(provided = true)
-  MyCheckBox checkBox;
+  @UiField
+  MyCheckBox cBoxMChanger;
 
   @UiField
-  CheckBox cBoxMChanger;
-
-  @UiField
-  CheckBox cBoxRAgent;
+  MyCheckBox cBoxRAgent;
 
   @UiField
   Button save;
 
   @Inject
-  public ClientView(final MyCheckBox checkBox, final Binder binder) {
-    this.checkBox = checkBox;
+  public ClientView(final Binder binder) {
     widget = binder.createAndBindUi(this);
     setUpListing();
   }
@@ -115,9 +111,16 @@ public class ClientView
     getUiHandlers().setName(event.getValue());
   }
 
+  @SuppressWarnings("unused")
   @UiHandler("cBoxMChanger")
-  void onClientCodeChange(ValueChangeEvent<Boolean> event) {
+  void onClickMChanger(ClickEvent event) {
+    getUiHandlers().toggleMChanger();
+  }
 
+  @SuppressWarnings("unused")
+  @UiHandler("cBoxRAgent")
+  void onClickRAgent(ClickEvent event) {
+    getUiHandlers().toggleMChanger();
   }
 
   @SuppressWarnings("unused")
@@ -161,6 +164,16 @@ public class ClientView
     loadingMessage.setVisible(visible);
     currentStep.setVisible(!visible);
     mainPanel.setVisible(!visible);
+  }
+
+  @Override
+  public void setMChanger(boolean checked) {
+    cBoxMChanger.setChecked(checked);
+  }
+
+  @Override
+  public void setRAgent(boolean checked) {
+    cBoxRAgent.setChecked(checked);
   }
 
   private void setUpListing() {

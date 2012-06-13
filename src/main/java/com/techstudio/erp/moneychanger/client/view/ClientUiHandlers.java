@@ -15,6 +15,8 @@ import com.gwtplatform.mvp.client.UiHandlers;
 public interface ClientUiHandlers extends UiHandlers {
   void setName(String name);
 
+  void toggleMChanger();
+
   void edit(Long id);
 
   void create();
@@ -22,4 +24,6 @@ public interface ClientUiHandlers extends UiHandlers {
   void delete();
 
   void update();
+
+  void toggleRAgent();
 }
