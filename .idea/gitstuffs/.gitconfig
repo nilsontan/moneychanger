@@ -1,0 +1,8 @@
+[user]
+	name = Nilson
+	email = nilson.tan@techstudio.com.sg
+[github]
+	user = nilsontan
+	token = 366da0c037f341bf32a499b885ed2fc8
+[core]
+	excludesfile = c:/Users/Nilson/.gitignore_global

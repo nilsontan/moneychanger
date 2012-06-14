@@ -1,3 +1,11 @@
 <component name="ProjectDictionaryState">
-  <dictionary name="Nilson" />
+  <dictionary name="Nilson">
+    <words>
+      <w>blobkey</w>
+      <w>blobstore</w>
+      <w>fullname</w>
+      <w>spotrate</w>
+      <w>uoms</w>
+    </words>
+  </dictionary>
 </component>
