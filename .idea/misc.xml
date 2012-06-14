@@ -16,7 +16,6 @@
     <option name="activeProfiles">
       <list>
         <option value="artifactory" />
-        <option value="local" />
       </list>
     </option>
   </component>
