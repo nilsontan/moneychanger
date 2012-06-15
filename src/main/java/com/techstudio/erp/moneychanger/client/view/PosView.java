@@ -172,10 +172,10 @@ public class PosView
   @SuppressWarnings("unused")
   @UiHandler("ancMenu")
   public void onClickMenu(ClickEvent event) {
-    if (mainPanel.getStyleName().contains("showCat")) {
-      mainPanel.removeStyleName("showCat");
+    if (mainPanel.getStyleName().contains("showPulldown")) {
+      mainPanel.removeStyleName("showPulldown");
     } else {
-      mainPanel.addStyleName("showCat");
+      mainPanel.addStyleName("showPulldown");
     }
   }
 
@@ -521,7 +521,7 @@ public class PosView
         CategoryProxy selected = selectionModel.getLastSelectedObject();
         if (selected != null) {
           getUiHandlers().switchCategory(selected);
-          mainPanel.removeStyleName("showCat");
+          mainPanel.removeStyleName("showPulldown");
         }
       }
     });

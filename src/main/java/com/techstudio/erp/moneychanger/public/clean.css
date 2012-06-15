@@ -144,9 +144,10 @@ label {
   width: 30%;
   text-transform: uppercase;
   text-align: center;
+  overflow: hidden;
 }
 
-select, input, textarea {
+select, input, textarea, input.gwt-TextBox {
   border-left: 0;
   -webkit-border-radius: 0;
   -webkit-border-top-right-radius: 0.6em;
@@ -159,6 +160,18 @@ select, input, textarea {
   width: 70%;
   -webkit-box-shadow: inset 0px 1px 4px rgba(0, 0, 0, .2);
   box-shadow: inset 0px 1px 4px rgba(0, 0, 0, .2);
+}
+
+input.gwt-TextBox {
+  border-left: solid 1px #AAA;
+  -webkit-border-radius: 0.6em;
+  -moz-border-radius: 0.6em;
+  border-radius: 0.6em;
+  width: 100%;
+}
+
+.field input.gwt-TextBox {
+  width: 100%;
 }
 
 .checkBox {
@@ -601,6 +614,12 @@ input::-webkit-inner-spin-button {
   overflow: hidden;
 }
 
+.hiddenMenuBar {
+  width: 33.33333333%;
+  position: absolute;
+  overflow: hidden;
+}
+
 /* Items */
 .itemListing {
   clear: both;
@@ -1004,7 +1023,7 @@ div.di-r-container {
 }
 
 .slider .slide1, .slider .slide2,
-.slideshow .menu-category,
+.slideshow .menu-pulldown,
 .slideshow .menu1, .slideshow .menu2,
 .slideshow .menu3 {
   position: relative;
@@ -1019,7 +1038,7 @@ div.di-r-container {
   float: left;
 }
 
-.slideshow .menu-category {
+.menu-pulldown {
   z-index: 1;
   float: right;
   border: 1px solid #AAA;
@@ -1045,14 +1064,14 @@ div.di-r-container {
 .slideshow.show3 {
 }
 
-.slideshow .menu-category {
+.menu-pulldown {
   -webkit-transform: translate(0, -100%);
   -moz-transform: translate(0, -100%);
   -o-transform: translate(0, -100%);
   transform: translate(0, -100%);
 }
 
-.slideshow.showCat .menu-category {
+.showPulldown .menu-pulldown {
   -webkit-transform: translate(0, 0);
   -moz-transform: translate(0, 0);
   -o-transform: translate(0, 0);

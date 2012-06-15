@@ -14,12 +14,15 @@ import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
 import com.techstudio.erp.moneychanger.server.service.CountryDao;
 import com.techstudio.erp.moneychanger.shared.domain.Address;
+import com.techstudio.erp.moneychanger.shared.domain.ClientType;
 
 import javax.persistence.Embedded;
 
 @Entity
 @Cached
 public class Client extends MyDatastoreObject {
+
+  private ClientType clientType = ClientType.INDIVIDUAL;
 
   @Embedded
   private Address address;
@@ -35,6 +38,14 @@ public class Client extends MyDatastoreObject {
   private String email;
 
   public Client() {
+  }
+
+  public ClientType getClientType() {
+    return clientType;
+  }
+
+  public void setClientType(ClientType clientType) {
+    this.clientType = clientType;
   }
 
   public Address getAddress() {

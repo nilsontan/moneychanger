@@ -25,7 +25,11 @@ public interface AddressProxy extends ValueProxy {
 
   void setLine2(String line2);
 
-  String getPostcode();
+  String getLine3();
 
-  void setPostcode(String postcode);
+  void setLine3(String line3);
+
+  String getPostalCode();
+
+  void setPostalCode(String postalCode);
 }

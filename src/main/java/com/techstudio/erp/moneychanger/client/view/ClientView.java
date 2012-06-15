@@ -22,12 +22,13 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import com.techstudio.erp.moneychanger.client.NameTokens;
 import com.techstudio.erp.moneychanger.client.presenter.ClientPresenter;
-import com.techstudio.erp.moneychanger.client.ui.LabelInput;
-import com.techstudio.erp.moneychanger.client.ui.MyCheckBox;
-import com.techstudio.erp.moneychanger.client.ui.RangeLabelPager;
-import com.techstudio.erp.moneychanger.client.ui.ShowMorePagerPanel;
+import com.techstudio.erp.moneychanger.client.ui.*;
 import com.techstudio.erp.moneychanger.client.ui.cell.ClientCell;
+import com.techstudio.erp.moneychanger.client.ui.cell.ClientTypeCell;
+import com.techstudio.erp.moneychanger.shared.domain.ClientType;
 import com.techstudio.erp.moneychanger.shared.proxy.ClientProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.CountryProxy;
+import com.techstudio.erp.moneychanger.shared.proxy.IndividualClientProxy;
 
 /**
  * @author Nilson
@@ -42,10 +43,16 @@ public class ClientView
   private final Widget widget;
 
   @UiField
+  HTMLPanel ancBar;
+
+  @UiField
   Anchor ancHome;
 
   @UiField
   Anchor ancBack;
+
+  @UiField
+  Anchor ancNext;
 
   @UiField
   HTMLPanel loadingMessage;
@@ -55,6 +62,16 @@ public class ClientView
 
   @UiField
   HTMLPanel mainPanel;
+
+  /**
+   * Category Panel
+   */
+
+  @UiField
+  HTMLPanel clientPulldown;
+
+  @UiField(provided = true)
+  CellList<ClientType> clientList = new CellList<ClientType>(new ClientTypeCell());
 
   @UiField
   HTMLPanel listPanel;
@@ -79,6 +96,70 @@ public class ClientView
 
   @UiField
   MyCheckBox cBoxRAgent;
+
+  @UiField
+  LabelInput bizReg;
+
+  @UiField
+  LabelInput licenseNo;
+
+  @UiField
+  LabelInput addressLine1;
+
+  @UiField
+  TextBox addressLine2;
+
+  @UiField
+  TextBox addressLine3;
+
+  @UiField
+  LabelInput postalCode;
+
+  @UiField
+  LabelInput contactNo1;
+
+  @UiField
+  LabelInput contactNo2;
+
+  @UiField
+  LabelInput contactFax;
+
+  @UiField
+  LabelInput contactOther;
+
+  @UiField
+  LabelInput email;
+
+  @UiField
+  LabelInput website;
+
+  @UiField(provided = true)
+  SelectOneListBox<CountryProxy> countryList
+      = new SelectOneListBox<CountryProxy>(new SelectOneListBox.OptionFormatter<CountryProxy>() {
+    @Override
+    public String getLabel(CountryProxy option) {
+      return option.getName();
+    }
+
+    @Override
+    public String getValue(CountryProxy option) {
+      return option.getId().toString();
+    }
+  });
+
+  @UiField(provided = true)
+  SelectOneListBox<IndividualClientProxy> authorizedList
+      = new SelectOneListBox<IndividualClientProxy>(new SelectOneListBox.OptionFormatter<IndividualClientProxy>() {
+    @Override
+    public String getLabel(IndividualClientProxy option) {
+      return option.getName();
+    }
+
+    @Override
+    public String getValue(IndividualClientProxy option) {
+      return option.getId().toString();
+    }
+  });
 
   @UiField
   Button save;
@@ -106,6 +187,22 @@ public class ClientView
     showListPanel();
   }
 
+//  @SuppressWarnings("unused")
+//  @UiHandler("ancNext")
+//  public void onClickNext(ClickEvent event) {
+//    getUiHandlers().create();
+//  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("ancNext")
+  public void onClickMenu(ClickEvent event) {
+    if (mainPanel.getStyleName().contains("showPulldown")) {
+      mainPanel.removeStyleName("showPulldown");
+    } else {
+      mainPanel.addStyleName("showPulldown");
+    }
+  }
+
   @UiHandler("name")
   void onClientNameChange(ValueChangeEvent<String> event) {
     getUiHandlers().setName(event.getValue());
@@ -120,7 +217,59 @@ public class ClientView
   @SuppressWarnings("unused")
   @UiHandler("cBoxRAgent")
   void onClickRAgent(ClickEvent event) {
-    getUiHandlers().toggleMChanger();
+    getUiHandlers().toggleRAgent();
+  }
+
+  @UiHandler("bizReg")
+  void onChangeBizReg(ValueChangeEvent<String> event) {
+    getUiHandlers().setBizReg(event.getValue());
+  }
+
+  @UiHandler("licenseNo")
+  void onChangeLicenseNo(ValueChangeEvent<String> event) {
+    getUiHandlers().setLicenseNo(event.getValue());
+  }
+
+  @UiHandler("addressLine1")
+  void onChangeAddressLine1(ValueChangeEvent<String> event) {
+    getUiHandlers().setAddressLine1(event.getValue());
+  }
+
+  @UiHandler("addressLine2")
+  void onChangeAddressLine2(ValueChangeEvent<String> event) {
+    getUiHandlers().setAddressLine2(event.getValue());
+  }
+
+  @UiHandler("addressLine3")
+  void onChangeAddressLine3(ValueChangeEvent<String> event) {
+    getUiHandlers().setAddressLine3(event.getValue());
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("countryList")
+  public void onChangeCountry(ValueChangeEvent<CountryProxy> event) {
+    getUiHandlers().setCountry(countryList.getSelectedValue());
+  }
+
+  @UiHandler("postalCode")
+  void onChangePostalCode(ValueChangeEvent<String> event) {
+    getUiHandlers().setPostalCode(event.getValue());
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("authorizedList")
+  public void onChangeAuthorizedPerson(ValueChangeEvent<IndividualClientProxy> event) {
+    getUiHandlers().setAuthorizedPerson(authorizedList.getSelectedValue());
+  }
+
+  @UiHandler("email")
+  void onChangeEmail(ValueChangeEvent<String> event) {
+    getUiHandlers().setEmail(event.getValue());
+  }
+
+  @UiHandler("website")
+  void onChangeWebsite(ValueChangeEvent<String> event) {
+    getUiHandlers().setWebsite(event.getValue());
   }
 
   @SuppressWarnings("unused")
@@ -135,6 +284,16 @@ public class ClientView
   }
 
   @Override
+  public HasSelectedValue<CountryProxy> getCountryListing() {
+    return countryList;
+  }
+
+  @Override
+  public HasSelectedValue<IndividualClientProxy> getAuthorizedPersonListing() {
+    return authorizedList;
+  }
+
+  @Override
   public void showListPanel() {
 //    mainPanel.setStyleName("slider show1");
 //    list.setVisible(true);
@@ -142,6 +301,7 @@ public class ClientView
     detailPanel.setVisible(false);
     ancHome.setVisible(true);
     ancBack.setVisible(false);
+    ancNext.setVisible(true);
   }
 
   @Override
@@ -152,6 +312,7 @@ public class ClientView
     detailPanel.setVisible(true);
     ancHome.setVisible(false);
     ancBack.setVisible(true);
+    ancNext.setVisible(false);
   }
 
   @Override
@@ -160,10 +321,55 @@ public class ClientView
   }
 
   @Override
+  public void setAddressLine1(String addressLine1) {
+    this.addressLine1.setValue(addressLine1);
+  }
+
+  @Override
+  public void setAddressLine2(String addressLine2) {
+    this.addressLine2.setValue(addressLine2);
+  }
+
+  @Override
+  public void setAddressLine3(String addressLine3) {
+    this.addressLine3.setValue(addressLine3);
+  }
+
+  @Override
+  public void setCountry(CountryProxy country) {
+    this.countryList.setSelectedValue(country);
+  }
+
+  @Override
+  public void setPostalCode(String postalCode) {
+    this.postalCode.setValue(postalCode);
+  }
+
+  @Override
+  public void setContactNo(String contactNo) {
+    this.contactNo1.setValue(contactNo);
+  }
+
+  @Override
+  public void setContactNo2(String contactNo2) {
+    this.contactNo2.setValue(contactNo2);
+  }
+
+  @Override
+  public void setFaxNo(String faxNo) {
+    this.contactFax.setValue(faxNo);
+  }
+
+  @Override
+  public void setEmail(String email) {
+    this.email.setValue(email);
+  }
+
+  @Override
   public void showLoading(boolean visible) {
     loadingMessage.setVisible(visible);
-    currentStep.setVisible(!visible);
     mainPanel.setVisible(!visible);
+    ancBar.setVisible(!visible);
   }
 
   @Override
@@ -174,6 +380,26 @@ public class ClientView
   @Override
   public void setRAgent(boolean checked) {
     cBoxRAgent.setChecked(checked);
+  }
+
+  @Override
+  public void setBizReg(String bizReg) {
+    this.bizReg.setValue(bizReg);
+  }
+
+  @Override
+  public void setLicenseNo(String licenseNo) {
+    this.licenseNo.setValue(licenseNo);
+  }
+
+  @Override
+  public void setWebsite(String website) {
+    this.website.setValue(website);
+  }
+
+  @Override
+  public void setAuthorizedPerson(IndividualClientProxy authorizedPerson) {
+    this.authorizedList.setSelectedValue(authorizedPerson);
   }
 
   private void setUpListing() {
@@ -191,6 +417,20 @@ public class ClientView
 
     pagerPanel.setDisplay(list);
     pager.setDisplay(list);
+
+    final NoSelectionModel<ClientType> clientSelectionModel = new NoSelectionModel<ClientType>();
+    clientList.setSelectionModel(clientSelectionModel);
+    clientSelectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+      @Override
+      public void onSelectionChange(SelectionChangeEvent event) {
+        ClientType selected = clientSelectionModel.getLastSelectedObject();
+        if (selected != null) {
+          getUiHandlers().setClientType(selected);
+          getUiHandlers().create();
+          mainPanel.removeStyleName("showPulldown");
+        }
+      }
+    });
   }
 
 }

@@ -4,7 +4,6 @@
              xsi:schemaLocation="http://maven.apache.org/PROFILES/1.0.0 http://maven.apache.org/xsd/profiles-1.0.0.xsd">
   <profiles>
     <profile>
-      <id>artifactory</id>
       <repositories>
         <repository>
           <snapshots>
@@ -15,7 +14,7 @@
           <url>http://sg.techstudio.mobi/artifactory/libs-release</url>
         </repository>
         <repository>
-          <snapshots/>
+          <snapshots />
           <id>snapshots</id>
           <name>libs-snapshot</name>
           <url>http://sg.techstudio.mobi/artifactory/libs-snapshot</url>
@@ -31,7 +30,7 @@
           <url>http://sg.techstudio.mobi/artifactory/plugins-release</url>
         </pluginRepository>
         <pluginRepository>
-          <snapshots/>
+          <snapshots />
           <id>snapshots</id>
           <name>plugins-snapshot</name>
           <url>http://sg.techstudio.mobi/artifactory/plugins-snapshot</url>

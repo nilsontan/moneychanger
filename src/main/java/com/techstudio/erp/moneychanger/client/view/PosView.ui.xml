@@ -16,12 +16,6 @@
       text-align: center;
     }
 
-    .hiddenMenuBar {
-      width: 33.33333333%;
-      position: absolute;
-      overflow: hidden;
-    }
-
     .minSize {
       min-height: 5em;
     }
@@ -49,8 +43,8 @@
     </div>
     <div id="content" class="content bodyBg">
       <g:HTMLPanel ui:field="mainPanel" addStyleNames="slideshow">
-        <g:HTMLPanel addStyleNames="{style.hiddenMenuBar}">
-          <g:HTMLPanel ui:field="categoryPulldown" addStyleNames="menu-category">
+        <g:HTMLPanel addStyleNames="hiddenMenuBar">
+          <g:HTMLPanel ui:field="categoryPulldown" addStyleNames="menu-pulldown">
             <c:CellList ui:field="categoryList" />
           </g:HTMLPanel>
         </g:HTMLPanel>

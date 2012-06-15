@@ -51,6 +51,7 @@ public class CountryDataProvider extends AbstractDataProvider<CountryProxy> {
             for (HasData<CountryProxy> display : getDataDisplays()) {
               onRangeChanged(display);
             }
+            updateList(proxies);
           }
         });
   }

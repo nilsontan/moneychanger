@@ -7,7 +7,7 @@
     <g:Anchor ui:field="check" addStyleNames="checkBox-icon checkBox-icon-l icon-container-b">
       <span ui:field="icon" class="icon-set icon-left icon-empty" />
     </g:Anchor>
-    <span class="checkBox soft-bg">
+    <span style="width:100%;" class="checkBox soft-bg">
       <g:Label ui:field="label" />
     </span>
   </g:HTMLPanel>

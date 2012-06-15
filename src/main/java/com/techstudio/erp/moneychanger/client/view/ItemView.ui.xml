@@ -52,7 +52,7 @@
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="icon-container">
               <span class="icon-set icon-set-left icon-tick" />
-              <g:Button ui:field="save" text="Save" />
+              <g:Button ui:field="save" text="Save" addStyleNames="bar-green" />
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="icon-container">
               <span class="icon-set icon-set-left icon-cross" />

@@ -10,12 +10,18 @@ package com.techstudio.erp.moneychanger.shared.proxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 import com.techstudio.erp.moneychanger.server.domain.Client;
 import com.techstudio.erp.moneychanger.server.locator.ObjectifyLocator;
+import com.techstudio.erp.moneychanger.shared.domain.ClientType;
 
 /**
  * @author Nilson
  */
 @ProxyFor(value = Client.class, locator = ObjectifyLocator.class)
 public interface ClientProxy extends MyEntityProxy {
+  public static final String ADDRESS = "address";
+
+  ClientType getClientType();
+
+  void setClientType(ClientType clientType);
 
   AddressProxy getAddress();
 

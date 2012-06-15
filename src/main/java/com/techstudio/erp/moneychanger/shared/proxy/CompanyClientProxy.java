@@ -18,6 +18,7 @@ import java.util.List;
  */
 @ProxyFor(value = CompanyClient.class, locator = ObjectifyLocator.class)
 public interface CompanyClientProxy extends ClientProxy {
+  public static final String AUTHORIZED_PERSONS = "authorizedPersons";
 
   Boolean getMoneyChanger();
 

@@ -15,6 +15,7 @@ import com.techstudio.erp.moneychanger.client.util.DataResetService;
 import com.techstudio.erp.moneychanger.server.domain.*;
 import com.techstudio.erp.moneychanger.server.service.*;
 import com.techstudio.erp.moneychanger.shared.domain.Address;
+import com.techstudio.erp.moneychanger.shared.domain.ClientType;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -203,13 +204,14 @@ public class DataReset
       IndividualClient individualClient = new IndividualClient();
       individualClient.setCode(client.get(0));
       individualClient.setName(client.get(1));
+      individualClient.setClientType(ClientType.INDIVIDUAL);
       individualClient.setNric(client.get(2));
       List<String> longAddress = Lists.newArrayList(Splitter.on("|").trimResults().split(client.get(3)));
       Address address = new Address();
       if (!longAddress.isEmpty() && longAddress.size() >= 3) {
         address.setLine1(longAddress.get(0));
         address.setLine2(longAddress.get(1));
-        address.setPostcode(longAddress.get(2));
+        address.setPostalCode(longAddress.get(2));
       }
       individualClient.setAddress(address);
       individualClient.setCountry(countryMap.get(client.get(4)));
@@ -255,6 +257,7 @@ public class DataReset
       CompanyClient companyClient = new CompanyClient();
       companyClient.setCode(client.get(0));
       companyClient.setName(client.get(1));
+      companyClient.setClientType(ClientType.COMPANY);
       companyClient.setMoneyChanger("Y".equals(client.get(2)));
       companyClient.setRemitter("Y".equals(client.get(3)));
       companyClient.setBizRegNo(client.get(4));
@@ -264,7 +267,7 @@ public class DataReset
       if (!longAddress.isEmpty() && longAddress.size() >= 3) {
         address.setLine1(longAddress.get(0));
         address.setLine2(longAddress.get(1));
-        address.setPostcode(longAddress.get(2));
+        address.setPostalCode(longAddress.get(2));
       }
       companyClient.setAddress(address);
       companyClient.setCountry(countryMap.get(client.get(7)));

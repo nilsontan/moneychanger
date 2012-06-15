@@ -83,4 +83,9 @@ public class CompanyClient extends Client {
     }
     this.authorizedPersons = Lists.newArrayList(new IndividualClientDao().putAll(authorizedPersons).keySet());
   }
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }

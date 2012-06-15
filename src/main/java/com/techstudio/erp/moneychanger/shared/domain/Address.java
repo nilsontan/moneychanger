@@ -14,11 +14,13 @@ public class Address {
 
   public static final Address EMPTY = new Address();
 
-  private String line1;
+  private String line1 = "";
 
-  private String line2;
+  private String line2 = "";
 
-  private String postcode;
+  private String line3 = "";
+
+  private String postalCode = "";
 
   public Address() {
   }
@@ -39,11 +41,19 @@ public class Address {
     this.line2 = line2;
   }
 
-  public String getPostcode() {
-    return postcode;
+  public String getLine3() {
+    return line3;
   }
 
-  public void setPostcode(String postcode) {
-    this.postcode = postcode;
+  public void setLine3(String line3) {
+    this.line3 = line3;
+  }
+
+  public String getPostalCode() {
+    return postalCode;
+  }
+
+  public void setPostalCode(String postalCode) {
+    this.postalCode = postalCode;
   }
 }

@@ -25,12 +25,12 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.techstudio.erp.moneychanger.client.NameTokens;
-import com.techstudio.erp.moneychanger.client.view.ItemUiHandlers;
 import com.techstudio.erp.moneychanger.client.ui.HasSelectedValue;
 import com.techstudio.erp.moneychanger.client.ui.dataprovider.CategoryDataProvider;
 import com.techstudio.erp.moneychanger.client.ui.dataprovider.FirstLoad;
 import com.techstudio.erp.moneychanger.client.ui.dataprovider.ItemDataProvider;
 import com.techstudio.erp.moneychanger.client.ui.dataprovider.MyDataProvider;
+import com.techstudio.erp.moneychanger.client.view.ItemUiHandlers;
 import com.techstudio.erp.moneychanger.shared.proxy.CategoryProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.ItemProxy;
 import com.techstudio.erp.moneychanger.shared.proxy.PricingProxy;
@@ -181,11 +181,6 @@ public class ItemPresenter
   @Override
   protected void onReset() {
     super.onReset();
-    reset();
-  }
-
-  @Override
-  protected void onReveal() {
     reset();
   }
 

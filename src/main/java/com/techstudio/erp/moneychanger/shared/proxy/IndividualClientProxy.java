@@ -18,6 +18,7 @@ import java.util.Date;
  */
 @ProxyFor(value = IndividualClient.class, locator = ObjectifyLocator.class)
 public interface IndividualClientProxy extends ClientProxy {
+  public static final String NATIONALITY = "nationality";
 
   String getNric();
 

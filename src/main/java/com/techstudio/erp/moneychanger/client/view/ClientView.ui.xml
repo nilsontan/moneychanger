@@ -12,17 +12,27 @@
       <g:Label text="Loading Clients ..." />
       <div class="progress-bar" />
     </g:HTMLPanel>
-    <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
-      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home" />
-    </g:Anchor>
-    <g:Anchor ui:field="ancBack" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
-      <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-left" />
-    </g:Anchor>
+    <g:HTMLPanel ui:field="ancBar">
+      <g:Anchor ui:field="ancHome" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-home" />
+      </g:Anchor>
+      <g:Anchor ui:field="ancBack" addStyleNames="homeBar-icon homeBar-icon-l icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-left" />
+      </g:Anchor>
+      <g:Anchor ui:field="ancNext" addStyleNames="homeBar-icon homeBar-icon-r icon-container-a">
+        <span style="position:absolute; top:16%; left:14%;" class="icon-set icon-plus" />
+      </g:Anchor>
+    </g:HTMLPanel>
     <div class="bar page-title">
       <g:Label ui:field="currentStep" text="Client" addStyleNames="step" />
     </div>
     <div class="content bodyBg">
       <g:HTMLPanel ui:field="mainPanel" addStyleNames="slider">
+        <g:HTMLPanel addStyleNames="hiddenMenuBar">
+          <g:HTMLPanel ui:field="clientPulldown" addStyleNames="menu-pulldown">
+            <c:CellList ui:field="clientList" />
+          </g:HTMLPanel>
+        </g:HTMLPanel>
         <g:HTMLPanel ui:field="listPanel" addStyleNames="centered slide1">
           <c:CellList ui:field="list" />
           <m:ShowMorePagerPanel ui:field="pagerPanel" />
@@ -31,18 +41,43 @@
         <g:HTMLPanel ui:field="detailPanel" addStyleNames="centered slide2">
           <g:HTMLPanel addStyleNames="padding-s">
             <div class="field-container">
-              <m:LabelInput ui:field="name"  text="Name" type="text" />
-              <g:HTMLPanel ui:field="companyPanel1" addStyleNames="field">
-                <m:MyCheckBox ui:field="cBoxMChanger" text="Money Changer" width="50%" />
-                <m:MyCheckBox ui:field="cBoxRAgent" text="Remittance Agent" width="50%" />
-              </g:HTMLPanel>
+              <m:LabelInput ui:field="name" text="Name" type="text" width="100%" addStyleNames="rate" />
+              <m:MyCheckBox ui:field="cBoxMChanger" text="Money Changer" addStyleNames="field" />
+              <m:MyCheckBox ui:field="cBoxRAgent" text="Remittance Agent" addStyleNames="field" />
+              <m:LabelInput ui:field="bizReg" text="Biz Reg." type="text" addStyleNames="rate" />
+              <m:LabelInput ui:field="licenseNo" text="MC/RA Lic" type="text" addStyleNames="rate" />
+              <m:LabelInput ui:field="addressLine1" text="Address" type="text" width="100%" addStyleNames="rate" />
+              <span class="field rate">
+                <g:TextBox ui:field="addressLine2" />
+              </span>
+              <span class="field rate">
+                <g:TextBox ui:field="addressLine3" />
+              </span>
+              <span class="field rate">
+                <span style="position:absolute; top:0.7em; right:0.8em;" class="icon-set icon-down" />
+                <label>Country</label>
+                <m:SelectOneListBox ui:field="countryList" />
+              </span>
+              <m:LabelInput ui:field="postalCode" text="Postal" type="number" addStyleNames="rate" />
+              <m:LabelInput ui:field="contactNo1" text="Phone 1" type="number" addStyleNames="rate" />
+              <m:LabelInput ui:field="contactNo2" text="Phone 2" type="number" addStyleNames="rate" />
+              <m:LabelInput ui:field="contactFax" text="Fax" type="number" addStyleNames="rate" />
+              <m:LabelInput ui:field="contactOther" text="Others" type="number" addStyleNames="rate" />
+              <m:LabelInput ui:field="email" text="Email" type="email" addStyleNames="rate" />
+              <m:LabelInput ui:field="website" text="Website" type="url" addStyleNames="rate" />
+              <span class="field rate" style="width:100%">
+                <span style="position:absolute; top:0.7em; right:0.8em;" class="icon-set icon-down" />
+                <label>Authorized Person</label>
+                <m:SelectOneListBox ui:field="authorizedList" />
+              </span>
             </div>
             <g:HTMLPanel addStyleNames="icon-container">
               <span class="icon-set icon-set-left icon-tick" />
-              <g:Button ui:field="save" text="Save" />
+              <g:Button ui:field="save" text="Save" addStyleNames="bar-green" />
             </g:HTMLPanel>
           </g:HTMLPanel>
         </g:HTMLPanel>
+        <g:HTMLPanel ui:field="clientContentContainer" />
       </g:HTMLPanel>
     </div>
   </g:HTMLPanel>
